@@ -104,6 +104,56 @@ app.get('/', (req, res) => {
     });
 });
 
+// Database test route
+app.get('/api/test-db', async (req, res) => {
+    try {
+        // Test database connection
+        const dbState = mongoose.connection.readyState;
+        const dbInfo = {
+            state: dbState,
+            status: ['Disconnected', 'Connected', 'Connecting', 'Disconnecting'][dbState],
+            database: mongoose.connection.name,
+            host: mongoose.connection.host,
+            port: mongoose.connection.port,
+            models: Object.keys(mongoose.models)
+        };
+
+        // Test database operation
+        const stats = await mongoose.connection.db.stats();
+        
+        res.json({
+            success: true,
+            message: 'Database connection test successful',
+            connection: dbInfo,
+            statistics: {
+                collections: stats.collections,
+                indexes: stats.indexes,
+                avgObjSize: stats.avgObjSize,
+                dataSize: stats.dataSize,
+                storageSize: stats.storageSize
+            },
+            environmentVariables: {
+                nodeEnv: process.env.NODE_ENV,
+                mongoDbUriExists: !!process.env.MONGODB_URI,
+                jwtSecretExists: !!process.env.JWT_SECRET
+            }
+        });
+    } catch (error) {
+        console.error('Database test error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Database test failed',
+            error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+            connectionState: mongoose.connection.readyState,
+            details: process.env.NODE_ENV === 'development' ? {
+                errorName: error.name,
+                errorCode: error.code,
+                errorType: error.constructor.name
+            } : undefined
+        });
+    }
+});
+
 // API routes
 app.post('/api/register', async (req, res) => {
     try {
