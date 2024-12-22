@@ -28,31 +28,79 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Log environment variables (without sensitive data)
+console.log('Environment:', process.env.NODE_ENV);
+console.log('MongoDB URI exists:', !!process.env.MONGODB_URI);
+console.log('JWT Secret exists:', !!process.env.JWT_SECRET);
+
 // Connect to MongoDB before handling requests
 app.use(async (req, res, next) => {
     try {
+        // Check if we're already trying to connect
+        if (mongoose.connection.readyState === 2) {
+            console.log('Connection is already in progress');
+            return next();
+        }
+
+        // If disconnected, try to connect
         if (mongoose.connection.readyState !== 1) {
+            console.log('Current connection state:', mongoose.connection.readyState);
+            console.log('Attempting to connect to MongoDB...');
             await connectDB();
         }
+
+        // Verify connection after attempt
+        if (mongoose.connection.readyState !== 1) {
+            throw new Error('Failed to establish database connection');
+        }
+
         next();
     } catch (error) {
-        console.error('Database connection error:', error);
+        console.error('Database middleware error:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
+
+        // Send appropriate error response
         res.status(500).json({ 
             message: 'Database connection error', 
-            error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error' 
+            error: process.env.NODE_ENV === 'development' 
+                ? error.message 
+                : 'Internal server error',
+            details: process.env.NODE_ENV === 'development' 
+                ? {
+                    connectionState: mongoose.connection.readyState,
+                    errorName: error.name,
+                    errorType: error.constructor.name
+                }
+                : undefined
         });
     }
 });
 
-// Health check route
+// Health check route with detailed status
 app.get('/', (req, res) => {
-    const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+    const dbStatus = mongoose.connection.readyState;
+    const statusMap = {
+        0: 'Disconnected',
+        1: 'Connected',
+        2: 'Connecting',
+        3: 'Disconnecting'
+    };
+
     res.json({ 
         message: 'CareerConnect API is running',
         status: 'healthy',
-        database: dbStatus,
+        database: {
+            status: statusMap[dbStatus],
+            state: dbStatus,
+            name: mongoose.connection.name,
+            host: mongoose.connection.host
+        },
         environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
     });
 });
 

@@ -9,20 +9,47 @@ const connectDB = async () => {
     }
 
     try {
+        // Log the MongoDB URI (without sensitive data)
+        const maskedUri = process.env.MONGODB_URI 
+            ? process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@')
+            : 'MongoDB URI is not defined';
+        console.log('Connecting to MongoDB:', maskedUri);
+
+        if (!process.env.MONGODB_URI) {
+            throw new Error('MongoDB URI is not defined in environment variables');
+        }
+
         const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000,
-            socketTimeoutMS: 30000,
+            serverSelectionTimeoutMS: 10000,
+            socketTimeoutMS: 45000,
+            family: 4,
             keepAlive: true,
+            keepAliveInitialDelay: 300000,
             maxPoolSize: 50,
+            minPoolSize: 10,
             retryWrites: true,
-            w: 'majority'
+            w: 'majority',
+            maxIdleTimeMS: 60000,
+            connectTimeoutMS: 20000
         };
+
+        // Clear any existing connections
+        if (mongoose.connection.readyState !== 0) {
+            console.log('Closing existing MongoDB connection');
+            await mongoose.connection.close();
+        }
 
         const db = await mongoose.connect(process.env.MONGODB_URI, options);
         isConnected = db.connections[0].readyState === 1;
-        console.log('Connected to MongoDB Atlas successfully');
+        
+        if (isConnected) {
+            console.log('Connected to MongoDB Atlas successfully');
+            console.log('Database Name:', db.connection.name);
+            console.log('Connection State:', db.connection.readyState);
+            console.log('MongoDB Version:', db.connection.serverConfig.description.version);
+        }
 
         mongoose.connection.on('connected', () => {
             console.log('Mongoose connected to MongoDB');
@@ -32,17 +59,44 @@ const connectDB = async () => {
         mongoose.connection.on('error', (err) => {
             console.error('Mongoose connection error:', err);
             isConnected = false;
+            // Attempt to reconnect
+            setTimeout(() => {
+                if (!isConnected) {
+                    console.log('Attempting to reconnect to MongoDB...');
+                    connectDB();
+                }
+            }, 5000);
         });
 
         mongoose.connection.on('disconnected', () => {
             console.log('Mongoose disconnected from MongoDB');
             isConnected = false;
+            // Attempt to reconnect
+            setTimeout(() => {
+                if (!isConnected) {
+                    console.log('Attempting to reconnect to MongoDB...');
+                    connectDB();
+                }
+            }, 5000);
         });
 
         return db;
     } catch (err) {
-        console.error('MongoDB connection error:', err);
+        console.error('MongoDB connection error details:', {
+            message: err.message,
+            code: err.code,
+            name: err.name,
+            stack: err.stack
+        });
         isConnected = false;
+        
+        // Check for specific error types
+        if (err.name === 'MongoServerSelectionError') {
+            console.error('Could not connect to any MongoDB server');
+        } else if (err.name === 'MongoNetworkError') {
+            console.error('Network error occurred while connecting to MongoDB');
+        }
+        
         throw err;
     }
 };
