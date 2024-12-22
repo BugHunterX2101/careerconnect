@@ -2,25 +2,22 @@
     "version": 2,
     "builds": [
         {
-            "src": "./index.js",
+            "src": "index.js",
             "use": "@vercel/node"
         }
     ],
     "rewrites": [
         {
-            "source": "/(.*)",
-            "destination": "/"
-        }
-    ],
-    "headers": [
+            "source": "/api/(.*)",
+            "destination": "/index.js"
+        },
         {
             "source": "/(.*)",
-            "headers": [
-                { "key": "Access-Control-Allow-Credentials", "value": "true" },
-                { "key": "Access-Control-Allow-Origin", "value": "*" },
-                { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-                { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization" }
-            ]
+            "destination": "/index.js"
         }
-    ]
+    ],
+    "env": {
+        "MONGODB_URI": "mongodb+srv://veditagrawal_21:7_TB6a-m5AZndTj@cloud0.r4ejz.mongodb.net/careerconnect?retryWrites=true&w=majority&appName=cloud0&tls=true",
+        "NODE_ENV": "production"
+    }
 } 
