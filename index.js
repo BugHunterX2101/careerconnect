@@ -28,8 +28,21 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB before handling requests
+app.use(async (req, res, next) => {
+    try {
+        if (mongoose.connection.readyState !== 1) {
+            await connectDB();
+        }
+        next();
+    } catch (error) {
+        console.error('Database connection error:', error);
+        res.status(500).json({ 
+            message: 'Database connection error', 
+            error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error' 
+        });
+    }
+});
 
 // Health check route
 app.get('/', (req, res) => {
