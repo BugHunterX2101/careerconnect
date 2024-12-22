@@ -1,0 +1,18 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "backend/backend.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "backend/backend.js"
+        }
+    ],
+    "env": {
+        "MONGODB_URI": "mongodb+srv://veditagrawal_21:7_TB6a-m5AZndTj@cloud0.r4ejz.mongodb.net/careerconnect?retryWrites=true&w=majority&appName=cloud0&tls=true"
+    }
+} 
