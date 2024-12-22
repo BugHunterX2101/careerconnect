@@ -15,9 +15,5 @@
             "source": "/(.*)",
             "destination": "/index.js"
         }
-    ],
-    "env": {
-        "MONGODB_URI": "mongodb+srv://veditagrawal_21:7_TB6a-m5AZndTj@cloud0.r4ejz.mongodb.net/careerconnect?retryWrites=true&w=majority&appName=cloud0&tls=true",
-        "NODE_ENV": "production"
-    }
+    ]
 } 

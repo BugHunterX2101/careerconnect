@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let isConnected = false;
 let connectionAttempts = 0;
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 5;
 
 const connectDB = async () => {
     try {
@@ -21,22 +21,34 @@ const connectDB = async () => {
         // Log connection attempt
         console.log(`Connection attempt ${connectionAttempts} of ${MAX_RETRIES}`);
         console.log('Environment:', process.env.NODE_ENV);
-        console.log('MongoDB URI exists:', !!process.env.MONGODB_URI);
 
-        if (!process.env.MONGODB_URI) {
+        const MONGODB_URI = process.env.MONGODB_URI;
+        if (!MONGODB_URI) {
             throw new Error('MongoDB URI is not defined in environment variables');
         }
+
+        // Log masked URI for debugging
+        const maskedUri = MONGODB_URI.replace(
+            /mongodb\+srv:\/\/([^:]+):([^@]+)@/,
+            'mongodb+srv://***:***@'
+        );
+        console.log('Connecting to MongoDB:', maskedUri);
 
         const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000,
-            socketTimeoutMS: 30000,
+            serverSelectionTimeoutMS: 10000,
+            socketTimeoutMS: 45000,
+            family: 4,
             keepAlive: true,
             keepAliveInitialDelay: 300000,
             autoIndex: true,
             maxPoolSize: 10,
-            minPoolSize: 5
+            minPoolSize: 5,
+            retryWrites: true,
+            w: 'majority',
+            maxIdleTimeMS: 60000,
+            connectTimeoutMS: 30000
         };
 
         // Clear any existing connections
@@ -45,7 +57,7 @@ const connectDB = async () => {
             await mongoose.connection.close();
         }
 
-        const conn = await mongoose.connect(process.env.MONGODB_URI, options);
+        const conn = await mongoose.connect(MONGODB_URI, options);
         isConnected = conn.connections[0].readyState === 1;
 
         if (isConnected) {
@@ -61,7 +73,30 @@ const connectDB = async () => {
                 ready: isConnected
             });
 
+            // Set up connection event handlers
+            mongoose.connection.on('connected', () => {
+                console.log('Mongoose connected to MongoDB');
+                isConnected = true;
+            });
+
+            mongoose.connection.on('error', (err) => {
+                console.error('Mongoose connection error:', err);
+                isConnected = false;
+            });
+
+            mongoose.connection.on('disconnected', () => {
+                console.log('Mongoose disconnected from MongoDB');
+                isConnected = false;
+                // Attempt to reconnect
+                if (connectionAttempts < MAX_RETRIES) {
+                    console.log('Attempting to reconnect...');
+                    setTimeout(() => connectDB(), 5000);
+                }
+            });
+
             return conn;
+        } else {
+            throw new Error('Failed to establish database connection');
         }
     } catch (error) {
         console.error('MongoDB connection error:', {

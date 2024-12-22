@@ -28,6 +28,22 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Log environment setup
+console.log('Starting server with configuration:');
+console.log('- Environment:', process.env.NODE_ENV);
+console.log('- MongoDB URI exists:', !!process.env.MONGODB_URI);
+console.log('- JWT Secret exists:', !!process.env.JWT_SECRET);
+
+// Initial database connection
+(async () => {
+    try {
+        await connectDB();
+        console.log('Initial database connection successful');
+    } catch (error) {
+        console.error('Initial database connection failed:', error.message);
+    }
+})();
+
 // Connect to MongoDB before handling requests
 app.use(async (req, res, next) => {
     try {
@@ -44,20 +60,24 @@ app.use(async (req, res, next) => {
         // If connecting, wait briefly then proceed
         if (mongoose.connection.readyState === 2) {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            return next();
+            if (mongoose.connection.readyState === 1) {
+                return next();
+            }
         }
 
         // Attempt to connect
+        console.log('Attempting database connection for request:', req.path);
         await connectDB();
         next();
     } catch (error) {
         console.error('Database connection error:', {
             path: req.path,
             method: req.method,
-            error: error.message
+            error: error.message,
+            stack: error.stack
         });
 
-        res.status(500).json({
+        res.status(503).json({
             status: 'error',
             message: 'Database connection failed',
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -81,7 +101,9 @@ app.get('/', (req, res) => {
         uptime: process.uptime(),
         database: {
             status: stateMap[dbState],
-            state: dbState
+            state: dbState,
+            name: mongoose.connection.name,
+            host: mongoose.connection.host
         },
         environment: process.env.NODE_ENV || 'development'
     });
@@ -91,6 +113,7 @@ app.get('/', (req, res) => {
 app.get('/api/test-db', async (req, res) => {
     try {
         if (mongoose.connection.readyState !== 1) {
+            console.log('Database not connected, attempting connection...');
             await connectDB();
         }
 
@@ -101,7 +124,8 @@ app.get('/api/test-db', async (req, res) => {
             connection: {
                 state: mongoose.connection.readyState,
                 host: mongoose.connection.host,
-                name: mongoose.connection.name
+                name: mongoose.connection.name,
+                readyState: mongoose.connection.readyState
             },
             stats: {
                 collections: stats.collections,
@@ -110,6 +134,7 @@ app.get('/api/test-db', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Database test error:', error);
         res.status(500).json({
             status: 'error',
             message: error.message,
@@ -147,6 +172,7 @@ app.post('/api/register', async (req, res) => {
             data: { userId: user._id }
         });
     } catch (error) {
+        console.error('Registration error:', error);
         res.status(500).json({
             status: 'error',
             message: error.message
@@ -182,6 +208,7 @@ app.post('/api/login', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({
             status: 'error',
             message: error.message
