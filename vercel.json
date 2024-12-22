@@ -8,11 +8,27 @@
     ],
     "routes": [
         {
+            "src": "/api/(.*)",
+            "dest": "backend/backend.js"
+        },
+        {
             "src": "/(.*)",
             "dest": "backend/backend.js"
         }
     ],
     "env": {
-        "MONGODB_URI": "mongodb+srv://veditagrawal_21:7_TB6a-m5AZndTj@cloud0.r4ejz.mongodb.net/careerconnect?retryWrites=true&w=majority&appName=cloud0&tls=true"
-    }
+        "MONGODB_URI": "mongodb+srv://veditagrawal_21:7_TB6a-m5AZndTj@cloud0.r4ejz.mongodb.net/careerconnect?retryWrites=true&w=majority&appName=cloud0&tls=true",
+        "NODE_ENV": "production",
+        "JWT_SECRET": "your_jwt_secret_key_here"
+    },
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                { "key": "Access-Control-Allow-Origin", "value": "*" },
+                { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
+                { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization" }
+            ]
+        }
+    ]
 } 

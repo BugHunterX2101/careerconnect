@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('../config/database');
+const mongoose = require('mongoose');
 
 // Import models
 const User = require('../models/User');
@@ -10,27 +11,51 @@ const Quiz = require('../models/Quiz');
 
 const app = express();
 
-// Enhanced CORS configuration for Vercel
-app.use(cors({
-    origin: '*', // Allow all origins in development
+// Enhanced CORS configuration
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        // List of allowed origins (add your frontend URLs here)
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:5000',
+            'https://careerconnect-git-main-bughunterx2101.vercel.app',
+            'https://careerconnect-bughunterx2101.vercel.app',
+            'https://careerconnect.vercel.app'
+        ];
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+    credentials: true,
+    maxAge: 86400 // 24 hours
+};
+
+app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
 connectDB();
 
-// Basic test route
+// Health check route
 app.get('/', (req, res) => {
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
     res.json({ 
-        message: 'Server is running',
+        message: 'CareerConnect API is running',
+        status: 'healthy',
         database: dbStatus,
-        environment: process.env.VERCEL_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -39,6 +64,13 @@ app.post('/api/register', async (req, res) => {
     try {
         const { username, email, password, role } = req.body;
         
+        // Input validation
+        if (!username || !email || !password) {
+            return res.status(400).json({ 
+                message: 'Please provide all required fields' 
+            });
+        }
+
         // Check if user already exists
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) {
@@ -62,6 +94,7 @@ app.post('/api/register', async (req, res) => {
             userId: user._id
         });
     } catch (error) {
+        console.error('Registration error:', error);
         res.status(500).json({ 
             message: 'Registration failed', 
             error: error.message 
@@ -73,6 +106,13 @@ app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         
+        // Input validation
+        if (!email || !password) {
+            return res.status(400).json({ 
+                message: 'Please provide email and password' 
+            });
+        }
+
         // Find user
         const user = await User.findOne({ email });
         if (!user) {
@@ -92,6 +132,7 @@ app.post('/api/login', async (req, res) => {
             userId: user._id
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ 
             message: 'Login failed', 
             error: error.message 
@@ -101,11 +142,26 @@ app.post('/api/login', async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Error:', err.stack);
+    
+    // Handle CORS errors
+    if (err.message === 'Not allowed by CORS') {
+        return res.status(403).json({
+            message: 'CORS error: Origin not allowed',
+            error: err.message
+        });
+    }
+
+    // Handle other errors
     res.status(500).json({ 
         message: 'Something went wrong!',
-        error: err.message 
+        error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
     });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
 });
 
 // Vercel serverless function export
@@ -116,5 +172,6 @@ if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
+        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
 }
