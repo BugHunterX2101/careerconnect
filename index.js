@@ -1,41 +1,25 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('../config/database');
+const connectDB = require('./config/database');
 const mongoose = require('mongoose');
 
 // Import models
-const User = require('../models/User');
-const Job = require('../models/Job');
-const Quiz = require('../models/Quiz');
+const User = require('./models/User');
+const Job = require('./models/Job');
+const Quiz = require('./models/Quiz');
 
 const app = express();
 
 // Enhanced CORS configuration
 const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        // List of allowed origins (add your frontend URLs here)
-        const allowedOrigins = [
-            'http://localhost:3000',
-            'http://localhost:5000',
-            'https://careerconnect-git-main-bughunterx2101.vercel.app',
-            'https://careerconnect-bughunterx2101.vercel.app',
-            'https://careerconnect.vercel.app'
-        ];
-        
-        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
+        callback(null, true);
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    maxAge: 86400 // 24 hours
+    maxAge: 86400
 };
 
 app.use(cors(corsOptions));
@@ -164,7 +148,7 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Route not found' });
 });
 
-// Vercel serverless function export
+// Export for Vercel
 module.exports = app;
 
 // Start server if not in Vercel
