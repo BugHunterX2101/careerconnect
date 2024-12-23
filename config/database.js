@@ -47,22 +47,6 @@ const connectDB = async () => {
             await mongoose.connection.close();
         }
 
-        const options = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 60000,
-            socketTimeoutMS: 60000,
-            connectTimeoutMS: 60000,
-            keepAlive: true,
-            keepAliveInitialDelay: 300000,
-            autoIndex: true,
-            retryWrites: true,
-            w: 'majority',
-            family: 4
-        };
-
-        console.log('Attempting MongoDB connection with options:', JSON.stringify(options, null, 2));
-
         // Remove all existing listeners
         mongoose.connection.removeAllListeners();
         
@@ -82,6 +66,15 @@ const connectDB = async () => {
             isConnected = false;
         });
 
+        // Basic connection options
+        const options = {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        };
+
+        console.log('Attempting MongoDB connection with options:', JSON.stringify(options, null, 2));
+
+        // Connect to MongoDB
         const conn = await mongoose.connect(MONGODB_URI, options);
         isConnected = conn.connections[0].readyState === 1;
 
