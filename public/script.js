@@ -1,160 +1,216 @@
-// Handle login form submission
-document.querySelector('.login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const email = e.target.querySelector('input[type="text"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('signUpModal');
+    const signUpBtn = document.getElementById('signUpBtn');
+    const closeModal = document.querySelector('.close-modal');
 
-    try {
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
+    signUpBtn.addEventListener('click', () => {
+        modal.style.display = 'block';
+    });
 
-        const data = await response.json();
-
-        if (data.status === 'success') {
-            alert('Login successful!');
-            // Store user data in localStorage
-            localStorage.setItem('user', JSON.stringify(data.data));
-            // Redirect to dashboard or home page
-            window.location.href = '/dashboard';
-        } else {
-            alert(data.message || 'Login failed');
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('Login failed. Please try again.');
-    }
-});
-
-// Handle signup form submission
-document.querySelector('.signup-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const username = e.target.querySelector('input[placeholder="Full Name"]').value;
-    const email = e.target.querySelector('input[type="email"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
-    const confirmPassword = e.target.querySelector('input[placeholder="Confirm Password"]').value;
-
-    if (password !== confirmPassword) {
-        alert('Passwords do not match');
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, email, password })
-        });
-
-        const data = await response.json();
-
-        if (data.status === 'success') {
-            alert('Registration successful! Please login.');
-            // Close modal
-            document.getElementById('signUpModal').style.display = 'none';
-        } else {
-            alert(data.message || 'Registration failed');
-        }
-    } catch (error) {
-        console.error('Registration error:', error);
-        alert('Registration failed. Please try again.');
-    }
-});
-
-// Modal handling
-const modal = document.getElementById('signUpModal');
-const signUpLink = document.querySelector('a[href="#signup"]');
-const closeModal = document.querySelector('.close-modal');
-
-signUpLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'block';
-});
-
-closeModal.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
+    closeModal.addEventListener('click', () => {
         modal.style.display = 'none';
-    }
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 });
 
-// Particle animation for background
-function setupParticleAnimation(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    let particles = [];
+// Add particle animation around CareerConnect
+document.addEventListener('DOMContentLoaded', function() {
+    // Background Particles
+    const bgCanvas = document.getElementById('backgroundParticles');
+    const bgCtx = bgCanvas.getContext('2d');
+    
+    // Brand Particles
+    const brandCanvas = document.getElementById('brandParticles');
+    const brandCtx = brandCanvas.getContext('2d');
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    // Resize functions
+    function resizeBgCanvas() {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
     }
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    function resizeBrandCanvas() {
+        const container = document.querySelector('.brand-container');
+        brandCanvas.width = container.offsetWidth;
+        brandCanvas.height = container.offsetHeight;
+    }
 
-    class Particle {
+    resizeBgCanvas();
+    resizeBrandCanvas();
+    window.addEventListener('resize', () => {
+        resizeBgCanvas();
+        resizeBrandCanvas();
+    });
+
+    // Background Particle class
+    class BgParticle {
         constructor() {
             this.reset();
         }
 
         reset() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 2 - 1;
-            this.speedY = Math.random() * 2 - 1;
+            this.x = Math.random() * bgCanvas.width;
+            this.y = Math.random() * bgCanvas.height;
+            this.size = Math.random() * 3 + 0.5; // Slightly larger particles
+            this.speedX = (Math.random() - 0.5) * 1.5; // Increased speed range
+            this.speedY = (Math.random() - 0.5) * 1.5;
             this.opacity = Math.random() * 0.5 + 0.2;
+            this.pulseSpeed = 0.02;
+            this.pulse = Math.random() * Math.PI;
+            this.glowSize = this.size * 2;
         }
 
         update() {
+            // Update position
             this.x += this.speedX;
             this.y += this.speedY;
 
-            if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                this.reset();
-            }
+            // Bounce off edges
+            if (this.x < 0 || this.x > bgCanvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > bgCanvas.height) this.speedY *= -1;
+
+            // Pulse animation
+            this.pulse += this.pulseSpeed;
+            this.currentSize = this.size * (1 + 0.2 * Math.sin(this.pulse));
+            this.currentOpacity = this.opacity * (0.8 + 0.2 * Math.sin(this.pulse));
         }
 
         draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(0, 247, 255, ${this.opacity})`;
-            ctx.fill();
+            // Draw glow
+            bgCtx.beginPath();
+            const gradient = bgCtx.createRadialGradient(
+                this.x, this.y, 0,
+                this.x, this.y, this.glowSize
+            );
+            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.5})`);
+            gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
+            bgCtx.fillStyle = gradient;
+            bgCtx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
+            bgCtx.fill();
+
+            // Draw particle
+            bgCtx.beginPath();
+            bgCtx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
+            bgCtx.fillStyle = `rgba(0, 247, 255, ${this.currentOpacity})`;
+            bgCtx.fill();
         }
     }
 
-    function initParticles() {
-        particles = [];
-        const numberOfParticles = Math.floor((canvas.width * canvas.height) / 10000);
-        for (let i = 0; i < numberOfParticles; i++) {
-            particles.push(new Particle());
+    // Brand Particle class
+    class BrandParticle {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 80 + Math.random() * 100;
+            const centerX = brandCanvas.width / 2;
+            const centerY = brandCanvas.height / 2;
+            
+            this.x = centerX + Math.cos(angle) * distance;
+            this.y = centerY + Math.sin(angle) * distance;
+            this.size = Math.random() * 2 + 1;
+            
+            // Orbital motion parameters
+            this.orbit = angle;
+            this.orbitSpeed = (Math.random() * 0.002 + 0.001) * (Math.random() < 0.5 ? 1 : -1);
+            this.orbitRadius = distance;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            
+            // Pulse parameters
+            this.pulse = Math.random() * Math.PI;
+            this.pulseSpeed = 0.02;
+        }
+
+        update() {
+            // Update orbital position
+            this.orbit += this.orbitSpeed;
+            this.x = brandCanvas.width / 2 + Math.cos(this.orbit) * this.orbitRadius;
+            this.y = brandCanvas.height / 2 + Math.sin(this.orbit) * this.orbitRadius;
+            
+            // Update pulse
+            this.pulse += this.pulseSpeed;
+            this.currentSize = this.size * (1 + 0.2 * Math.sin(this.pulse));
+        }
+
+        draw() {
+            brandCtx.beginPath();
+            brandCtx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
+            brandCtx.fillStyle = `rgba(0, 247, 255, ${this.opacity})`;
+            brandCtx.fill();
         }
     }
 
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(particle => {
+    const bgParticles = Array(200).fill().map(() => new BgParticle()); // Increased from 150 to 200
+
+    const brandParticles = [];
+    const brandParticleCount = 50;
+
+    for (let i = 0; i < brandParticleCount; i++) {
+        brandParticles.push(new BrandParticle());
+    }
+
+    function animateBg() {
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        
+        bgParticles.forEach((particle, i) => {
             particle.update();
             particle.draw();
+
+            // Enhanced connections
+            bgParticles.slice(i + 1).forEach(particle2 => {
+                const dx = particle.x - particle2.x;
+                const dy = particle.y - particle2.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 200) { // Increased connection distance
+                    const opacity = 0.15 * (1 - distance/200);
+                    bgCtx.beginPath();
+                    bgCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
+                    bgCtx.lineWidth = 0.5;
+                    bgCtx.moveTo(particle.x, particle.y);
+                    bgCtx.lineTo(particle2.x, particle2.y);
+                    bgCtx.stroke();
+                }
+            });
         });
-        requestAnimationFrame(animate);
+
+        requestAnimationFrame(animateBg);
     }
 
-    initParticles();
-    animate();
-}
+    function animateBrand() {
+        brandCtx.clearRect(0, 0, brandCanvas.width, brandCanvas.height);
+        
+        brandParticles.forEach((particle, i) => {
+            particle.update();
+            particle.draw();
 
-// Initialize particle animations
-setupParticleAnimation('backgroundParticles');
-setupParticleAnimation('brandParticles'); 
+            // Draw connections
+            for (let j = i + 1; j < brandParticles.length; j++) {
+                const dx = brandParticles[j].x - particle.x;
+                const dy = brandParticles[j].y - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 70) {
+                    brandCtx.beginPath();
+                    brandCtx.strokeStyle = `rgba(0, 247, 255, ${0.2 * (1 - distance/70)})`;
+                    brandCtx.lineWidth = 0.5;
+                    brandCtx.moveTo(particle.x, particle.y);
+                    brandCtx.lineTo(brandParticles[j].x, brandParticles[j].y);
+                    brandCtx.stroke();
+                }
+            }
+        });
+
+        requestAnimationFrame(animateBrand);
+    }
+
+    animateBg();
+    animateBrand();
+}); 
