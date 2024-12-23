@@ -3,165 +3,431 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CareerConnect</title>
+        <title>CareerConnect - Your Path to Success</title>
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+        <canvas id="particleCanvas"></canvas>
         <div class="container">
             <nav>
                 <div class="nav-links">
-                    <div class="nav-item"><a href="/about">About</a></div>
-                    <div class="nav-item"><a href="/services">Services</a></div>
-                    <div class="nav-item"><a href="/contact">Contact</a></div>
-                    <div class="nav-item"><a href="/signup">Sign Up</a></div>
+                    <div class="nav-item">
+                        <a href="/services">Services</a>
+                        <div class="hover-card services-card">
+                            <h3>Our Services</h3>
+                            <ul>
+                                <li>Job Search & Matching</li>
+                                <li>Resume Building</li>
+                                <li>Career Guidance</li>
+                                <li>Interview Preparation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a href="/about">About</a>
+                        <div class="hover-card">
+                            <h3>About Us</h3>
+                            <p>CareerConnect is your trusted partner in professional growth, connecting talented individuals with their dream careers.</p>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a href="/contact">Contact</a>
+                        <div class="hover-card contact-card">
+                            <h3>Get in Touch</h3>
+                            <ul>
+                                <li>Email: support@careerconnect.com</li>
+                                <li>Phone: +1 (555) 123-4567</li>
+                                <li>Hours: Mon-Fri, 9AM-6PM</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a href="/signup" class="sign-up">Sign Up</a>
+                    </div>
                 </div>
             </nav>
 
             <div class="content-wrapper">
-                <div class="logo-section">
-                    <h1 class="brand-name">CareerConnect</h1>
-                </div>
-                
-                <div class="login-section">
-                    <div class="profile-icon"></div>
-                    <form class="login-form" id="loginForm">
-                        <input type="text" name="username" placeholder="Username" required>
-                        <input type="password" name="password" placeholder="Password" required>
-                        <button type="submit">Sign In</button>
-                        <div class="remember-me">
-                            <input type="checkbox" id="remember" name="remember">
-                            <label for="remember">Remember me</label>
+                <div class="dashboard-background">
+                    <div class="login-section">
+                        <div class="profile-icon"></div>
+                        <form class="login-form">
+                            <input type="email" placeholder="Email" required>
+                            <input type="password" placeholder="Password" required>
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">Remember me</label>
+                            </div>
+                            <button type="submit">Login</button>
+                        </form>
+                    </div>
+                    
+                    <div class="welcome-section">
+                        <div class="brand-container">
+                            <canvas id="logoParticles"></canvas>
+                            <div class="logo-background"></div>
+                            <h1 class="brand-name">CareerConnect</h1>
+                            <p class="brand-description">Your Path to Professional Success</p>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <canvas id="particleCanvas"></canvas>
-
         <script>
+            // Background particles
             const canvas = document.getElementById('particleCanvas');
             const ctx = canvas.getContext('2d');
-            let particles = [];
-            const particleCount = 35;
-            const connectionDistance = 180;
-
+            
+            // Logo particles
+            const logoCanvas = document.getElementById('logoParticles');
+            const logoCtx = logoCanvas.getContext('2d');
+            
+            // Set canvas sizes
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
+                
+                // Set logo canvas size to match container
+                const brandContainer = document.querySelector('.brand-container');
+                logoCanvas.width = brandContainer.offsetWidth;
+                logoCanvas.height = brandContainer.offsetHeight;
             }
-
-            window.addEventListener('resize', resizeCanvas);
+            
             resizeCanvas();
-
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Particle class for background
             class Particle {
-                constructor() {
+                constructor(ctx, width, height, isLogo = false) {
+                    this.ctx = ctx;
+                    this.width = width;
+                    this.height = height;
+                    this.isLogo = isLogo;
                     this.reset();
                 }
-
+                
                 reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.2 + 0.4;
-                    this.speedX = (Math.random() - 0.5) * 0.4;
-                    this.speedY = (Math.random() - 0.5) * 0.4;
-                    this.color = Math.random() > 0.9 ? '#00f7ff' : '#0066ff';
+                    if (this.isLogo) {
+                        // Logo particles stay within logo area
+                        this.x = Math.random() * this.width;
+                        this.y = Math.random() * this.height;
+                        this.size = Math.random() * 2 + 1;
+                        this.speedX = Math.random() * 2 - 1;
+                        this.speedY = Math.random() * 2 - 1;
+                        this.alpha = Math.random() * 0.8 + 0.2;
+                        this.color = Math.random() > 0.3 ? '#00f7ff' : '#0099ff';
+                    } else {
+                        // Background particles
+                        this.x = Math.random() * this.width;
+                        this.y = Math.random() * this.height;
+                        this.size = Math.random() * 3 + 1;
+                        this.speedX = Math.random() * 3 - 1.5;
+                        this.speedY = Math.random() * 3 - 1.5;
+                        this.alpha = Math.random() * 0.6 + 0.4;
+                        this.color = Math.random() > 0.5 ? '#00f7ff' : '#0099ff';
+                    }
+                    this.life = 1;
                 }
-
+                
                 update() {
                     this.x += this.speedX;
                     this.y += this.speedY;
-
-                    if (this.x < 0) this.x = canvas.width;
-                    if (this.x > canvas.width) this.x = 0;
-                    if (this.y < 0) this.y = canvas.height;
-                    if (this.y > canvas.height) this.y = 0;
+                    
+                    if (this.isLogo) {
+                        // Logo particles stay within bounds and move more gently
+                        this.speedX += (Math.random() - 0.5) * 0.1;
+                        this.speedY += (Math.random() - 0.5) * 0.1;
+                        this.speedX = Math.max(-1, Math.min(1, this.speedX));
+                        this.speedY = Math.max(-1, Math.min(1, this.speedY));
+                        
+                        // Wrap around for logo particles
+                        if (this.x < 0) this.x = this.width;
+                        if (this.x > this.width) this.x = 0;
+                        if (this.y < 0) this.y = this.height;
+                        if (this.y > this.height) this.y = 0;
+                    } else {
+                        // Background particles
+                        this.speedX += (Math.random() - 0.5) * 0.2;
+                        this.speedY += (Math.random() - 0.5) * 0.2;
+                        this.speedX = Math.max(-1.5, Math.min(1.5, this.speedX));
+                        this.speedY = Math.max(-1.5, Math.min(1.5, this.speedY));
+                        
+                        if (this.x < 0 || this.x > this.width || this.y < 0 || this.y > this.height) {
+                            this.reset();
+                        }
+                    }
+                    
+                    this.size += (Math.random() - 0.5) * 0.1;
+                    this.size = Math.max(1, Math.min(4, this.size));
                 }
-
+                
                 draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = this.color.replace(')', `, ${this.alpha})`).replace('rgb', 'rgba');
+                    this.ctx.fill();
+                    
+                    // Add glow effect
+                    this.ctx.shadowBlur = this.isLogo ? 20 : 15;
+                    this.ctx.shadowColor = this.color;
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 0;
                 }
-
+                
                 drawConnections(particles) {
                     particles.forEach(particle => {
-                        const dx = this.x - particle.x;
-                        const dy = this.y - particle.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < connectionDistance && this !== particle) {
-                            const opacity = (1 - distance/connectionDistance) * 0.06;
-                            ctx.beginPath();
-                            ctx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
-                            ctx.lineWidth = 0.15;
-                            ctx.moveTo(this.x, this.y);
-                            ctx.lineTo(particle.x, particle.y);
-                            ctx.stroke();
+                        const distance = Math.sqrt(
+                            Math.pow(this.x - particle.x, 2) + 
+                            Math.pow(this.y - particle.y, 2)
+                        );
+                        const maxDistance = this.isLogo ? 100 : 150;
+                        if (distance < maxDistance) {
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = `rgba(0, 247, 255, ${0.3 * (1 - distance/maxDistance)})`;
+                            this.ctx.lineWidth = this.isLogo ? 0.8 : 0.5;
+                            this.ctx.moveTo(this.x, this.y);
+                            this.ctx.lineTo(particle.x, particle.y);
+                            this.ctx.stroke();
                         }
                     });
                 }
             }
-
-            function init() {
-                particles = [];
-                for (let i = 0; i < particleCount; i++) {
-                    particles.push(new Particle());
+            
+            // Create background particles
+            const particles = [];
+            const particleCount = 100;
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(ctx, canvas.width, canvas.height, false));
+            }
+            
+            // Particle animation for logo
+            const brandContainer = document.querySelector('.brand-container');
+            
+            function resizeLogoCanvas() {
+                logoCanvas.width = brandContainer.offsetWidth * 1.5;
+                logoCanvas.height = brandContainer.offsetHeight * 1.5;
+            }
+            
+            resizeLogoCanvas();
+            window.addEventListener('resize', resizeLogoCanvas);
+            
+            class LogoParticle {
+                constructor() {
+                    this.reset();
+                }
+                
+                reset() {
+                    this.x = Math.random() * logoCanvas.width;
+                    this.y = Math.random() * logoCanvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = (Math.random() - 0.5) * 2;
+                    this.speedY = (Math.random() - 0.5) * 2;
+                    this.color = Math.random() > 0.5 ? '#00f7ff' : '#0099ff';
+                    this.alpha = Math.random() * 0.5 + 0.5;
+                    this.acceleration = 0.01;
+                }
+                
+                update() {
+                    // Center gravity effect
+                    const centerX = logoCanvas.width / 2;
+                    const centerY = logoCanvas.height / 2;
+                    const dx = centerX - this.x;
+                    const dy = centerY - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 100) {
+                        this.speedX += (dx / distance) * this.acceleration;
+                        this.speedY += (dy / distance) * this.acceleration;
+                    }
+                    
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    
+                    // Add some random movement
+                    this.speedX += (Math.random() - 0.5) * 0.1;
+                    this.speedY += (Math.random() - 0.5) * 0.1;
+                    
+                    // Limit speed
+                    const maxSpeed = 2;
+                    const currentSpeed = Math.sqrt(this.speedX * this.speedX + this.speedY * this.speedY);
+                    if (currentSpeed > maxSpeed) {
+                        this.speedX = (this.speedX / currentSpeed) * maxSpeed;
+                        this.speedY = (this.speedY / currentSpeed) * maxSpeed;
+                    }
+                    
+                    // Keep particles within bounds
+                    if (this.x < 0 || this.x > logoCanvas.width) this.speedX *= -0.5;
+                    if (this.y < 0 || this.y > logoCanvas.height) this.speedY *= -0.5;
+                    
+                    // Random size fluctuation
+                    this.size += (Math.random() - 0.5) * 0.1;
+                    this.size = Math.max(0.5, Math.min(2.5, this.size));
+                }
+                
+                draw() {
+                    logoCtx.beginPath();
+                    logoCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    logoCtx.fillStyle = this.color.replace(')', `, ${this.alpha})`).replace('rgb', 'rgba');
+                    logoCtx.fill();
+                    
+                    // Add glow effect
+                    logoCtx.shadowBlur = 15;
+                    logoCtx.shadowColor = this.color;
+                    logoCtx.fill();
+                    logoCtx.shadowBlur = 0;
+                }
+                
+                drawConnections(particles) {
+                    particles.forEach(particle => {
+                        const distance = Math.sqrt(
+                            Math.pow(this.x - particle.x, 2) + 
+                            Math.pow(this.y - particle.y, 2)
+                        );
+                        if (distance < 100) {
+                            logoCtx.beginPath();
+                            logoCtx.strokeStyle = `rgba(0, 247, 255, ${0.2 * (1 - distance/100)})`;
+                            logoCtx.lineWidth = 0.5;
+                            logoCtx.moveTo(this.x, this.y);
+                            logoCtx.lineTo(particle.x, particle.y);
+                            logoCtx.stroke();
+                        }
+                    });
                 }
             }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                particles.forEach(particle => {
-                    particle.update();
-                    particle.draw();
-                    particle.drawConnections(particles);
-                });
-
-                requestAnimationFrame(animate);
+            
+            // Create logo particles
+            const logoParticles = [];
+            const logoParticleCount = 50;
+            
+            for (let i = 0; i < logoParticleCount; i++) {
+                logoParticles.push(new LogoParticle());
             }
+            
+            // Mouse interaction for logo particles
+            let mouse = {
+                x: null,
+                y: null,
+                radius: 100
+            };
+            
+            logoCanvas.addEventListener('mousemove', (event) => {
+                const rect = logoCanvas.getBoundingClientRect();
+                mouse.x = event.clientX - rect.left;
+                mouse.y = event.clientY - rect.top;
+            });
+            
+            logoCanvas.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+            
+            // Animation loop for logo particles
+            function animateLogoParticles() {
+                logoCtx.clearRect(0, 0, logoCanvas.width, logoCanvas.height);
+                
+                logoParticles.forEach(particle => {
+                    particle.update();
+                    
+                    // Mouse interaction
+                    if (mouse.x && mouse.y) {
+                        const dx = particle.x - mouse.x;
+                        const dy = particle.y - mouse.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < mouse.radius) {
+                            const force = (mouse.radius - distance) / mouse.radius;
+                            particle.speedX += dx * force * 0.02;
+                            particle.speedY += dy * force * 0.02;
+                        }
+                    }
+                    
+                    particle.draw();
+                });
+                
+                // Draw connections
+                logoParticles.forEach(particle => {
+                    particle.drawConnections(logoParticles);
+                });
+                
+                requestAnimationFrame(animateLogoParticles);
+            }
+            
+            animateLogoParticles();
 
-            init();
-            animate();
-
-            // Form handling
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            // Form submission
+            document.querySelector('.login-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const formData = new FormData(e.target);
-                const username = formData.get('username');
-                const password = formData.get('password');
-                const remember = formData.get('remember');
-
+                const email = e.target.querySelector('input[type="email"]').value;
+                const password = e.target.querySelector('input[type="password"]').value;
+                
                 try {
                     const response = await fetch('/api/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ username, password }),
+                        body: JSON.stringify({ email, password }),
                     });
-
+                    
                     const data = await response.json();
-
+                    
                     if (response.ok) {
-                        localStorage.setItem('token', data.token);
-                        localStorage.setItem('userId', data.user._id);
-                        localStorage.setItem('username', data.user.username);
-                        if (remember) {
-                            localStorage.setItem('rememberMe', 'true');
-                        }
-                        
-                        const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                        // Store token and user data in localStorage
+                        localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('userId', data.data.userId);
+                        localStorage.setItem('username', data.data.username);
+                        localStorage.setItem('email', data.data.email);
+
+                        // Set up session expiry
+                        const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours
                         localStorage.setItem('sessionExpiry', expiryTime);
 
+                        // Redirect to dashboard
                         window.location.href = '/dashboard';
                     } else {
-                        throw new Error(data.message || 'Login failed');
+                        // Show error message
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'error-message';
+                        errorDiv.textContent = data.message || 'Login failed';
+                        errorDiv.style.color = '#ff4444';
+                        errorDiv.style.marginTop = '10px';
+                        errorDiv.style.textAlign = 'center';
+                        
+                        // Remove any existing error message
+                        const existingError = document.querySelector('.error-message');
+                        if (existingError) {
+                            existingError.remove();
+                        }
+                        
+                        // Add new error message
+                        const form = document.querySelector('.login-form');
+                        form.appendChild(errorDiv);
+                        
+                        // Clear password field
+                        e.target.querySelector('input[type="password"]').value = '';
                     }
                 } catch (error) {
                     console.error('Login error:', error);
+                    alert('An error occurred during login. Please try again.');
+                }
+            });
+
+            // Check session status on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                const token = localStorage.getItem('token');
+                const sessionExpiry = localStorage.getItem('sessionExpiry');
+                
+                if (token && sessionExpiry) {
+                    // Check if session has expired
+                    if (new Date().getTime() > parseInt(sessionExpiry)) {
+                        // Clear session data
+                        localStorage.clear();
+                    } else if (window.location.pathname === '/') {
+                        // If on landing page and session is valid, redirect to dashboard
+                        window.location.href = '/dashboard';
+                    }
                 }
             });
         </script>

@@ -1,5 +1,0 @@
-[33mcfb8106[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix CORS and authentication issues
-[33m676891e[m Update Vercel configuration with explicit API routes
-[33m87cc33c[m Fix routing issues and improve error handling
-[33m6ab6d7e[m Add detailed logging and connection monitoring
-[33m811a0a8[m Simplify MongoDB connection for Vercel deployment
