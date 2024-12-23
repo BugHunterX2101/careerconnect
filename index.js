@@ -9,18 +9,23 @@ const User = require('./models/User');
 const app = express();
 
 // CORS configuration
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the public directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Log environment setup
 console.log('Starting server with configuration:');
@@ -181,6 +186,11 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
+// Catch-all route to serve index.html for client-side routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Error handling
 app.use((err, req, res, next) => {
     console.error('Error:', {
@@ -193,21 +203,6 @@ app.use((err, req, res, next) => {
     res.status(500).json({
         status: 'error',
         message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error',
-        path: req.path
-    });
-});
-
-// 404 handler
-app.use((req, res) => {
-    console.log('404 Not Found:', {
-        path: req.path,
-        method: req.method,
-        timestamp: new Date().toISOString()
-    });
-    
-    res.status(404).json({
-        status: 'error',
-        message: 'Route not found',
         path: req.path
     });
 });
