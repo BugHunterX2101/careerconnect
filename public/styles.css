@@ -32,10 +32,10 @@ body {
     position: relative;
     z-index: 1;
     background: rgba(21, 21, 21, 0.7);
-    border-radius: 20px;
+    border-radius: 25px;
     box-shadow: 
-        0 0 30px rgba(0, 247, 255, 0.1),
-        inset 0 0 30px rgba(0, 247, 255, 0.05);
+        0 0 40px rgba(0, 247, 255, 0.1),
+        inset 0 0 40px rgba(0, 247, 255, 0.05);
     overflow: hidden;
 }
 
@@ -44,13 +44,13 @@ nav {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 2rem 3rem;
+    padding: 2.5rem 3.5rem;
     z-index: 2;
 }
 
 .nav-links {
     display: flex;
-    gap: 3rem;
+    gap: 3.5rem;
     align-items: center;
 }
 
@@ -59,7 +59,7 @@ nav {
     text-decoration: none;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .nav-item a:hover {
@@ -77,7 +77,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     min-height: 85vh;
-    padding: 0 10%;
+    padding: 0 12%;
 }
 
 /* Logo Section */
@@ -86,48 +86,48 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 4rem;
+    margin-right: 6rem;
 }
 
 .brand-name {
     font-size: 5.5rem;
     color: var(--primary-color);
     text-shadow: 
-        0 0 20px rgba(0, 247, 255, 0.8),
-        0 0 40px rgba(0, 247, 255, 0.6),
-        0 0 60px rgba(0, 247, 255, 0.4);
+        0 0 25px rgba(0, 247, 255, 0.9),
+        0 0 45px rgba(0, 247, 255, 0.7),
+        0 0 65px rgba(0, 247, 255, 0.5);
     animation: glow 2s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
     from {
         text-shadow: 
-            0 0 20px rgba(0, 247, 255, 0.8),
-            0 0 40px rgba(0, 247, 255, 0.6),
-            0 0 60px rgba(0, 247, 255, 0.4);
+            0 0 25px rgba(0, 247, 255, 0.9),
+            0 0 45px rgba(0, 247, 255, 0.7),
+            0 0 65px rgba(0, 247, 255, 0.5);
     }
     to {
         text-shadow: 
-            0 0 30px rgba(0, 247, 255, 1),
-            0 0 50px rgba(0, 247, 255, 0.8),
-            0 0 70px rgba(0, 247, 255, 0.6);
+            0 0 35px rgba(0, 247, 255, 1),
+            0 0 55px rgba(0, 247, 255, 0.8),
+            0 0 75px rgba(0, 247, 255, 0.6);
     }
 }
 
 /* Login Section */
 .login-section {
     width: 360px;
-    padding: 2.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 .profile-icon {
-    width: 90px;
-    height: 90px;
+    width: 85px;
+    height: 85px;
     background: transparent;
-    border: 2px solid rgba(0, 247, 255, 0.2);
+    border: 2px solid rgba(0, 247, 255, 0.15);
     border-radius: 50%;
     margin: 0 auto;
     position: relative;
@@ -136,38 +136,38 @@ nav {
 .profile-icon::before {
     content: '';
     position: absolute;
-    top: 20px;
+    top: 18px;
     left: 50%;
     transform: translateX(-50%);
-    width: 35px;
-    height: 35px;
-    background: rgba(0, 247, 255, 0.15);
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 247, 255, 0.12);
     border-radius: 50%;
 }
 
 .profile-icon::after {
     content: '';
     position: absolute;
-    bottom: 10px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 45px;
-    height: 25px;
-    background: rgba(0, 247, 255, 0.15);
+    width: 42px;
+    height: 24px;
+    background: rgba(0, 247, 255, 0.12);
     border-radius: 20px 20px 0 0;
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .login-form input {
     width: 100%;
     padding: 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 247, 255, 0.15);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 247, 255, 0.12);
     border-radius: 8px;
     color: var(--text-color);
     font-size: 1rem;
@@ -176,11 +176,11 @@ nav {
 .login-form input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.15);
 }
 
 .login-form input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .login-form button {
@@ -189,7 +189,7 @@ nav {
     padding: 1rem;
     border: none;
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -197,14 +197,14 @@ nav {
 
 .login-form button:hover {
     background: #00e0e7;
-    box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.2);
 }
 
 .remember-me {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.9rem;
 }
 
@@ -222,7 +222,7 @@ nav {
     width: 100%;
     height: 100%;
     z-index: 0;
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 /* Error Message */

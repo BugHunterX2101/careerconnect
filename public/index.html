@@ -13,7 +13,7 @@
                     <div class="nav-item"><a href="/about">About</a></div>
                     <div class="nav-item"><a href="/services">Services</a></div>
                     <div class="nav-item"><a href="/contact">Contact</a></div>
-                    <div class="nav-item"><a href="/signup" class="sign-up">Sign Up</a></div>
+                    <div class="nav-item"><a href="/signup">Sign Up</a></div>
                 </div>
             </nav>
 
@@ -33,7 +33,6 @@
                             <label for="remember">Remember me</label>
                         </div>
                     </form>
-                    <div id="errorMessage" class="error-message" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -44,8 +43,8 @@
             const canvas = document.getElementById('particleCanvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
-            const particleCount = 50;
-            const connectionDistance = 150;
+            const particleCount = 35;
+            const connectionDistance = 180;
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -63,10 +62,10 @@
                 reset() {
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 2 + 1;
-                    this.speedX = (Math.random() - 0.5) * 0.8;
-                    this.speedY = (Math.random() - 0.5) * 0.8;
-                    this.color = Math.random() > 0.8 ? '#00f7ff' : '#0066ff';
+                    this.size = Math.random() * 1.2 + 0.4;
+                    this.speedX = (Math.random() - 0.5) * 0.4;
+                    this.speedY = (Math.random() - 0.5) * 0.4;
+                    this.color = Math.random() > 0.9 ? '#00f7ff' : '#0066ff';
                 }
 
                 update() {
@@ -93,10 +92,10 @@
                         const distance = Math.sqrt(dx * dx + dy * dy);
 
                         if (distance < connectionDistance && this !== particle) {
-                            const opacity = (1 - distance/connectionDistance) * 0.1;
+                            const opacity = (1 - distance/connectionDistance) * 0.06;
                             ctx.beginPath();
                             ctx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
-                            ctx.lineWidth = 0.3;
+                            ctx.lineWidth = 0.15;
                             ctx.moveTo(this.x, this.y);
                             ctx.lineTo(particle.x, particle.y);
                             ctx.stroke();
@@ -162,19 +161,7 @@
                         throw new Error(data.message || 'Login failed');
                     }
                 } catch (error) {
-                    const errorMessage = document.getElementById('errorMessage');
-                    errorMessage.textContent = error.message;
-                    errorMessage.style.display = 'block';
-                }
-            });
-
-            window.addEventListener('load', () => {
-                const token = localStorage.getItem('token');
-                const sessionExpiry = localStorage.getItem('sessionExpiry');
-                const currentTime = new Date().getTime();
-
-                if (token && sessionExpiry && currentTime < parseInt(sessionExpiry)) {
-                    window.location.href = '/dashboard';
+                    console.error('Login error:', error);
                 }
             });
         </script>
