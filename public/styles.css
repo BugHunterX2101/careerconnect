@@ -33,7 +33,9 @@ body {
     z-index: 1;
     background: rgba(21, 21, 21, 0.7);
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 247, 255, 0.1);
+    box-shadow: 
+        0 0 30px rgba(0, 247, 255, 0.1),
+        inset 0 0 30px rgba(0, 247, 255, 0.05);
     overflow: hidden;
 }
 
@@ -114,46 +116,45 @@ nav {
 
 /* Login Section */
 .login-section {
-    background: rgba(21, 21, 21, 0.95);
-    padding: 3rem;
-    border-radius: 15px;
     width: 360px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 247, 255, 0.1);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .profile-icon {
     width: 90px;
     height: 90px;
-    background: rgba(0, 247, 255, 0.1);
+    background: transparent;
+    border: 2px solid rgba(0, 247, 255, 0.2);
     border-radius: 50%;
-    margin: 0 auto 3rem;
+    margin: 0 auto;
     position: relative;
 }
 
 .profile-icon::before {
     content: '';
     position: absolute;
-    top: 25px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: 35px;
     height: 35px;
-    background: rgba(0, 247, 255, 0.2);
+    background: rgba(0, 247, 255, 0.15);
     border-radius: 50%;
 }
 
 .profile-icon::after {
     content: '';
     position: absolute;
-    bottom: 12px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 50px;
-    height: 28px;
-    background: rgba(0, 247, 255, 0.2);
-    border-radius: 25px 25px 0 0;
+    width: 45px;
+    height: 25px;
+    background: rgba(0, 247, 255, 0.15);
+    border-radius: 20px 20px 0 0;
 }
 
 .login-form {
@@ -165,11 +166,10 @@ nav {
 .login-form input {
     width: 100%;
     padding: 1rem;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 247, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 247, 255, 0.15);
     border-radius: 8px;
     color: var(--text-color);
-    transition: all 0.3s ease;
     font-size: 1rem;
 }
 
@@ -183,38 +183,35 @@ nav {
     color: rgba(255, 255, 255, 0.5);
 }
 
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-    margin-top: -0.5rem;
-}
-
-.remember-me input[type="checkbox"] {
-    width: auto;
-    margin: 0;
-    cursor: pointer;
-}
-
 .login-form button {
     background: var(--primary-color);
     color: var(--background);
     padding: 1rem;
     border: none;
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 1rem;
 }
 
 .login-form button:hover {
     background: #00e0e7;
     box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.remember-me input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
 }
 
 /* Particle Canvas */
@@ -282,7 +279,6 @@ nav {
     }
 
     .login-section {
-        padding: 2rem;
         width: 100%;
         max-width: 340px;
     }
