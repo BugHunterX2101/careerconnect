@@ -16,12 +16,28 @@
             "dest": "index.js"
         },
         {
+            "src": "/signup",
+            "dest": "/public/signup.html"
+        },
+        {
+            "src": "/signup.html",
+            "dest": "/public/signup.html"
+        },
+        {
+            "src": "/dashboard",
+            "dest": "/public/dashboard.html"
+        },
+        {
+            "src": "/styles.css",
+            "dest": "/public/styles.css"
+        },
+        {
             "src": "/",
-            "dest": "public/index.html"
+            "dest": "/public/index.html"
         },
         {
             "src": "/(.+)",
-            "dest": "public/$1"
+            "dest": "/public/$1"
         }
     ]
 } 
