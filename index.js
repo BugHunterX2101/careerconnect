@@ -8,17 +8,13 @@ const authRoutes = require('./routes/auth');
 const app = express();
 
 // Enhanced CORS configuration
-const corsOptions = {
-    origin: function (origin, callback) {
-        callback(null, true);
-    },
+app.use(cors({
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     maxAge: 86400
-};
-
-app.use(cors(corsOptions));
+}));
 
 // Middleware
 app.use(express.json());
@@ -42,6 +38,13 @@ console.log('- JWT Secret exists:', !!process.env.JWT_SECRET);
 
 // Connect to MongoDB before handling requests
 app.use(async (req, res, next) => {
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        return res.status(200).json({});
+    }
+
     try {
         // Skip database connection for health check
         if (req.path === '/') {
