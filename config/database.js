@@ -10,7 +10,8 @@ const connectDB = async () => {
         console.log('Current connection state:', {
             isConnected,
             connectionAttempts,
-            readyState: mongoose.connection.readyState
+            readyState: mongoose.connection.readyState,
+            timestamp: new Date().toISOString()
         });
 
         if (isConnected && mongoose.connection.readyState === 1) {
@@ -52,24 +53,30 @@ const connectDB = async () => {
         
         // Set up connection event listeners before connecting
         mongoose.connection.on('connected', () => {
-            console.log('Mongoose connected to MongoDB');
+            console.log('Mongoose connected to MongoDB at:', new Date().toISOString());
             isConnected = true;
         });
 
         mongoose.connection.on('error', (err) => {
-            console.error('Mongoose connection error:', err);
+            console.error('Mongoose connection error:', {
+                error: err.message,
+                code: err.code,
+                timestamp: new Date().toISOString()
+            });
             isConnected = false;
         });
 
         mongoose.connection.on('disconnected', () => {
-            console.log('Mongoose disconnected from MongoDB');
+            console.log('Mongoose disconnected from MongoDB at:', new Date().toISOString());
             isConnected = false;
         });
 
         // Basic connection options
         const options = {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 30000,
+            heartbeatFrequencyMS: 2000
         };
 
         console.log('Attempting MongoDB connection with options:', JSON.stringify(options, null, 2));
@@ -79,7 +86,7 @@ const connectDB = async () => {
         isConnected = conn.connections[0].readyState === 1;
 
         if (isConnected) {
-            console.log('MongoDB Connected Successfully');
+            console.log('MongoDB Connected Successfully at:', new Date().toISOString());
             connectionAttempts = 0; // Reset attempts on successful connection
             
             // Log connection details
@@ -90,8 +97,17 @@ const connectDB = async () => {
                 port: port,
                 ready: isConnected,
                 state: conn.connection.readyState,
-                models: Object.keys(conn.models)
+                models: Object.keys(conn.models),
+                timestamp: new Date().toISOString()
             });
+
+            // Test the connection with a ping
+            try {
+                await conn.connection.db.admin().ping();
+                console.log('MongoDB ping successful');
+            } catch (pingError) {
+                console.error('MongoDB ping failed:', pingError.message);
+            }
 
             return conn;
         } else {
@@ -125,7 +141,8 @@ const checkConnection = () => ({
     isConnected,
     attempts: connectionAttempts,
     state: mongoose.connection.readyState,
-    stateDesc: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState] || 'unknown'
+    stateDesc: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState] || 'unknown',
+    timestamp: new Date().toISOString()
 });
 
 module.exports = connectDB;
