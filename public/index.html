@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="nav-item">
-                        <a href="#register" class="sign-up">Sign Up</a>
+                        <a href="signup" class="sign-up">Sign Up</a>
                     </div>
                 </div>
             </nav>
@@ -281,15 +281,60 @@
                     const data = await response.json();
                     
                     if (response.ok) {
-                        // Store token and redirect
-                        localStorage.setItem('token', data.token);
+                        // Store token and user data in localStorage
+                        localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('userId', data.data.userId);
+                        localStorage.setItem('username', data.data.username);
+                        localStorage.setItem('email', data.data.email);
+
+                        // Set up session expiry
+                        const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours
+                        localStorage.setItem('sessionExpiry', expiryTime);
+
+                        // Redirect to dashboard
                         window.location.href = '/dashboard';
                     } else {
-                        alert(data.message || 'Login failed');
+                        // Show error message
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'error-message';
+                        errorDiv.textContent = data.message || 'Login failed';
+                        errorDiv.style.color = '#ff4444';
+                        errorDiv.style.marginTop = '10px';
+                        errorDiv.style.textAlign = 'center';
+                        
+                        // Remove any existing error message
+                        const existingError = document.querySelector('.error-message');
+                        if (existingError) {
+                            existingError.remove();
+                        }
+                        
+                        // Add new error message
+                        const form = document.querySelector('.login-form');
+                        form.appendChild(errorDiv);
+                        
+                        // Clear password field
+                        e.target.querySelector('input[type="password"]').value = '';
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    alert('An error occurred during login');
+                    alert('An error occurred during login. Please try again.');
+                }
+            });
+
+            // Check session status on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                const token = localStorage.getItem('token');
+                const sessionExpiry = localStorage.getItem('sessionExpiry');
+                
+                if (token && sessionExpiry) {
+                    // Check if session has expired
+                    if (new Date().getTime() > parseInt(sessionExpiry)) {
+                        // Clear session data
+                        localStorage.clear();
+                    } else if (window.location.pathname === '/') {
+                        // If on landing page and session is valid, redirect to dashboard
+                        window.location.href = '/dashboard';
+                    }
                 }
             });
         </script>
