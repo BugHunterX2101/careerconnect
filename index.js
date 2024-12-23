@@ -5,6 +5,7 @@ const path = require('path');
 const connectDB = require('./config/database');
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -48,10 +49,20 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Serve the signup page
+app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+});
+
+// Serve the signup page for the .html extension as well
+app.get('/signup.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+});
+
 // Register endpoint
 app.post('/api/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, role } = req.body;
         
         // Basic validation
         if (!username || !email || !password) {
@@ -61,24 +72,34 @@ app.post('/api/register', async (req, res) => {
             });
         }
 
-        // Create user
+        // Create user with role
         const user = new User({
             username,
             email,
-            password
+            password,
+            role: role || 'jobseeker' // Default to jobseeker if no role provided
         });
 
         // Save user
         await user.save();
 
-        // Return success
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Return success with token
         res.status(201).json({
             status: 'success',
             message: 'Registration successful',
             data: {
                 userId: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role: user.role,
+                token
             }
         });
     } catch (error) {
@@ -130,14 +151,22 @@ app.post('/api/login', async (req, res) => {
             });
         }
 
-        // Return success
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Return success with token
         res.json({
             status: 'success',
             message: 'Login successful',
             data: {
                 userId: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                token
             }
         });
     } catch (error) {
@@ -182,6 +211,36 @@ app.get('/api/test-db', async (req, res) => {
             status: 'error',
             message: 'Database connection test failed',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+// Test endpoint to view users (only in development)
+app.get('/api/test/users', async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+        return res.status(403).json({
+            status: 'error',
+            message: 'This endpoint is not available in production'
+        });
+    }
+
+    try {
+        // Get all users but exclude sensitive information
+        const users = await User.find({})
+            .select('-password -__v')
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        res.json({
+            status: 'success',
+            count: users.length,
+            data: users
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to fetch users'
         });
     }
 });

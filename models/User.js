@@ -24,11 +24,11 @@ const userSchema = new mongoose.Schema({
         enum: ['jobseeker', 'employer'],
         default: 'jobseeker'
     },
-    skills: [{
+    position: {
         type: String,
         trim: true
-    }],
-    location: {
+    },
+    company: {
         type: String,
         trim: true
     },
@@ -36,9 +36,27 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['entry', 'intermediate', 'senior']
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
+    location: {
+        type: String,
+        trim: true
+    },
+    skills: [{
+        type: String,
+        trim: true
+    }],
+    primaryField: {
+        type: String,
+        enum: ['technology', 'business', 'healthcare', 'education', 'engineering', 'other']
+    },
+    preferences: {
+        jobAlerts: {
+            type: Boolean,
+            default: false
+        },
+        newsletter: {
+            type: Boolean,
+            default: false
+        }
     },
     profile: {
         education: [{
@@ -55,6 +73,14 @@ const userSchema = new mongoose.Schema({
         }],
         bio: String,
         profilePicture: String
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    lastActive: {
+        type: Date,
+        default: Date.now
     }
 });
 
@@ -79,7 +105,19 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
-// Create indexes
-userSchema.index({ username: 'text', skills: 'text', location: 'text' });
+// Update lastActive timestamp
+userSchema.methods.updateLastActive = function() {
+    this.lastActive = new Date();
+    return this.save();
+};
+
+// Create indexes for searching
+userSchema.index({ 
+    username: 'text', 
+    skills: 'text', 
+    location: 'text',
+    position: 'text',
+    company: 'text'
+});
 
 module.exports = mongoose.model('User', userSchema); 

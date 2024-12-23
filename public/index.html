@@ -10,18 +10,10 @@
         <div class="container">
             <nav>
                 <div class="nav-links">
-                    <div class="nav-item">
-                        <a href="/services">Services</a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="/about">About</a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="/contact">Contact</a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="/signup" class="sign-up">Sign Up</a>
-                    </div>
+                    <div class="nav-item"><a href="/about">About</a></div>
+                    <div class="nav-item"><a href="/services">Services</a></div>
+                    <div class="nav-item"><a href="/contact">Contact</a></div>
+                    <div class="nav-item"><a href="/signup" class="sign-up">Sign Up</a></div>
                 </div>
             </nav>
 
@@ -33,13 +25,13 @@
                 <div class="login-section">
                     <div class="profile-icon"></div>
                     <form class="login-form" id="loginForm">
-                        <input type="email" name="email" placeholder="Email" required>
+                        <input type="text" name="username" placeholder="Username" required>
                         <input type="password" name="password" placeholder="Password" required>
+                        <button type="submit">Sign In</button>
                         <div class="remember-me">
                             <input type="checkbox" id="remember" name="remember">
                             <label for="remember">Remember me</label>
                         </div>
-                        <button type="submit">Login</button>
                     </form>
                     <div id="errorMessage" class="error-message" style="display: none;"></div>
                 </div>
@@ -72,9 +64,9 @@
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
                     this.size = Math.random() * 2 + 1;
-                    this.speedX = (Math.random() - 0.5) * 1;
-                    this.speedY = (Math.random() - 0.5) * 1;
-                    this.color = Math.random() > 0.7 ? '#00f7ff' : '#0066ff';
+                    this.speedX = (Math.random() - 0.5) * 0.8;
+                    this.speedY = (Math.random() - 0.5) * 0.8;
+                    this.color = Math.random() > 0.8 ? '#00f7ff' : '#0066ff';
                 }
 
                 update() {
@@ -101,10 +93,10 @@
                         const distance = Math.sqrt(dx * dx + dy * dy);
 
                         if (distance < connectionDistance && this !== particle) {
-                            const opacity = (1 - distance/connectionDistance) * 0.15;
+                            const opacity = (1 - distance/connectionDistance) * 0.1;
                             ctx.beginPath();
                             ctx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
-                            ctx.lineWidth = 0.5;
+                            ctx.lineWidth = 0.3;
                             ctx.moveTo(this.x, this.y);
                             ctx.lineTo(particle.x, particle.y);
                             ctx.stroke();
@@ -139,7 +131,7 @@
             document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
-                const email = formData.get('email');
+                const username = formData.get('username');
                 const password = formData.get('password');
                 const remember = formData.get('remember');
 
@@ -149,7 +141,7 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ email, password }),
+                        body: JSON.stringify({ username, password }),
                     });
 
                     const data = await response.json();
@@ -157,7 +149,7 @@
                     if (response.ok) {
                         localStorage.setItem('token', data.token);
                         localStorage.setItem('userId', data.user._id);
-                        localStorage.setItem('email', data.user.email);
+                        localStorage.setItem('username', data.user.username);
                         if (remember) {
                             localStorage.setItem('rememberMe', 'true');
                         }
