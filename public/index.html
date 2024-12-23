@@ -5,21 +5,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CareerConnect - Your Path to Success</title>
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </head>
     <body>
         <canvas id="particleCanvas"></canvas>
         <div class="container">
             <nav>
+                <div class="nav-brand">
+                    <a href="/" class="brand-link">CareerConnect</a>
+                </div>
                 <div class="nav-links">
                     <div class="nav-item">
                         <a href="/services">Services</a>
                         <div class="hover-card services-card">
                             <h3>Our Services</h3>
                             <ul>
-                                <li>Job Search & Matching</li>
-                                <li>Resume Building</li>
-                                <li>Career Guidance</li>
-                                <li>Interview Preparation</li>
+                                <li><i class="fas fa-search"></i> Job Search & Matching</li>
+                                <li><i class="fas fa-file-alt"></i> Resume Building</li>
+                                <li><i class="fas fa-compass"></i> Career Guidance</li>
+                                <li><i class="fas fa-comments"></i> Interview Preparation</li>
                             </ul>
                         </div>
                     </div>
@@ -27,7 +31,9 @@
                         <a href="/about">About</a>
                         <div class="hover-card">
                             <h3>About Us</h3>
-                            <p>CareerConnect is your trusted partner in professional growth, connecting talented individuals with their dream careers.</p>
+                            <p><i class="fas fa-star"></i> Your trusted partner in professional growth</p>
+                            <p><i class="fas fa-users"></i> Connecting talent with opportunity</p>
+                            <p><i class="fas fa-chart-line"></i> Driving career success</p>
                         </div>
                     </div>
                     <div class="nav-item">
@@ -35,9 +41,9 @@
                         <div class="hover-card contact-card">
                             <h3>Get in Touch</h3>
                             <ul>
-                                <li>Email: support@careerconnect.com</li>
-                                <li>Phone: +1 (555) 123-4567</li>
-                                <li>Hours: Mon-Fri, 9AM-6PM</li>
+                                <li><i class="fas fa-envelope"></i> support@careerconnect.com</li>
+                                <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                                <li><i class="fas fa-clock"></i> Mon-Fri, 9AM-6PM</li>
                             </ul>
                         </div>
                     </div>
@@ -46,25 +52,80 @@
                     </div>
                 </div>
             </nav>
-            
+
             <div class="content-wrapper">
-                <div class="login-section">
-                    <div class="profile-icon"></div>
-                    <form class="login-form">
-                        <input type="email" placeholder="Email" required>
-                        <input type="password" placeholder="Password" required>
-                        <div class="remember-me">
-                            <input type="checkbox" id="remember">
-                            <label for="remember">Remember me</label>
-                        </div>
-                        <button type="submit">Login</button>
-                    </form>
-                </div>
-                
                 <div class="welcome-section">
                     <div class="brand-container">
                         <canvas id="logoParticles"></canvas>
                         <h1 class="brand-name">CareerConnect</h1>
+                        <p class="brand-tagline">Your Path to Professional Success</p>
+                        <div class="brand-features">
+                            <div class="feature">
+                                <i class="fas fa-rocket"></i>
+                                <span>Launch Your Career</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-handshake"></i>
+                                <span>Connect with Opportunities</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-chart-up"></i>
+                                <span>Grow Professionally</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="login-section">
+                    <div class="login-container">
+                        <div class="profile-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2>Welcome Back</h2>
+                        <form class="login-form">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="email" placeholder="Enter your email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="password" placeholder="Enter your password" required>
+                                </div>
+                            </div>
+                            <div class="form-options">
+                                <div class="remember-me">
+                                    <input type="checkbox" id="remember">
+                                    <label for="remember">Remember me</label>
+                                </div>
+                                <a href="/forgot-password" class="forgot-password">Forgot Password?</a>
+                            </div>
+                            <button type="submit" class="login-button">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Login
+                            </button>
+                            <div class="login-divider">
+                                <span>or</span>
+                            </div>
+                            <div class="social-login">
+                                <button type="button" class="google-login">
+                                    <i class="fab fa-google"></i>
+                                    Continue with Google
+                                </button>
+                                <button type="button" class="linkedin-login">
+                                    <i class="fab fa-linkedin"></i>
+                                    Continue with LinkedIn
+                                </button>
+                            </div>
+                        </form>
+                        <p class="signup-prompt">
+                            New to CareerConnect? 
+                            <a href="/signup">Create an account</a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -266,8 +327,8 @@
             // Form submission
             document.querySelector('.login-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const email = e.target.querySelector('input[type="email"]').value;
-                const password = e.target.querySelector('input[type="password"]').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
                 
                 try {
                     const response = await fetch('/api/login', {
@@ -281,58 +342,66 @@
                     const data = await response.json();
                     
                     if (response.ok) {
-                        // Store token and user data in localStorage
+                        // Store token and user data
                         localStorage.setItem('token', data.data.token);
                         localStorage.setItem('userId', data.data.userId);
                         localStorage.setItem('username', data.data.username);
                         localStorage.setItem('email', data.data.email);
 
-                        // Set up session expiry
-                        const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours
+                        // Set session expiry
+                        const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000);
                         localStorage.setItem('sessionExpiry', expiryTime);
 
-                        // Redirect to dashboard
-                        window.location.href = '/dashboard';
+                        // Show success message and redirect
+                        const successMessage = document.createElement('div');
+                        successMessage.className = 'success-message';
+                        successMessage.innerHTML = `
+                            <i class="fas fa-check-circle"></i>
+                            <span>Login successful! Redirecting...</span>
+                        `;
+                        document.querySelector('.login-form').appendChild(successMessage);
+
+                        setTimeout(() => {
+                            window.location.href = '/dashboard';
+                        }, 1500);
                     } else {
                         // Show error message
                         const errorDiv = document.createElement('div');
                         errorDiv.className = 'error-message';
-                        errorDiv.textContent = data.message || 'Login failed';
-                        errorDiv.style.color = '#ff4444';
-                        errorDiv.style.marginTop = '10px';
-                        errorDiv.style.textAlign = 'center';
+                        errorDiv.innerHTML = `
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>${data.message || 'Login failed'}</span>
+                        `;
                         
-                        // Remove any existing error message
                         const existingError = document.querySelector('.error-message');
                         if (existingError) {
                             existingError.remove();
                         }
                         
-                        // Add new error message
-                        const form = document.querySelector('.login-form');
-                        form.appendChild(errorDiv);
-                        
-                        // Clear password field
-                        e.target.querySelector('input[type="password"]').value = '';
+                        document.querySelector('.login-form').appendChild(errorDiv);
+                        document.getElementById('password').value = '';
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    alert('An error occurred during login. Please try again.');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = `
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>An error occurred. Please try again.</span>
+                    `;
+                    document.querySelector('.login-form').appendChild(errorDiv);
                 }
             });
 
-            // Check session status on page load
+            // Check session status
             document.addEventListener('DOMContentLoaded', () => {
                 const token = localStorage.getItem('token');
                 const sessionExpiry = localStorage.getItem('sessionExpiry');
                 
                 if (token && sessionExpiry) {
-                    // Check if session has expired
                     if (new Date().getTime() > parseInt(sessionExpiry)) {
-                        // Clear session data
                         localStorage.clear();
                     } else if (window.location.pathname === '/') {
-                        // If on landing page and session is valid, redirect to dashboard
                         window.location.href = '/dashboard';
                     }
                 }
