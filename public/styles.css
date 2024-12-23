@@ -133,7 +133,19 @@ nav {
     margin-left: -20px;
 }
 
+#logoParticles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
 .brand-name {
+    position: relative;
+    z-index: 2;
     font-size: 5.5rem;
     font-weight: 700;
     margin: 0;
@@ -148,8 +160,6 @@ nav {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    position: relative;
-    z-index: 2;
     text-shadow: 
         0 0 20px rgba(0, 247, 255, 0.6),
         0 0 40px rgba(0, 247, 255, 0.4),
