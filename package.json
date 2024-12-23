@@ -8,7 +8,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "vercel-build": "echo hello"
+    "build": "echo 'Build step completed'",
+    "vercel-build": "npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +27,10 @@
   },
   "description": "",
   "nodemonConfig": {
-    "ignore": ["node_modules/*", "public/*"],
+    "ignore": [
+      "node_modules/*",
+      "public/*"
+    ],
     "delay": 0,
     "verbose": false
   }

@@ -112,33 +112,121 @@ app.get('/', (req, res) => {
 // Database test route
 app.get('/api/test-db', async (req, res) => {
     try {
+        const { checkConnection } = require('./config/database');
+        const connectionInfo = checkConnection();
+        
+        console.log('Testing database connection...');
+        console.log('Current connection state:', connectionInfo);
+
+        // Check environment variables
+        const envCheck = {
+            NODE_ENV: process.env.NODE_ENV || 'not set',
+            MONGODB_URI: process.env.MONGODB_URI ? 'set' : 'not set',
+            JWT_SECRET: process.env.JWT_SECRET ? 'set' : 'not set'
+        };
+        console.log('Environment variables:', envCheck);
+
+        // Test database connection
         if (mongoose.connection.readyState !== 1) {
             console.log('Database not connected, attempting connection...');
             await connectDB();
         }
 
-        const stats = await mongoose.connection.db.stats();
-        
-        res.json({
-            status: 'ok',
-            connection: {
-                state: mongoose.connection.readyState,
-                host: mongoose.connection.host,
-                name: mongoose.connection.name,
-                readyState: mongoose.connection.readyState
-            },
-            stats: {
-                collections: stats.collections,
-                documents: stats.objects,
-                indexes: stats.indexes
+        // Get detailed connection information
+        const connInfo = {
+            readyState: mongoose.connection.readyState,
+            stateDesc: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState],
+            host: mongoose.connection.host,
+            port: mongoose.connection.port,
+            name: mongoose.connection.name,
+            models: Object.keys(mongoose.models)
+        };
+        console.log('Connection info:', connInfo);
+
+        // Test database operations
+        let dbOperationTest = {};
+        if (mongoose.connection.readyState === 1) {
+            try {
+                // Try to create a test collection
+                const testCollection = mongoose.connection.db.collection('connection_test');
+                
+                // Try to insert a test document
+                await testCollection.insertOne({ 
+                    test: true, 
+                    timestamp: new Date() 
+                });
+                
+                // Try to read it back
+                const testDoc = await testCollection.findOne({ test: true });
+                
+                // Clean up
+                await testCollection.deleteMany({ test: true });
+                
+                dbOperationTest = {
+                    success: true,
+                    message: 'Successfully performed test operations'
+                };
+            } catch (opError) {
+                dbOperationTest = {
+                    success: false,
+                    error: opError.message,
+                    stack: opError.stack
+                };
             }
-        });
+        }
+
+        // Get database stats if connected
+        let stats = {};
+        if (mongoose.connection.readyState === 1) {
+            try {
+                stats = await mongoose.connection.db.stats();
+            } catch (statsError) {
+                console.error('Failed to get database stats:', statsError);
+                stats = { error: statsError.message };
+            }
+        }
+
+        const dbInfo = {
+            status: mongoose.connection.readyState === 1 ? 'ok' : 'error',
+            timestamp: new Date().toISOString(),
+            environment: envCheck,
+            connection: {
+                ...connInfo,
+                attempts: connectionInfo.attempts,
+                url: mongoose.connection.host ? `${mongoose.connection.host}:${mongoose.connection.port}` : 'not connected'
+            },
+            operationTest: dbOperationTest,
+            stats: mongoose.connection.readyState === 1 ? stats : 'Not available - database not connected'
+        };
+
+        console.log('Database test results:', JSON.stringify(dbInfo, null, 2));
+        res.json(dbInfo);
     } catch (error) {
-        console.error('Database test error:', error);
+        console.error('Database test error:', {
+            message: error.message,
+            stack: error.stack,
+            code: error.code,
+            name: error.name,
+            connectionState: mongoose.connection.readyState
+        });
+        
         res.status(500).json({
             status: 'error',
             message: error.message,
-            timestamp: new Date().toISOString()
+            error: error.toString(),
+            timestamp: new Date().toISOString(),
+            details: {
+                code: error.code,
+                name: error.name,
+                connectionState: mongoose.connection.readyState,
+                stateDesc: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState],
+                host: mongoose.connection.host,
+                database: mongoose.connection.name,
+                envVars: {
+                    NODE_ENV: process.env.NODE_ENV || 'not set',
+                    MONGODB_URI: process.env.MONGODB_URI ? 'set' : 'not set'
+                }
+            }
         });
     }
 });
