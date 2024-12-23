@@ -3,11 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
 const mongoose = require('mongoose');
-
-// Import models
-const User = require('./models/User');
-const Job = require('./models/Job');
-const Quiz = require('./models/Quiz');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -231,93 +227,37 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
-// API routes
-app.post('/api/register', async (req, res) => {
-    try {
-        const { username, email, password, role } = req.body;
-        
-        if (!username || !email || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Missing required fields'
-            });
-        }
-
-        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-        if (existingUser) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'User already exists'
-            });
-        }
-
-        const user = new User({ username, email, password, role: role || 'jobseeker' });
-        await user.save();
-
-        res.status(201).json({
-            status: 'success',
-            message: 'User registered successfully',
-            data: { userId: user._id }
-        });
-    } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
-
-app.post('/api/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Missing credentials'
-            });
-        }
-
-        const user = await User.findOne({ email });
-        if (!user || !(await user.comparePassword(password))) {
-            return res.status(401).json({
-                status: 'error',
-                message: 'Invalid credentials'
-            });
-        }
-
-        res.json({
-            status: 'success',
-            data: {
-                userId: user._id,
-                username: user.username,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
+// Mount API routes
+app.use('/api', authRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
-    console.error('Error:', err);
+    console.error('Error:', {
+        message: err.message,
+        stack: err.stack,
+        path: req.path,
+        method: req.method
+    });
+    
     res.status(500).json({
         status: 'error',
-        message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error',
+        path: req.path
     });
 });
 
 // 404 handler
 app.use((req, res) => {
+    console.log('404 Not Found:', {
+        path: req.path,
+        method: req.method,
+        timestamp: new Date().toISOString()
+    });
+    
     res.status(404).json({
         status: 'error',
-        message: 'Route not found'
+        message: 'Route not found',
+        path: req.path
     });
 });
 
