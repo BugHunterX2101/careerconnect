@@ -36,8 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resizeBrandCanvas() {
         const container = document.querySelector('.brand-container');
-        brandCanvas.width = container.offsetWidth;
-        brandCanvas.height = container.offsetHeight;
+        const rect = container.getBoundingClientRect();
+        brandCanvas.width = rect.width * 1.5;
+        brandCanvas.height = rect.height * 1.5;
+        brandCanvas.style.left = `-${(brandCanvas.width - rect.width) / 2}px`;
+        brandCanvas.style.top = `-${(brandCanvas.height - rect.height) / 2}px`;
     }
 
     resizeBgCanvas();
@@ -56,52 +59,34 @@ document.addEventListener('DOMContentLoaded', function() {
         reset() {
             this.x = Math.random() * bgCanvas.width;
             this.y = Math.random() * bgCanvas.height;
-            this.size = Math.random() * 3 + 0.5; // Slightly larger particles
-            this.speedX = (Math.random() - 0.5) * 1.5; // Increased speed range
-            this.speedY = (Math.random() - 0.5) * 1.5;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.8;
+            this.speedY = (Math.random() - 0.5) * 0.8;
             this.opacity = Math.random() * 0.5 + 0.2;
             this.pulseSpeed = 0.02;
             this.pulse = Math.random() * Math.PI;
-            this.glowSize = this.size * 2;
         }
 
         update() {
-            // Update position
             this.x += this.speedX;
             this.y += this.speedY;
 
-            // Bounce off edges
             if (this.x < 0 || this.x > bgCanvas.width) this.speedX *= -1;
             if (this.y < 0 || this.y > bgCanvas.height) this.speedY *= -1;
 
-            // Pulse animation
             this.pulse += this.pulseSpeed;
-            this.currentSize = this.size * (1 + 0.2 * Math.sin(this.pulse));
             this.currentOpacity = this.opacity * (0.8 + 0.2 * Math.sin(this.pulse));
         }
 
         draw() {
-            // Draw glow
             bgCtx.beginPath();
-            const gradient = bgCtx.createRadialGradient(
-                this.x, this.y, 0,
-                this.x, this.y, this.glowSize
-            );
-            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.5})`);
-            gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
-            bgCtx.fillStyle = gradient;
-            bgCtx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
-            bgCtx.fill();
-
-            // Draw particle
-            bgCtx.beginPath();
-            bgCtx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
+            bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             bgCtx.fillStyle = `rgba(0, 247, 255, ${this.currentOpacity})`;
             bgCtx.fill();
         }
     }
 
-    // Brand Particle class
+    // Brand Particle class with enhanced effects
     class BrandParticle {
         constructor() {
             this.reset();
@@ -109,53 +94,89 @@ document.addEventListener('DOMContentLoaded', function() {
 
         reset() {
             const angle = Math.random() * Math.PI * 2;
-            const distance = 80 + Math.random() * 100;
+            const distance = 50 + Math.random() * 150;
             const centerX = brandCanvas.width / 2;
             const centerY = brandCanvas.height / 2;
             
             this.x = centerX + Math.cos(angle) * distance;
             this.y = centerY + Math.sin(angle) * distance;
-            this.size = Math.random() * 2 + 1;
+            this.size = Math.random() * 3 + 1;
+            this.baseSize = this.size;
             
-            // Orbital motion parameters
+            // Orbital motion
             this.orbit = angle;
             this.orbitSpeed = (Math.random() * 0.002 + 0.001) * (Math.random() < 0.5 ? 1 : -1);
             this.orbitRadius = distance;
-            this.opacity = Math.random() * 0.5 + 0.2;
+            this.orbitRadiusVariation = Math.random() * 20;
+            this.orbitRadiusSpeed = Math.random() * 0.02;
             
-            // Pulse parameters
+            // Opacity and pulse
+            this.opacity = Math.random() * 0.5 + 0.3;
             this.pulse = Math.random() * Math.PI;
-            this.pulseSpeed = 0.02;
+            this.pulseSpeed = 0.03;
+
+            // Trail effect
+            this.trail = [];
+            this.trailLength = Math.floor(Math.random() * 5) + 3;
         }
 
         update() {
-            // Update orbital position
+            // Update orbital position with radius variation
             this.orbit += this.orbitSpeed;
-            this.x = brandCanvas.width / 2 + Math.cos(this.orbit) * this.orbitRadius;
-            this.y = brandCanvas.height / 2 + Math.sin(this.orbit) * this.orbitRadius;
+            const radiusVariation = Math.sin(this.orbit * this.orbitRadiusSpeed) * this.orbitRadiusVariation;
+            const currentRadius = this.orbitRadius + radiusVariation;
             
-            // Update pulse
+            // Store previous position for trail
+            this.trail.unshift({ x: this.x, y: this.y });
+            if (this.trail.length > this.trailLength) {
+                this.trail.pop();
+            }
+            
+            // Update current position
+            this.x = brandCanvas.width / 2 + Math.cos(this.orbit) * currentRadius;
+            this.y = brandCanvas.height / 2 + Math.sin(this.orbit) * currentRadius;
+            
+            // Update pulse and size
             this.pulse += this.pulseSpeed;
-            this.currentSize = this.size * (1 + 0.2 * Math.sin(this.pulse));
+            this.size = this.baseSize * (1 + 0.3 * Math.sin(this.pulse));
+            this.currentOpacity = this.opacity * (0.8 + 0.2 * Math.sin(this.pulse));
         }
 
         draw() {
+            // Draw trail
+            this.trail.forEach((pos, index) => {
+                const trailOpacity = (this.currentOpacity * (this.trailLength - index) / this.trailLength) * 0.5;
+                brandCtx.beginPath();
+                brandCtx.arc(pos.x, pos.y, this.size * 0.8, 0, Math.PI * 2);
+                brandCtx.fillStyle = `rgba(0, 247, 255, ${trailOpacity})`;
+                brandCtx.fill();
+            });
+
+            // Draw main particle
             brandCtx.beginPath();
-            brandCtx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
-            brandCtx.fillStyle = `rgba(0, 247, 255, ${this.opacity})`;
+            brandCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            brandCtx.fillStyle = `rgba(0, 247, 255, ${this.currentOpacity})`;
+            brandCtx.fill();
+
+            // Draw glow effect
+            const gradient = brandCtx.createRadialGradient(
+                this.x, this.y, 0,
+                this.x, this.y, this.size * 3
+            );
+            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.3})`);
+            gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
+            brandCtx.fillStyle = gradient;
+            brandCtx.beginPath();
+            brandCtx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
             brandCtx.fill();
         }
     }
 
-    const bgParticles = Array(200).fill().map(() => new BgParticle()); // Increased from 150 to 200
+    // Create particles
+    const bgParticles = Array(100).fill().map(() => new BgParticle());
+    const brandParticles = Array(80).fill().map(() => new BrandParticle());
 
-    const brandParticles = [];
-    const brandParticleCount = 50;
-
-    for (let i = 0; i < brandParticleCount; i++) {
-        brandParticles.push(new BrandParticle());
-    }
-
+    // Animation functions
     function animateBg() {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
         
@@ -163,14 +184,14 @@ document.addEventListener('DOMContentLoaded', function() {
             particle.update();
             particle.draw();
 
-            // Enhanced connections
+            // Draw connections
             bgParticles.slice(i + 1).forEach(particle2 => {
                 const dx = particle.x - particle2.x;
                 const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 200) { // Increased connection distance
-                    const opacity = 0.15 * (1 - distance/200);
+                if (distance < 150) {
+                    const opacity = 0.15 * (1 - distance/150);
                     bgCtx.beginPath();
                     bgCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
                     bgCtx.lineWidth = 0.5;
@@ -187,30 +208,35 @@ document.addEventListener('DOMContentLoaded', function() {
     function animateBrand() {
         brandCtx.clearRect(0, 0, brandCanvas.width, brandCanvas.height);
         
+        // Draw connecting lines first
         brandParticles.forEach((particle, i) => {
-            particle.update();
-            particle.draw();
-
-            // Draw connections
-            for (let j = i + 1; j < brandParticles.length; j++) {
-                const dx = brandParticles[j].x - particle.x;
-                const dy = brandParticles[j].y - particle.y;
+            brandParticles.slice(i + 1).forEach(particle2 => {
+                const dx = particle.x - particle2.x;
+                const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 70) {
+                if (distance < 100) {
+                    const opacity = 0.2 * (1 - distance/100);
                     brandCtx.beginPath();
-                    brandCtx.strokeStyle = `rgba(0, 247, 255, ${0.2 * (1 - distance/70)})`;
-                    brandCtx.lineWidth = 0.5;
+                    brandCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
+                    brandCtx.lineWidth = 0.8;
                     brandCtx.moveTo(particle.x, particle.y);
-                    brandCtx.lineTo(brandParticles[j].x, brandParticles[j].y);
+                    brandCtx.lineTo(particle2.x, particle2.y);
                     brandCtx.stroke();
                 }
-            }
+            });
+        });
+
+        // Then draw particles
+        brandParticles.forEach(particle => {
+            particle.update();
+            particle.draw();
         });
 
         requestAnimationFrame(animateBrand);
     }
 
+    // Start animations
     animateBg();
     animateBrand();
 }); 
