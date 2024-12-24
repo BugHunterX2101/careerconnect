@@ -9,6 +9,23 @@
             .signup-container {
                 min-height: 100vh;
                 background: rgba(0, 0, 0, 0.8);
+                max-height: 100vh;
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: #00f7ff rgba(0, 0, 0, 0.2);
+            }
+
+            .signup-container::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .signup-container::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.2);
+            }
+
+            .signup-container::-webkit-scrollbar-thumb {
+                background-color: #00f7ff;
+                border-radius: 4px;
             }
 
             .signup-wrapper {
@@ -315,6 +332,23 @@
                                 <div class="error-message"></div>
                             </div>
                             <div class="form-group">
+                                <input type="tel" placeholder="Phone Number" required>
+                                <div class="error-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="date" placeholder="Date of Birth" required>
+                                <div class="error-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <select required title="Gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer-not">Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <input type="password" placeholder="Password" required>
                                 <div class="password-strength">
                                     <div class="strength-bar"></div>
@@ -330,42 +364,123 @@
                         <div class="form-section" data-step="2">
                             <h3>Professional Information</h3>
                             <div class="form-group">
-                                <input type="text" placeholder="Current Job Title">
+                                <input type="text" placeholder="Current Job Title" required>
                             </div>
                             <div class="form-group">
-                                <input type="text" placeholder="Company/Organization">
+                                <input type="text" placeholder="Company/Organization" required>
                             </div>
                             <div class="form-group">
                                 <select required title="Experience Level">
                                     <option value="">Select Experience Level</option>
-                                    <option value="entry">Entry Level</option>
-                                    <option value="intermediate">Intermediate</option>
-                                    <option value="expert">Expert</option>
+                                    <option value="entry">Entry Level (0-2 years)</option>
+                                    <option value="intermediate">Intermediate (3-5 years)</option>
+                                    <option value="senior">Senior (6-8 years)</option>
+                                    <option value="expert">Expert (8+ years)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select required title="Employment Type">
+                                    <option value="">Preferred Employment Type</option>
+                                    <option value="full-time">Full Time</option>
+                                    <option value="part-time">Part Time</option>
+                                    <option value="contract">Contract</option>
+                                    <option value="freelance">Freelance</option>
+                                    <option value="internship">Internship</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="Expected Salary Range" required>
+                            </div>
+                            <div class="form-group">
+                                <select required title="Notice Period">
+                                    <option value="">Notice Period</option>
+                                    <option value="immediate">Immediate</option>
+                                    <option value="15-days">15 Days</option>
+                                    <option value="30-days">30 Days</option>
+                                    <option value="60-days">60 Days</option>
+                                    <option value="90-days">90 Days</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select required title="Work Location Preference">
+                                    <option value="">Work Location Preference</option>
+                                    <option value="on-site">On-site</option>
+                                    <option value="hybrid">Hybrid</option>
+                                    <option value="remote">Remote</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-section" data-step="3">
-                            <h3>Skills & Expertise</h3>
+                            <h3>Education & Skills</h3>
+                            <div class="form-group">
+                                <select required title="Highest Education">
+                                    <option value="">Highest Education Level</option>
+                                    <option value="high-school">High School</option>
+                                    <option value="bachelors">Bachelor's Degree</option>
+                                    <option value="masters">Master's Degree</option>
+                                    <option value="phd">Ph.D.</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="Field of Study" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="University/Institution" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="Year of Graduation" required>
+                            </div>
                             <div class="form-group">
                                 <input type="text" id="skillInput" placeholder="Type a skill and press Enter">
                                 <div class="skills-container"></div>
                             </div>
                             <div class="form-group">
-                                <select multiple title="Areas of Interest">
+                                <select multiple title="Areas of Interest" required>
                                     <option value="web">Web Development</option>
                                     <option value="mobile">Mobile Development</option>
                                     <option value="ui">UI/UX Design</option>
                                     <option value="data">Data Science</option>
                                     <option value="cloud">Cloud Computing</option>
+                                    <option value="ai">Artificial Intelligence</option>
+                                    <option value="cybersecurity">Cybersecurity</option>
+                                    <option value="devops">DevOps</option>
+                                    <option value="blockchain">Blockchain</option>
+                                    <option value="iot">Internet of Things</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea placeholder="List any certifications or achievements" rows="3"></textarea>
                             </div>
                         </div>
 
                         <div class="form-section" data-step="4">
                             <h3>Additional Information</h3>
                             <div class="form-group">
-                                <textarea placeholder="Brief bio or introduction" rows="4"></textarea>
+                                <textarea placeholder="Professional Summary (Brief bio or introduction)" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="url" placeholder="LinkedIn Profile URL">
+                            </div>
+                            <div class="form-group">
+                                <input type="url" placeholder="Portfolio/GitHub URL">
+                            </div>
+                            <div class="form-group">
+                                <select required title="Preferred Communication">
+                                    <option value="">Preferred Communication Method</option>
+                                    <option value="email">Email</option>
+                                    <option value="phone">Phone</option>
+                                    <option value="both">Both Email and Phone</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select required title="Job Alerts">
+                                    <option value="">Job Alert Frequency</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <select required title="Referral Source">
@@ -373,8 +488,15 @@
                                     <option value="search">Search Engine</option>
                                     <option value="social">Social Media</option>
                                     <option value="friend">Friend/Colleague</option>
+                                    <option value="job-board">Job Board</option>
                                     <option value="other">Other</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" required>
+                                    I agree to the Terms of Service and Privacy Policy
+                                </label>
                             </div>
                         </div>
 

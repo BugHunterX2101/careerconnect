@@ -10,6 +10,23 @@
             min-height: 100vh;
             background: rgba(0, 0, 0, 0.8);
             padding: 2rem;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00f7ff rgba(0, 0, 0, 0.2);
+        }
+
+        .services-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .services-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .services-container::-webkit-scrollbar-thumb {
+            background-color: #00f7ff;
+            border-radius: 4px;
         }
 
         .services-content {
@@ -20,6 +37,7 @@
             padding: 2rem;
             box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
             color: #fff;
+            margin-bottom: 2rem;
         }
 
         .services-header {
