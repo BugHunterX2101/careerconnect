@@ -21,6 +21,30 @@ body {
     justify-content: center;
     font-family: 'Arial', sans-serif;
     background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Canvas Styles */
+.particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#backgroundParticles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#brandParticles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
 /* Container Styles */
@@ -34,6 +58,7 @@ body {
     padding: 2rem;
     box-shadow: 0 0 60px rgba(0, 247, 255, 0.15);
     overflow: hidden;
+    z-index: 2;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 }
@@ -45,6 +70,8 @@ nav {
     align-items: center;
     margin-bottom: 2rem;
     padding: 25px 60px;
+    position: relative;
+    z-index: 3;
 }
 
 .nav-links {
@@ -72,6 +99,49 @@ nav {
     align-items: center;
     height: calc(100% - 80px);
     padding: 0 60px;
+    position: relative;
+    z-index: 3;
+}
+
+/* Welcome Section Styles */
+.welcome-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.brand-container {
+    position: relative;
+    z-index: 4;
+    padding: 40px;
+    transform: translateY(-60px);
+}
+
+.brand-name {
+    font-size: 4.5rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(
+        135deg,
+        #00f7ff 0%,
+        #00d8ff 25%,
+        #0099ff 50%,
+        #00b3ff 75%,
+        #00f7ff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    z-index: 5;
+    text-shadow: 
+        0 0 20px rgba(0, 247, 255, 0.6),
+        0 0 40px rgba(0, 247, 255, 0.4),
+        0 0 60px rgba(0, 247, 255, 0.2),
+        0 0 80px rgba(0, 247, 255, 0.1);
+    animation: textPulse 3s ease-in-out infinite;
 }
 
 /* Login Section Styles */
@@ -80,6 +150,8 @@ nav {
     padding: 2.5rem;
     margin-right: 40px;
     margin-top: -60px;
+    position: relative;
+    z-index: 4;
 }
 
 .profile-icon {
@@ -172,47 +244,18 @@ nav {
     box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
 }
 
-/* Welcome Section Styles */
-.welcome-section {
-    flex: 1;
+/* Checkbox styling */
+.remember-me {
+    margin-top: 0.5rem;
     display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.brand-container {
-    position: relative;
-    padding: 40px;
-    transform: translateY(-60px);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.brand-name {
-    font-size: 4.5rem;
-    font-weight: 700;
+.remember-me input[type="checkbox"] {
+    width: auto;
     margin: 0;
-    background: linear-gradient(
-        135deg,
-        #00f7ff 0%,
-        #00d8ff 25%,
-        #0099ff 50%,
-        #00b3ff 75%,
-        #00f7ff 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 
-        0 0 20px rgba(0, 247, 255, 0.6),
-        0 0 40px rgba(0, 247, 255, 0.4),
-        0 0 60px rgba(0, 247, 255, 0.2),
-        0 0 80px rgba(0, 247, 255, 0.1);
-    animation: textPulse 3s ease-in-out infinite;
 }
 
 @keyframes textPulse {
@@ -230,19 +273,5 @@ nav {
             0 0 75px rgba(0, 247, 255, 0.4),
             0 0 100px rgba(0, 247, 255, 0.2);
     }
-}
-
-/* Checkbox styling */
-.remember-me {
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.remember-me input[type="checkbox"] {
-    width: auto;
-    margin: 0;
 }
  
