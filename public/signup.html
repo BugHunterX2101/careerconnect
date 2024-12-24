@@ -75,12 +75,16 @@
                 padding: 1.5rem;
                 border-radius: 10px;
                 margin-bottom: 1.5rem;
+                opacity: 1;
+                transform: none;
             }
 
             .form-section h3 {
                 color: #00f7ff;
-                margin-bottom: 1rem;
-                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+                font-size: 1.3rem;
+                text-align: center;
+                text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
             }
 
             .form-section input,
@@ -105,7 +109,7 @@
 
             .form-footer {
                 text-align: center;
-                margin-top: 1rem;
+                margin-top: 2rem;
             }
 
             .form-footer button {
@@ -119,7 +123,6 @@
                 transition: all 0.3s ease;
                 text-transform: uppercase;
                 letter-spacing: 1px;
-                margin-bottom: 1rem;
             }
 
             .form-footer button:hover {
@@ -157,9 +160,7 @@
 
             /* Step indicators */
             .steps {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 2rem;
+                display: none;
             }
 
             .step {
@@ -286,6 +287,11 @@
 
             @keyframes spin {
                 to { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+
+            /* Show all sections */
+            .form-section {
+                display: block !important;
             }
         </style>
     </head>
@@ -517,13 +523,12 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.getElementById('signupForm');
-                const sections = form.querySelectorAll('.form-section');
-                const progress = document.querySelector('.progress');
-                const steps = document.querySelectorAll('.step');
-                const nextButton = form.querySelector('.next-button');
-                const backButton = form.querySelector('.back-button');
                 const submitButton = form.querySelector('.submit-button');
-                let currentStep = 1;
+                
+                // Remove step navigation buttons
+                form.querySelector('.next-button').style.display = 'none';
+                form.querySelector('.back-button').style.display = 'none';
+                submitButton.style.display = 'block';
 
                 // Password strength checker
                 const passwordInput = form.querySelector('input[type="password"]');
@@ -573,43 +578,6 @@
                     });
                 }
 
-                // Form navigation
-                function updateStep(step) {
-                    sections.forEach(section => {
-                        section.classList.remove('active');
-                        if (section.dataset.step == step) {
-                            section.classList.add('active');
-                        }
-                    });
-
-                    steps.forEach(s => {
-                        s.classList.remove('active');
-                        if (s.dataset.step <= step) {
-                            s.classList.add('active');
-                        }
-                    });
-
-                    progress.style.width = `${(step / sections.length) * 100}%`;
-                    
-                    backButton.style.display = step > 1 ? 'inline-block' : 'none';
-                    nextButton.style.display = step < sections.length ? 'inline-block' : 'none';
-                    submitButton.style.display = step === sections.length ? 'inline-block' : 'none';
-                }
-
-                nextButton.addEventListener('click', () => {
-                    if (currentStep < sections.length) {
-                        currentStep++;
-                        updateStep(currentStep);
-                    }
-                });
-
-                backButton.addEventListener('click', () => {
-                    if (currentStep > 1) {
-                        currentStep--;
-                        updateStep(currentStep);
-                    }
-                });
-
                 // Form submission
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
@@ -634,9 +602,6 @@
                         submitButton.classList.remove('loading');
                     }
                 });
-
-                // Initialize
-                updateStep(currentStep);
             });
         </script>
     </body>
