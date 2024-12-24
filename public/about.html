@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - CareerConnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .about-container {
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(20, 20, 30, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
+            color: #fff;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .about-title {
+            color: #00f7ff;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
+
+        .about-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+        }
+
+        .about-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .about-section {
+            background: rgba(30, 30, 40, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .about-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .about-section h3 {
+            color: #00f7ff;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .about-section p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .stat-number {
+            color: #00f7ff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .team-section {
+            margin-top: 3rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(30, 30, 40, 0.6);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, #006c7d, #00f7ff);
+        }
+
+        .member-name {
+            color: #00f7ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .back-to-home {
+            color: #00f7ff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-home:hover {
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="backgroundParticles" class="particle-canvas"></canvas>
+    
+    <div class="about-container">
+        <div class="about-content">
+            <div class="about-header">
+                <h1 class="about-title">About CareerConnect</h1>
+                <p class="about-subtitle">Connecting Talent with Opportunity</p>
+            </div>
+
+            <div class="about-sections">
+                <div class="about-section">
+                    <h3>Our Mission</h3>
+                    <p>CareerConnect is dedicated to bridging the gap between talented professionals and innovative companies. We strive to create meaningful connections that drive career growth and business success.</p>
+                </div>
+
+                <div class="about-section">
+                    <h3>Our Vision</h3>
+                    <p>We envision a future where every professional can find their ideal career path and every company can build their dream team. Through technology and human connection, we're making this vision a reality.</p>
+                </div>
+
+                <div class="about-section">
+                    <h3>Our Values</h3>
+                    <p>Innovation, integrity, and inclusivity are at the heart of everything we do. We believe in creating opportunities for all and fostering a community where talent knows no boundaries.</p>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5K+</div>
+                    <div class="stat-label">Companies</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20K+</div>
+                    <div class="stat-label">Job Matches</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+
+            <div class="team-section">
+                <h2 style="color: #00f7ff; text-align: center; margin-bottom: 2rem;">Our Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 class="member-name">John Doe</h3>
+                        <p class="member-role">CEO & Founder</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 class="member-name">Jane Smith</h3>
+                        <p class="member-role">Head of Technology</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 class="member-name">Mike Johnson</h3>
+                        <p class="member-role">Lead Designer</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar"></div>
+                        <h3 class="member-name">Sarah Wilson</h3>
+                        <p class="member-role">Community Manager</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="/" class="back-to-home">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html> 

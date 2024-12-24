@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - CareerConnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .services-container {
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+        }
+
+        .services-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(20, 20, 30, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
+            color: #fff;
+        }
+
+        .services-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .services-title {
+            color: #00f7ff;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
+
+        .services-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: rgba(30, 30, 40, 0.6);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #006c7d, #00f7ff);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(45deg, #006c7d, #00f7ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .service-title {
+            color: #00f7ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .service-features li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #00f7ff;
+        }
+
+        .pricing-section {
+            margin-top: 4rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pricing-card {
+            background: rgba(30, 30, 40, 0.6);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-tier {
+            color: #00f7ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00f7ff;
+        }
+
+        .pricing-button {
+            background: linear-gradient(45deg, #006c7d, #00f7ff);
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .back-to-home {
+            color: #00f7ff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-home:hover {
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="backgroundParticles" class="particle-canvas"></canvas>
+    
+    <div class="services-container">
+        <div class="services-content">
+            <div class="services-header">
+                <h1 class="services-title">Our Services</h1>
+                <p class="services-subtitle">Comprehensive Career Solutions for Professionals and Companies</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <h3 class="service-title">Job Matching</h3>
+                    <p class="service-description">Advanced AI-powered job matching system that connects professionals with their ideal opportunities.</p>
+                    <ul class="service-features">
+                        <li>Smart profile matching</li>
+                        <li>Real-time job alerts</li>
+                        <li>Skill-based recommendations</li>
+                        <li>Company culture fit analysis</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3 class="service-title">Career Development</h3>
+                    <p class="service-description">Comprehensive tools and resources to help you grow in your professional journey.</p>
+                    <ul class="service-features">
+                        <li>Skill assessment tests</li>
+                        <li>Professional certifications</li>
+                        <li>Mentorship programs</li>
+                        <li>Career path planning</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🤝</div>
+                    <h3 class="service-title">Recruitment Solutions</h3>
+                    <p class="service-description">End-to-end recruitment services for companies looking to build strong teams.</p>
+                    <ul class="service-features">
+                        <li>Talent pool access</li>
+                        <li>Automated screening</li>
+                        <li>Interview scheduling</li>
+                        <li>Onboarding support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-section">
+                <h2 style="color: #00f7ff; text-align: center; margin-bottom: 2rem;">Pricing Plans</h2>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3 class="pricing-tier">Basic</h3>
+                        <div class="pricing-price">$0 <span>/month</span></div>
+                        <ul class="pricing-features">
+                            <li>Basic job search</li>
+                            <li>Profile creation</li>
+                            <li>Job alerts</li>
+                            <li>Limited applications</li>
+                        </ul>
+                        <a href="#" class="pricing-button">Get Started</a>
+                    </div>
+
+                    <div class="pricing-card">
+                        <h3 class="pricing-tier">Professional</h3>
+                        <div class="pricing-price">$29 <span>/month</span></div>
+                        <ul class="pricing-features">
+                            <li>Advanced job search</li>
+                            <li>Priority applications</li>
+                            <li>Skill assessments</li>
+                            <li>Career counseling</li>
+                        </ul>
+                        <a href="#" class="pricing-button">Upgrade Now</a>
+                    </div>
+
+                    <div class="pricing-card">
+                        <h3 class="pricing-tier">Enterprise</h3>
+                        <div class="pricing-price">$99 <span>/month</span></div>
+                        <ul class="pricing-features">
+                            <li>Full platform access</li>
+                            <li>Recruitment tools</li>
+                            <li>Analytics dashboard</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="#" class="pricing-button">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="/" class="back-to-home">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html> 
