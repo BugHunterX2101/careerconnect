@@ -56,10 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
         reset() {
             this.x = Math.random() * bgCanvas.width;
             this.y = Math.random() * bgCanvas.height;
-            this.size = Math.random() * 3 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 1.5;
-            this.speedY = (Math.random() - 0.5) * 1.5;
-            this.opacity = Math.random() * 0.5 + 0.2;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.8;
+            this.speedY = (Math.random() - 0.5) * 0.8;
+            this.opacity = Math.random() * 0.4 + 0.1;
             this.pulseSpeed = 0.02;
             this.pulse = Math.random() * Math.PI;
             this.glowSize = this.size * 2;
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.x, this.y, 0,
                 this.x, this.y, this.glowSize
             );
-            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.5})`);
+            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.3})`);
             gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
             bgCtx.fillStyle = gradient;
             bgCtx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
@@ -103,38 +103,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         reset() {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 60 + Math.random() * 120; // Increased range
-            const centerX = brandCanvas.width / 2;
-            const centerY = brandCanvas.height / 2;
+            // Get brand container dimensions
+            const brandRect = document.querySelector('.brand-name').getBoundingClientRect();
+            const containerRect = document.querySelector('.brand-container').getBoundingClientRect();
             
-            this.x = centerX + Math.cos(angle) * distance;
-            this.y = centerY + Math.sin(angle) * distance;
-            this.size = Math.random() * 2.5 + 1; // Increased size
+            // Calculate relative position within the canvas
+            const relativeLeft = (brandRect.left - containerRect.left) / containerRect.width * brandCanvas.width;
+            const relativeWidth = brandRect.width / containerRect.width * brandCanvas.width;
+            const relativeHeight = brandRect.height / containerRect.height * brandCanvas.height;
             
-            // Enhanced orbital motion
-            this.orbit = angle;
-            this.orbitSpeed = (Math.random() * 0.003 + 0.001) * (Math.random() < 0.5 ? 1 : -1);
-            this.orbitRadius = distance;
-            this.radiusVariation = Math.random() * 20; // Add radius variation
-            this.radiusPhase = Math.random() * Math.PI * 2;
-            this.opacity = Math.random() * 0.6 + 0.2; // Increased opacity
+            // Position particles within and around the text area
+            const padding = 40; // Padding around the text area
+            this.x = relativeLeft - padding + Math.random() * (relativeWidth + padding * 2);
+            this.y = (brandCanvas.height - relativeHeight) / 2 - padding + Math.random() * (relativeHeight + padding * 2);
             
-            // Enhanced pulse parameters
+            this.originX = this.x;
+            this.originY = this.y;
+            this.size = Math.random() * 2 + 0.8;
+            this.baseSpeed = Math.random() * 0.5 + 0.2;
+            this.angle = Math.random() * Math.PI * 2;
+            this.radius = Math.random() * 20 + 10;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            
             this.pulse = Math.random() * Math.PI;
             this.pulseSpeed = 0.03;
-            this.glowSize = this.size * 3; // Added glow effect
+            this.glowSize = this.size * 3;
         }
 
         update() {
-            // Update orbital position with radius variation
-            this.orbit += this.orbitSpeed;
-            this.radiusPhase += 0.02;
-            const currentRadius = this.orbitRadius + Math.sin(this.radiusPhase) * this.radiusVariation;
-            this.x = brandCanvas.width / 2 + Math.cos(this.orbit) * currentRadius;
-            this.y = brandCanvas.height / 2 + Math.sin(this.orbit) * currentRadius;
+            // Circular motion around origin point
+            this.angle += this.baseSpeed * 0.02;
+            this.x = this.originX + Math.cos(this.angle) * this.radius;
+            this.y = this.originY + Math.sin(this.angle) * this.radius;
             
-            // Update pulse with enhanced effect
+            // Pulse effect
             this.pulse += this.pulseSpeed;
             this.currentSize = this.size * (1 + 0.3 * Math.sin(this.pulse));
             this.currentOpacity = this.opacity * (0.8 + 0.2 * Math.sin(this.pulse));
@@ -161,14 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const bgParticles = Array(200).fill().map(() => new BgParticle());
-
-    const brandParticles = [];
-    const brandParticleCount = 80; // Increased from 50 to 80
-
-    for (let i = 0; i < brandParticleCount; i++) {
-        brandParticles.push(new BrandParticle());
-    }
+    const bgParticles = Array(150).fill().map(() => new BgParticle());
+    const brandParticles = Array(100).fill().map(() => new BrandParticle());
 
     function animateBg() {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
@@ -183,8 +179,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 200) {
-                    const opacity = 0.15 * (1 - distance/200) * 
+                if (distance < 150) {
+                    const opacity = 0.1 * (1 - distance/150) * 
                         (0.8 + 0.2 * Math.sin(particle.pulse + particle2.pulse));
                     bgCtx.beginPath();
                     bgCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
@@ -213,10 +209,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle2.y - particle.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 100) { // Increased connection distance
-                    const opacity = 0.25 * (1 - distance/100) * 
+                if (distance < 50) {
+                    const opacity = 0.2 * (1 - distance/50) * 
                         (0.8 + 0.2 * Math.sin(particle.pulse + particle2.pulse));
-                    const lineWidth = 0.5 + 0.5 * (1 - distance/100); // Dynamic line width
+                    const lineWidth = 0.3 + 0.3 * (1 - distance/50);
                     
                     brandCtx.beginPath();
                     brandCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
