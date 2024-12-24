@@ -37,10 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function resizeBrandCanvas() {
         const container = document.querySelector('.brand-container');
         const rect = container.getBoundingClientRect();
-        brandCanvas.width = rect.width * 2;
-        brandCanvas.height = rect.height * 2;
-        brandCanvas.style.left = `-${(brandCanvas.width - rect.width) / 2}px`;
-        brandCanvas.style.top = `-${(brandCanvas.height - rect.height) / 2}px`;
+        brandCanvas.width = rect.width * 3;
+        brandCanvas.height = rect.height * 3;
     }
 
     resizeBgCanvas();
@@ -60,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
             this.x = Math.random() * bgCanvas.width;
             this.y = Math.random() * bgCanvas.height;
             this.size = Math.random() * 1.5 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.5;
-            this.speedY = (Math.random() - 0.5) * 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.speedY = (Math.random() - 0.5) * 0.3;
             this.opacity = Math.random() * 0.3 + 0.1;
             this.pulseSpeed = 0.02;
             this.pulse = Math.random() * Math.PI;
@@ -94,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         reset() {
             const angle = Math.random() * Math.PI * 2;
-            const distance = 30 + Math.random() * 180;
+            const distance = 50 + Math.random() * 200;
             const centerX = brandCanvas.width / 2;
             const centerY = brandCanvas.height / 2;
             
@@ -107,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.orbit = angle;
             this.orbitSpeed = (Math.random() * 0.001 + 0.0005) * (Math.random() < 0.5 ? 1 : -1);
             this.orbitRadius = distance;
-            this.orbitRadiusVariation = Math.random() * 15;
+            this.orbitRadiusVariation = Math.random() * 20;
             this.orbitRadiusSpeed = Math.random() * 0.015;
             
             // Opacity and pulse
@@ -176,8 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Create particles
-    const bgParticles = Array(150).fill().map(() => new BgParticle());
-    const brandParticles = Array(120).fill().map(() => new BrandParticle());
+    const bgParticles = Array(200).fill().map(() => new BgParticle());
+    const brandParticles = Array(150).fill().map(() => new BrandParticle());
 
     // Animation functions
     function animateBg() {
@@ -193,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 120) {
-                    const opacity = 0.1 * (1 - distance/120);
+                if (distance < 100) {
+                    const opacity = 0.08 * (1 - distance/100);
                     const gradient = bgCtx.createLinearGradient(
                         particle.x, particle.y,
                         particle2.x, particle2.y
@@ -205,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     bgCtx.beginPath();
                     bgCtx.strokeStyle = gradient;
-                    bgCtx.lineWidth = 0.3;
+                    bgCtx.lineWidth = 0.2;
                     bgCtx.moveTo(particle.x, particle.y);
                     bgCtx.lineTo(particle2.x, particle2.y);
                     bgCtx.stroke();
@@ -226,8 +224,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 80) {
-                    const opacity = 0.15 * (1 - distance/80);
+                if (distance < 100) {
+                    const opacity = 0.12 * (1 - distance/100);
                     const gradient = brandCtx.createLinearGradient(
                         particle.x, particle.y,
                         particle2.x, particle2.y
@@ -238,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     brandCtx.beginPath();
                     brandCtx.strokeStyle = gradient;
-                    brandCtx.lineWidth = 0.5;
+                    brandCtx.lineWidth = 0.4;
                     brandCtx.moveTo(particle.x, particle.y);
                     brandCtx.lineTo(particle2.x, particle2.y);
                     brandCtx.stroke();
