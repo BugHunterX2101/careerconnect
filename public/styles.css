@@ -25,7 +25,7 @@ body {
 
 /* Container Styles */
 .container {
-    background: var(--card-bg);
+    background: rgba(21, 21, 21, 0.85);
     width: 90%;
     max-width: 1200px;
     height: 600px;
@@ -34,8 +34,8 @@ body {
     padding: 2rem;
     box-shadow: 0 0 60px rgba(0, 247, 255, 0.15);
     overflow: hidden;
-    position: relative;
-    z-index: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 /* Navigation Styles */
@@ -183,7 +183,6 @@ nav {
 
 .brand-container {
     position: relative;
-    z-index: 3;
     padding: 40px;
     transform: translateY(-60px);
     width: 100%;
@@ -194,8 +193,6 @@ nav {
 }
 
 .brand-name {
-    position: relative;
-    z-index: 4;
     font-size: 4.5rem;
     font-weight: 700;
     margin: 0;
@@ -247,35 +244,5 @@ nav {
 .remember-me input[type="checkbox"] {
     width: auto;
     margin: 0;
-}
-
-/* Canvas positioning */
-#backgroundParticles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    opacity: 0.8;
-}
-
-#brandParticles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Container background */
-.container {
-    position: relative;
-    z-index: 2;
-    background: rgba(21, 21, 21, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
 }
  
