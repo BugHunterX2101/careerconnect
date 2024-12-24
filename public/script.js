@@ -37,8 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function resizeBrandCanvas() {
         const container = document.querySelector('.brand-container');
         const rect = container.getBoundingClientRect();
-        brandCanvas.width = rect.width * 3;
-        brandCanvas.height = rect.height * 3;
+        brandCanvas.width = rect.width * 2;
+        brandCanvas.height = rect.height * 2;
+        brandCanvas.style.left = `-${(brandCanvas.width - rect.width) / 2}px`;
+        brandCanvas.style.top = `-${(brandCanvas.height - rect.height) / 2}px`;
     }
 
     resizeBgCanvas();
@@ -86,18 +88,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Brand Particle class with enhanced effects
     class BrandParticle {
-        constructor() {
+        constructor(x, y) {
+            this.centerX = x;
+            this.centerY = y;
             this.reset();
         }
 
         reset() {
             const angle = Math.random() * Math.PI * 2;
-            const distance = 50 + Math.random() * 200;
-            const centerX = brandCanvas.width / 2;
-            const centerY = brandCanvas.height / 2;
+            const minDistance = 20; // Minimum distance from center
+            const maxDistance = 150; // Maximum distance from center
+            const distance = minDistance + Math.random() * (maxDistance - minDistance);
             
-            this.x = centerX + Math.cos(angle) * distance;
-            this.y = centerY + Math.sin(angle) * distance;
+            this.x = this.centerX + Math.cos(angle) * distance;
+            this.y = this.centerY + Math.sin(angle) * distance;
             this.size = Math.random() * 2 + 0.8;
             this.baseSize = this.size;
             
@@ -105,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.orbit = angle;
             this.orbitSpeed = (Math.random() * 0.001 + 0.0005) * (Math.random() < 0.5 ? 1 : -1);
             this.orbitRadius = distance;
-            this.orbitRadiusVariation = Math.random() * 20;
+            this.orbitRadiusVariation = Math.random() * 15;
             this.orbitRadiusSpeed = Math.random() * 0.015;
             
             // Opacity and pulse
@@ -115,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Trail effect
             this.trail = [];
-            this.trailLength = Math.floor(Math.random() * 6) + 4;
+            this.trailLength = Math.floor(Math.random() * 4) + 3;
         }
 
         update() {
@@ -131,8 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Update current position
-            this.x = brandCanvas.width / 2 + Math.cos(this.orbit) * currentRadius;
-            this.y = brandCanvas.height / 2 + Math.sin(this.orbit) * currentRadius;
+            this.x = this.centerX + Math.cos(this.orbit) * currentRadius;
+            this.y = this.centerY + Math.sin(this.orbit) * currentRadius;
             
             // Update pulse and size
             this.pulse += this.pulseSpeed;
@@ -174,8 +178,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Create particles
-    const bgParticles = Array(200).fill().map(() => new BgParticle());
-    const brandParticles = Array(150).fill().map(() => new BrandParticle());
+    const bgParticles = Array(150).fill().map(() => new BgParticle());
+
+    // Create brand particles distributed around the logo
+    const brandParticles = [];
+    const brandContainer = document.querySelector('.brand-container');
+    const brandRect = brandContainer.getBoundingClientRect();
+    const logoCenter = {
+        x: brandRect.left + brandRect.width / 2,
+        y: brandRect.top + brandRect.height / 2
+    };
+
+    // Create clusters of particles
+    const numClusters = 5;
+    const particlesPerCluster = 30;
+    
+    for (let i = 0; i < numClusters; i++) {
+        const angle = (i / numClusters) * Math.PI * 2;
+        const clusterCenterX = logoCenter.x + Math.cos(angle) * 100;
+        const clusterCenterY = logoCenter.y + Math.sin(angle) * 50;
+        
+        for (let j = 0; j < particlesPerCluster; j++) {
+            brandParticles.push(new BrandParticle(clusterCenterX, clusterCenterY));
+        }
+    }
 
     // Animation functions
     function animateBg() {
@@ -224,8 +250,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 100) {
-                    const opacity = 0.12 * (1 - distance/100);
+                if (distance < 80) {
+                    const opacity = 0.12 * (1 - distance/80);
                     const gradient = brandCtx.createLinearGradient(
                         particle.x, particle.y,
                         particle2.x, particle2.y
