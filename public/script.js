@@ -56,39 +56,44 @@ document.addEventListener('DOMContentLoaded', function() {
         reset() {
             this.x = Math.random() * bgCanvas.width;
             this.y = Math.random() * bgCanvas.height;
-            this.size = Math.random() * 2 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.8;
-            this.speedY = (Math.random() - 0.5) * 0.8;
-            this.opacity = Math.random() * 0.4 + 0.1;
+            this.size = Math.random() * 3 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 1;
+            this.speedY = (Math.random() - 0.5) * 1;
+            this.opacity = Math.random() * 0.5 + 0.2;
             this.pulseSpeed = 0.02;
             this.pulse = Math.random() * Math.PI;
-            this.glowSize = this.size * 2;
+            this.glowSize = this.size * 3;
         }
 
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
 
-            if (this.x < 0 || this.x > bgCanvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > bgCanvas.height) this.speedY *= -1;
+            // Wrap around screen edges
+            if (this.x < 0) this.x = bgCanvas.width;
+            if (this.x > bgCanvas.width) this.x = 0;
+            if (this.y < 0) this.y = bgCanvas.height;
+            if (this.y > bgCanvas.height) this.y = 0;
 
             this.pulse += this.pulseSpeed;
-            this.currentSize = this.size * (1 + 0.2 * Math.sin(this.pulse));
+            this.currentSize = this.size * (1 + 0.3 * Math.sin(this.pulse));
             this.currentOpacity = this.opacity * (0.8 + 0.2 * Math.sin(this.pulse));
         }
 
         draw() {
+            // Draw glow effect
             bgCtx.beginPath();
             const gradient = bgCtx.createRadialGradient(
                 this.x, this.y, 0,
                 this.x, this.y, this.glowSize
             );
-            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.3})`);
+            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.4})`);
             gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
             bgCtx.fillStyle = gradient;
             bgCtx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
             bgCtx.fill();
 
+            // Draw particle
             bgCtx.beginPath();
             bgCtx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
             bgCtx.fillStyle = `rgba(0, 247, 255, ${this.currentOpacity})`;
@@ -113,21 +118,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const relativeHeight = brandRect.height / containerRect.height * brandCanvas.height;
             
             // Position particles within and around the text area
-            const padding = 40; // Padding around the text area
+            const padding = 60; // Increased padding around the text area
             this.x = relativeLeft - padding + Math.random() * (relativeWidth + padding * 2);
             this.y = (brandCanvas.height - relativeHeight) / 2 - padding + Math.random() * (relativeHeight + padding * 2);
             
             this.originX = this.x;
             this.originY = this.y;
-            this.size = Math.random() * 2 + 0.8;
-            this.baseSpeed = Math.random() * 0.5 + 0.2;
+            this.size = Math.random() * 2.5 + 1;
+            this.baseSpeed = Math.random() * 0.8 + 0.3;
             this.angle = Math.random() * Math.PI * 2;
-            this.radius = Math.random() * 20 + 10;
-            this.opacity = Math.random() * 0.5 + 0.2;
+            this.radius = Math.random() * 30 + 15;
+            this.opacity = Math.random() * 0.6 + 0.3;
             
             this.pulse = Math.random() * Math.PI;
-            this.pulseSpeed = 0.03;
-            this.glowSize = this.size * 3;
+            this.pulseSpeed = 0.04;
+            this.glowSize = this.size * 4;
         }
 
         update() {
@@ -138,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Pulse effect
             this.pulse += this.pulseSpeed;
-            this.currentSize = this.size * (1 + 0.3 * Math.sin(this.pulse));
+            this.currentSize = this.size * (1 + 0.4 * Math.sin(this.pulse));
             this.currentOpacity = this.opacity * (0.8 + 0.2 * Math.sin(this.pulse));
         }
 
@@ -149,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.x, this.y, 0,
                 this.x, this.y, this.glowSize
             );
-            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.3})`);
+            gradient.addColorStop(0, `rgba(0, 247, 255, ${this.currentOpacity * 0.4})`);
             gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
             brandCtx.fillStyle = gradient;
             brandCtx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
@@ -163,8 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const bgParticles = Array(150).fill().map(() => new BgParticle());
-    const brandParticles = Array(100).fill().map(() => new BrandParticle());
+    // Increased number of particles
+    const bgParticles = Array(200).fill().map(() => new BgParticle());
+    const brandParticles = Array(120).fill().map(() => new BrandParticle());
 
     function animateBg() {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
@@ -179,12 +185,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle.y - particle2.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 150) {
-                    const opacity = 0.1 * (1 - distance/150) * 
+                if (distance < 180) {
+                    const opacity = 0.15 * (1 - distance/180) * 
                         (0.8 + 0.2 * Math.sin(particle.pulse + particle2.pulse));
                     bgCtx.beginPath();
                     bgCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
-                    bgCtx.lineWidth = 0.5;
+                    bgCtx.lineWidth = 0.8;
                     bgCtx.moveTo(particle.x, particle.y);
                     bgCtx.lineTo(particle2.x, particle2.y);
                     bgCtx.stroke();
@@ -209,10 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dy = particle2.y - particle.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 50) {
-                    const opacity = 0.2 * (1 - distance/50) * 
+                if (distance < 70) {
+                    const opacity = 0.25 * (1 - distance/70) * 
                         (0.8 + 0.2 * Math.sin(particle.pulse + particle2.pulse));
-                    const lineWidth = 0.3 + 0.3 * (1 - distance/50);
+                    const lineWidth = 0.5 + 0.5 * (1 - distance/70);
                     
                     brandCtx.beginPath();
                     brandCtx.strokeStyle = `rgba(0, 247, 255, ${opacity})`;
