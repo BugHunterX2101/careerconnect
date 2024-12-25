@@ -59,103 +59,166 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
                 padding: 2rem;
-                background: rgba(0, 0, 0, 0.9);
-                border-radius: 12px;
+                max-width: 450px;
                 width: 100%;
-                max-width: 400px;
-                margin: 2rem auto;
             }
 
-            .login-avatar {
-                width: 120px;
-                height: 120px;
+            .profile-icon {
+                width: 100px;
+                height: 100px;
                 background: rgba(0, 247, 255, 0.1);
+                border: 2px solid rgba(0, 247, 255, 0.3);
                 border-radius: 50%;
+                margin-bottom: 2.5rem;
+                position: relative;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-bottom: 2rem;
-                border: 2px solid rgba(0, 247, 255, 0.2);
+                transition: all 0.3s ease;
             }
 
-            .login-avatar i {
-                font-size: 3rem;
-                color: #00f7ff;
+            .profile-icon::before {
+                content: '';
+                position: absolute;
+                width: 50px;
+                height: 50px;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f7ff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>') center/contain no-repeat;
+                opacity: 0.6;
             }
 
             .login-form {
+                background: rgba(0, 0, 0, 0.4);
+                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(10px);
+                padding: 2.5rem;
+                border-radius: 16px;
                 width: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: 1.5rem;
+                border: 1px solid rgba(0, 247, 255, 0.1);
+                box-shadow: 0 4px 30px rgba(0, 247, 255, 0.1);
             }
 
             .form-group {
-                position: relative;
-                width: 100%;
+                margin-bottom: 1.8rem;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.8rem;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 0.95rem;
+                font-weight: 500;
+                letter-spacing: 0.5px;
             }
 
             .form-group input {
                 width: 100%;
-                padding: 1rem;
-                background: transparent;
-                border: none;
-                border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+                padding: 1rem 1.2rem;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(0, 247, 255, 0.2);
+                border-radius: 8px;
                 color: #fff;
                 font-size: 1rem;
-                transition: all 0.3s ease;
-            }
-
-            .form-group input:focus {
                 outline: none;
-                border-bottom-color: #00f7ff;
             }
 
-            .form-group input::placeholder {
-                color: rgba(255, 255, 255, 0.5);
+            .form-options {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                margin: 1.8rem 0;
+                font-size: 0.9rem;
+                color: rgba(255, 255, 255, 0.8);
             }
 
-            .remember-me {
+            .show-password, .remember-me {
                 display: flex;
                 align-items: center;
-                gap: 0.5rem;
-                color: rgba(255, 255, 255, 0.7);
-                margin-top: 1rem;
+                gap: 0.8rem;
+                padding: 0.5rem;
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: 6px;
+                transition: all 0.3s ease;
             }
 
+            .show-password:hover, .remember-me:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .show-password input[type="checkbox"],
             .remember-me input[type="checkbox"] {
-                width: 16px;
-                height: 16px;
-                accent-color: #00f7ff;
+                appearance: none;
+                -webkit-appearance: none;
+                width: 18px;
+                height: 18px;
+                border: 1px solid rgba(0, 247, 255, 0.3);
+                border-radius: 4px;
+                background: rgba(255, 255, 255, 0.05);
+                cursor: pointer;
+                position: relative;
+                transition: all 0.3s ease;
             }
 
-            .login-btn {
+            .show-password input[type="checkbox"]:checked,
+            .remember-me input[type="checkbox"]:checked {
+                background: rgba(0, 247, 255, 0.2);
+                border-color: rgba(0, 247, 255, 0.5);
+            }
+
+            .show-password input[type="checkbox"]:checked::before,
+            .remember-me input[type="checkbox"]:checked::before {
+                content: '✓';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #00f7ff;
+                font-size: 12px;
+            }
+
+            .show-password label,
+            .remember-me label {
+                cursor: pointer;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            .login-button {
                 width: 100%;
-                padding: 1rem;
-                background: #00f7ff;
+                padding: 1.1rem;
+                margin-top: 0.5rem;
+                background: linear-gradient(135deg, rgba(0, 247, 255, 0.2), rgba(0, 247, 255, 0.1));
                 border: none;
                 border-radius: 8px;
-                color: #000;
-                font-size: 1rem;
+                color: #fff;
+                font-size: 1.1rem;
                 font-weight: 600;
+                letter-spacing: 1px;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                margin-top: 1rem;
+                position: relative;
+                overflow: hidden;
             }
 
-            .login-btn:hover {
-                background: rgba(0, 247, 255, 0.8);
-            }
-
-            @media (min-width: 1024px) {
+            /* Mobile responsiveness */
+            @media (max-width: 768px) {
                 .login-section {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    margin: 0;
+                    padding: 1rem;
+                    max-width: 100%;
+                }
+
+                .login-form {
+                    padding: 1.5rem;
+                }
+
+                .form-options {
+                    grid-template-columns: 1fr;
+                    gap: 0.8rem;
+                }
+
+                .show-password, .remember-me {
+                    width: 100%;
+                    justify-content: flex-start;
                 }
             }
         </style>
@@ -188,21 +251,29 @@
 
                 <!-- Right side with login -->
                 <div class="login-section">
-                    <div class="login-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <form class="login-form" id="loginForm">
+                    <div class="profile-icon"></div>
+                    <form id="loginForm" class="login-form">
                         <div class="form-group">
-                            <input type="text" id="username" name="username" placeholder="Username" required>
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
                         </div>
                         <div class="form-group">
-                            <input type="password" id="password" name="password" placeholder="Password" required>
+                            <label for="loginPassword">Password</label>
+                            <div class="password-input-container">
+                                <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+                            </div>
                         </div>
-                        <div class="remember-me">
-                            <input type="checkbox" id="rememberMe" name="rememberMe">
-                            <label for="rememberMe">Remember me</label>
+                        <div class="form-options">
+                            <div class="show-password">
+                                <input type="checkbox" id="showPassword">
+                                <label for="showPassword">Show password</label>
+                            </div>
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">Remember me</label>
+                            </div>
                         </div>
-                        <button type="submit" class="login-btn">Sign In</button>
+                        <button type="submit" class="login-button">Login</button>
                     </form>
                 </div>
             </div>
