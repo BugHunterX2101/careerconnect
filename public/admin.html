@@ -252,19 +252,22 @@
     </div>
 
     <script>
-        // Check if user is admin
-        document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in and is admin
+        function checkAuth() {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/index.html';
-                return;
+            const role = localStorage.getItem('role');
+            
+            if (!token || role !== 'admin') {
+                window.location.href = '/';
+                return false;
             }
+            return true;
+        }
 
-            // Load users
-            loadUsers();
-        });
-
+        // Load users
         async function loadUsers() {
+            if (!checkAuth()) return;
+
             try {
                 const response = await fetch('/api/admin/users', {
                     headers: {
@@ -273,7 +276,8 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch users');
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to load users');
                 }
 
                 const data = await response.json();
@@ -281,8 +285,8 @@
                 tbody.innerHTML = '';
 
                 data.data.forEach(user => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                         <td>${user.role}</td>
@@ -290,18 +294,21 @@
                         <td class="action-buttons">
                             <button class="btn btn-view" onclick="viewUser('${user._id}')">View</button>
                             <button class="btn btn-edit" onclick="editUser('${user._id}')">Edit</button>
-                            <button class="btn btn-delete" onclick="deleteUser('${user._id}')">Delete</button>
+                            <button class="btn btn-delete" onclick="deleteUser('${user._id}', '${user.username}')">Delete</button>
                         </td>
                     `;
-                    tbody.appendChild(tr);
+                    tbody.appendChild(row);
                 });
             } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to load users');
+                console.error('Error loading users:', error);
+                alert(error.message || 'Failed to load users. Please try again.');
             }
         }
 
+        // View user
         async function viewUser(userId) {
+            if (!checkAuth()) return;
+
             try {
                 const response = await fetch(`/api/admin/users/${userId}`, {
                     headers: {
@@ -310,34 +317,36 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch user');
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to load user details');
                 }
 
                 const { data: user } = await response.json();
                 
-                // Populate modal
-                document.getElementById('modalTitle').textContent = 'View User';
                 document.getElementById('username').value = user.username;
                 document.getElementById('email').value = user.email;
                 document.getElementById('role').value = user.role;
-
-                // Disable inputs for view mode
+                
+                // Disable form fields for view mode
                 document.getElementById('username').disabled = true;
                 document.getElementById('email').disabled = true;
                 document.getElementById('role').disabled = true;
-
-                // Hide save button
-                document.querySelector('.modal-footer .btn-edit').style.display = 'none';
                 
-                // Show modal
+                document.getElementById('modalTitle').textContent = 'View User';
+                document.getElementById('userForm').onsubmit = null;
+                document.querySelector('#userModal .btn-edit').style.display = 'none';
+                
                 document.getElementById('userModal').classList.add('active');
             } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to load user details');
+                console.error('Error viewing user:', error);
+                alert(error.message || 'Failed to load user details. Please try again.');
             }
         }
 
+        // Edit user
         async function editUser(userId) {
+            if (!checkAuth()) return;
+
             try {
                 const response = await fetch(`/api/admin/users/${userId}`, {
                     headers: {
@@ -346,72 +355,75 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch user');
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to load user details');
                 }
 
                 const { data: user } = await response.json();
                 
-                // Populate modal
-                document.getElementById('modalTitle').textContent = 'Edit User';
                 document.getElementById('username').value = user.username;
                 document.getElementById('email').value = user.email;
                 document.getElementById('role').value = user.role;
-
-                // Enable inputs for edit mode
+                
+                // Enable form fields for edit mode
                 document.getElementById('username').disabled = false;
                 document.getElementById('email').disabled = false;
                 document.getElementById('role').disabled = false;
-
-                // Show save button
-                document.querySelector('.modal-footer .btn-edit').style.display = 'block';
-
-                // Update form submission
-                const form = document.getElementById('userForm');
-                form.onsubmit = async (e) => {
+                
+                document.getElementById('modalTitle').textContent = 'Edit User';
+                const saveButton = document.querySelector('#userModal .btn-edit');
+                saveButton.style.display = 'block';
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Changes';
+                
+                document.getElementById('userForm').onsubmit = async (e) => {
                     e.preventDefault();
-                    await updateUser(userId);
+                    
+                    try {
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Saving...';
+
+                        const response = await fetch(`/api/admin/users/${userId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username').value,
+                                email: document.getElementById('email').value,
+                                role: document.getElementById('role').value
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Failed to update user');
+                        }
+
+                        closeModal();
+                        loadUsers();
+                    } catch (error) {
+                        console.error('Error updating user:', error);
+                        alert(error.message || 'Failed to update user. Please try again.');
+                    } finally {
+                        saveButton.disabled = false;
+                        saveButton.textContent = 'Save Changes';
+                    }
                 };
                 
-                // Show modal
                 document.getElementById('userModal').classList.add('active');
             } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to load user details');
+                console.error('Error editing user:', error);
+                alert(error.message || 'Failed to load user details. Please try again.');
             }
         }
 
-        async function updateUser(userId) {
-            try {
-                const formData = {
-                    username: document.getElementById('username').value,
-                    email: document.getElementById('email').value,
-                    role: document.getElementById('role').value
-                };
+        // Delete user
+        async function deleteUser(userId, username) {
+            if (!checkAuth()) return;
 
-                const response = await fetch(`/api/admin/users/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to update user');
-                }
-
-                closeModal();
-                loadUsers();
-                alert('User updated successfully');
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to update user');
-            }
-        }
-
-        async function deleteUser(userId) {
-            if (!confirm('Are you sure you want to delete this user?')) {
+            if (!confirm(`Are you sure you want to delete user "${username}"? This action cannot be undone.`)) {
                 return;
             }
 
@@ -424,26 +436,52 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to delete user');
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to delete user');
                 }
 
                 loadUsers();
-                alert('User deleted successfully');
             } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to delete user');
+                console.error('Error deleting user:', error);
+                alert(error.message || 'Failed to delete user. Please try again.');
             }
         }
 
+        // Close modal
         function closeModal() {
             document.getElementById('userModal').classList.remove('active');
             document.getElementById('userForm').reset();
+            
+            // Reset form state
+            const form = document.getElementById('userForm');
+            form.onsubmit = null;
+            
+            // Enable all fields
+            document.getElementById('username').disabled = false;
+            document.getElementById('email').disabled = false;
+            document.getElementById('role').disabled = false;
+            
+            // Reset save button
+            const saveButton = document.querySelector('#userModal .btn-edit');
+            saveButton.disabled = false;
+            saveButton.textContent = 'Save Changes';
         }
 
+        // Handle logout
         function handleLogout() {
-            localStorage.clear();
-            window.location.href = '/index.html';
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
+            window.location.href = '/';
         }
+
+        // Check authentication and load users when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                loadUsers();
+            }
+        });
     </script>
 </body>
 </html> 
