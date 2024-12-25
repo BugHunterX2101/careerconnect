@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobs - CareerConnect</title>
+    <title>Job Search - CareerConnect</title>
     <style>
         * {
             margin: 0;
@@ -25,9 +25,6 @@
         }
 
         .search-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 2rem;
             margin-bottom: 2rem;
         }
 
@@ -35,6 +32,7 @@
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .search-input {
@@ -52,24 +50,26 @@
         }
 
         .search-btn {
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, rgba(0, 247, 255, 0.2), rgba(0, 247, 255, 0.1));
-            border: none;
+            padding: 0 2rem;
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.3);
             border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
+            color: #00f7ff;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .search-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 247, 255, 0.3), rgba(0, 247, 255, 0.2));
+            background: rgba(0, 247, 255, 0.2);
         }
 
         .filters {
             display: flex;
             gap: 1rem;
             margin-top: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
         }
 
         .filter-btn {
@@ -80,12 +80,14 @@
             color: #fff;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .filter-btn:hover,
         .filter-btn.active {
             background: rgba(0, 247, 255, 0.1);
-            border-color: rgba(0, 247, 255, 0.3);
+            border-color: #00f7ff;
+            color: #00f7ff;
         }
 
         .jobs-grid {
@@ -289,7 +291,7 @@
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    // In a real app, you would filter the jobs here
+                    // In a real app, this would filter the jobs
                 });
             });
         });
@@ -298,33 +300,32 @@
             const card = document.createElement('div');
             card.className = 'job-card';
             card.innerHTML = `
-                <div class="company-logo">
-                    <i class="fas fa-building"></i>
-                </div>
+                <div class="company-logo">${job.logo}</div>
                 <h3 class="job-title">${job.title}</h3>
                 <p class="company-name">${job.company}</p>
                 <div class="job-details">
                     <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
-                    <span><i class="fas fa-clock"></i> ${job.type}</span>
+                    <span><i class="fas fa-briefcase"></i> ${job.type}</span>
                     <span><i class="fas fa-money-bill-wave"></i> ${job.salary}</span>
                 </div>
                 <div class="job-tags">
                     ${job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('')}
                 </div>
-                <button class="apply-btn" onclick="handleApply('${job.title}')">Apply Now</button>
+                <button class="apply-btn" onclick="applyForJob('${job.company}', '${job.title}')">Apply Now</button>
             `;
             return card;
         }
 
         function handleSearch(event) {
             event.preventDefault();
-            // In a real app, you would implement search functionality here
-            alert('Search functionality will be implemented soon!');
+            // In a real app, this would trigger a search
+            const searchInput = document.querySelector('.search-input');
+            console.log('Searching for:', searchInput.value);
         }
 
-        function handleApply(jobTitle) {
-            // In a real app, you would handle the job application process here
-            alert(`Application submitted for ${jobTitle}!`);
+        function applyForJob(company, title) {
+            // In a real app, this would open an application form or modal
+            alert(`Application submitted for ${title} at ${company}`);
         }
     </script>
 </body>
