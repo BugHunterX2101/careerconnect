@@ -6,6 +6,7 @@
         <meta name="theme-color" content="#0a0a0a">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="mobile-web-app-capable" content="yes">
         <title>CareerConnect</title>
         <link rel="stylesheet" href="styles.css">
         <style>
@@ -301,21 +302,16 @@
                         },
                         body: JSON.stringify({ email, password })
                     });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Login failed');
-                    }
 
                     const data = await response.json();
                     console.log('Login response:', data);
                     
-                    if (data.status === 'success') {
+                    if (response.ok && data.status === 'success') {
                         localStorage.setItem('token', data.data.token);
                         localStorage.setItem('user', JSON.stringify(data.data));
                         window.location.href = './dashboard.html';
                     } else {
-                        alert(data.message || 'Login failed. Please try again.');
+                        throw new Error(data.message || 'Login failed. Please try again.');
                     }
                 } catch (error) {
                     console.error('Login error:', error);
