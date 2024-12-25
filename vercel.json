@@ -12,8 +12,23 @@
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
+            "src": "/api/auth/register",
             "dest": "index.js"
+        },
+        {
+            "src": "/api/auth/login",
+            "dest": "index.js"
+        },
+        {
+            "src": "/api/auth/dashboard",
+            "dest": "index.js"
+        },
+        {
+            "src": "/api/auth/(.*)",
+            "dest": "index.js"
+        },
+        {
+            "handle": "filesystem"
         },
         {
             "src": "/signup.html",
