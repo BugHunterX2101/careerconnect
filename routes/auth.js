@@ -66,11 +66,14 @@ router.post('/register', async (req, res) => {
 // Login route
 router.post('/login', async (req, res) => {
     try {
+        console.log('Login request received:', req.body);
+
         const { email, password } = req.body;
-        console.log('Login attempt:', { email, body: req.body });
 
         // Basic validation
         if (!email || !password) {
+            console.log('Missing credentials');
+            res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({
                 status: 'error',
                 message: 'Please provide email and password'
@@ -80,6 +83,8 @@ router.post('/login', async (req, res) => {
         // Find user with password
         const user = await User.findOne({ email }).select('+password');
         if (!user) {
+            console.log('User not found:', email);
+            res.setHeader('Content-Type', 'application/json');
             return res.status(401).json({
                 status: 'error',
                 message: 'Invalid credentials'
@@ -89,6 +94,8 @@ router.post('/login', async (req, res) => {
         // Check password
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
+            console.log('Invalid password for:', email);
+            res.setHeader('Content-Type', 'application/json');
             return res.status(401).json({
                 status: 'error',
                 message: 'Invalid credentials'
@@ -102,7 +109,6 @@ router.post('/login', async (req, res) => {
             { expiresIn: '24h' }
         );
 
-        // Create response object
         const responseData = {
             status: 'success',
             message: 'Login successful',
@@ -117,13 +123,16 @@ router.post('/login', async (req, res) => {
 
         console.log('Login successful:', { email, role: user.role });
 
-        // Send response
+        // Set headers and send response
+        res.setHeader('Content-Type', 'application/json');
         return res.status(200).json(responseData);
     } catch (error) {
         console.error('Login error:', error);
+        res.setHeader('Content-Type', 'application/json');
         return res.status(500).json({
             status: 'error',
-            message: 'An error occurred during login'
+            message: 'An error occurred during login',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 });
