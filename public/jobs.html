@@ -324,8 +324,28 @@
         }
 
         function applyForJob(company, title) {
-            // In a real app, this would open an application form or modal
-            alert(`Application submitted for ${title} at ${company}`);
+            // Get existing applications
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            
+            // Create new application
+            const application = {
+                id: Date.now().toString(),
+                company: company,
+                position: title,
+                date: new Date().toISOString(),
+                status: 'pending',
+                location: 'Remote', // This would come from the job data in a real app
+            };
+            
+            // Add to applications
+            applications.push(application);
+            localStorage.setItem('applications', JSON.stringify(applications));
+            
+            // Show success message
+            alert('Application submitted successfully! View it in the Applications section.');
+            
+            // Navigate to applications page
+            window.location.href = './applications.html';
         }
     </script>
 </body>

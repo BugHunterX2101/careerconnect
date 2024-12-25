@@ -352,15 +352,35 @@
             });
 
             // Highlight current page in navigation
-            const currentPath = window.location.pathname.split('/').pop() || 'dashboard.html';
+            const currentPath = window.location.pathname;
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
-                const linkPath = link.getAttribute('href').split('/').pop();
-                if (linkPath === currentPath) {
+                const linkPath = link.getAttribute('href');
+                if (currentPath.endsWith(linkPath) || 
+                    (currentPath.endsWith('/') && linkPath === './dashboard.html')) {
                     link.classList.add('active');
                 } else {
                     link.classList.remove('active');
                 }
+            });
+
+            // Load user settings if available
+            const userSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            
+            // Update stats based on stored data
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = applications.length;
+
+            // Add click handlers for stat cards
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('stat-link')) {
+                        const link = this.querySelector('.stat-link');
+                        if (link) {
+                            window.location.href = link.getAttribute('href');
+                        }
+                    }
+                });
             });
         });
     </script>
