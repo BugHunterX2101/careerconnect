@@ -12,8 +12,18 @@
             "dest": "/index.js"
         },
         {
+            "src": "/(.*\\.(js|css|html|png|jpg|jpeg|gif|ico|json))",
+            "dest": "/public/$1",
+            "headers": {
+                "cache-control": "public, max-age=0, must-revalidate"
+            }
+        },
+        {
             "src": "/(.*)",
-            "dest": "/public/$1"
+            "dest": "/public/$1",
+            "headers": {
+                "cache-control": "public, max-age=0, must-revalidate"
+            }
         }
     ],
     "env": {
