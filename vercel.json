@@ -13,63 +13,67 @@
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "/index.js"
+            "dest": "index.js"
+        },
+        {
+            "src": "/favicon.ico",
+            "dest": "public/favicon.ico"
         },
         {
             "src": "/",
-            "dest": "/public/index.html"
+            "dest": "public/index.html"
         },
         {
             "src": "/login",
-            "dest": "/public/login.html"
+            "dest": "public/login.html"
         },
         {
             "src": "/signup",
-            "dest": "/public/signup.html"
+            "dest": "public/signup.html"
         },
         {
             "src": "/dashboard",
-            "dest": "/public/dashboard.html"
+            "dest": "public/dashboard.html"
         },
         {
             "src": "/admin",
-            "dest": "/public/admin.html"
+            "dest": "public/admin.html"
         },
         {
             "src": "/employer-dashboard",
-            "dest": "/public/employer-dashboard.html"
+            "dest": "public/employer-dashboard.html"
         },
         {
             "src": "/profile",
-            "dest": "/public/profile.html"
+            "dest": "public/profile.html"
         },
         {
             "src": "/jobs",
-            "dest": "/public/jobs.html"
+            "dest": "public/jobs.html"
         },
         {
             "src": "/applications",
-            "dest": "/public/applications.html"
+            "dest": "public/applications.html"
         },
         {
             "src": "/messages",
-            "dest": "/public/messages.html"
+            "dest": "public/messages.html"
         },
         {
             "src": "/settings",
-            "dest": "/public/settings.html"
+            "dest": "public/settings.html"
         },
         {
             "src": "/css/(.*)",
-            "dest": "/public/css/$1"
+            "dest": "public/css/$1"
         },
         {
             "src": "/js/(.*)",
-            "dest": "/public/js/$1"
+            "dest": "public/js/$1"
         },
         {
             "src": "/images/(.*)",
-            "dest": "/public/images/$1"
+            "dest": "public/images/$1"
         },
         {
             "handle": "filesystem"

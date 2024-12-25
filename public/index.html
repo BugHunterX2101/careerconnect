@@ -209,6 +209,7 @@
                 align-items: center;
                 z-index: 100;
                 background: rgba(10, 10, 10, 0.8);
+                -webkit-backdrop-filter: blur(10px);
                 backdrop-filter: blur(10px);
             }
 
@@ -346,16 +347,21 @@
                     const response = await fetch('/api/login', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ email, password })
+                        body: JSON.stringify({ email, password }),
+                        credentials: 'include'
                     });
 
-                    const data = await response.json();
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (e) {
+                        throw new Error('Unable to connect to server. Please try again.');
+                    }
 
                     if (!response.ok) {
-                        throw new Error(data.message || 'Login failed');
+                        throw new Error(data.message || 'Login failed. Please try again.');
                     }
                     
                     // Store auth data
@@ -374,7 +380,7 @@
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    errorMessage.textContent = error.message || 'Login failed. Please try again.';
+                    errorMessage.textContent = error.message;
                     errorMessage.style.display = 'block';
                 } finally {
                     loginButton.disabled = false;
