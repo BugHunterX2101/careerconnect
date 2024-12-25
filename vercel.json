@@ -4,6 +4,10 @@
         {
             "src": "index.js",
             "use": "@vercel/node"
+        },
+        {
+            "src": "public/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
@@ -15,11 +19,23 @@
                 "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS"
             },
-            "dest": "index.js"
+            "dest": "/index.js"
+        },
+        {
+            "src": "/favicon.ico",
+            "dest": "/public/favicon.ico"
+        },
+        {
+            "src": "/signup",
+            "dest": "/public/signup.html"
+        },
+        {
+            "src": "/dashboard",
+            "dest": "/public/dashboard.html"
         },
         {
             "src": "/(.*)",
-            "dest": "index.js"
+            "dest": "/public/$1"
         }
     ],
     "env": {

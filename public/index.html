@@ -296,22 +296,30 @@
                     const response = await fetch('/api/auth/login', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({ email, password })
                     });
                     
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Login failed');
+                    }
+
                     const data = await response.json();
+                    console.log('Login response:', data);
                     
-                    if (response.ok) {
-                        localStorage.setItem('token', data.token);
-                        window.location.href = '/dashboard';
+                    if (data.status === 'success') {
+                        localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('user', JSON.stringify(data.data));
+                        window.location.href = './dashboard.html';
                     } else {
                         alert(data.message || 'Login failed. Please try again.');
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    alert('An error occurred during login. Please try again.');
+                    alert(error.message || 'An error occurred during login. Please try again.');
                 }
             });
 
