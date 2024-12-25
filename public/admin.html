@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - CareerConnect</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         :root {
             --primary-color: #00f7ff;
@@ -12,6 +11,15 @@
             --card-bg: #151515;
             --text-color: #ffffff;
             --danger-color: #ff4444;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: var(--background);
+            color: var(--text-color);
+            min-height: 100vh;
         }
 
         .admin-container {
@@ -194,6 +202,16 @@
                 margin: 1rem;
             }
         }
+
+        .error-message {
+            color: var(--danger-color);
+            text-align: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 6px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +220,8 @@
             <h1 class="admin-title">Admin Dashboard</h1>
             <button class="logout-button" onclick="handleLogout()">Logout</button>
         </div>
+
+        <div id="errorMessage" class="error-message"></div>
 
         <table class="users-table">
             <thead>
@@ -274,6 +294,9 @@
 
         // Load users
         async function loadUsers() {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.style.display = 'none';
+
             if (!checkAuth()) return;
 
             try {
@@ -309,6 +332,10 @@
                 const tbody = document.getElementById('usersTableBody');
                 tbody.innerHTML = '';
 
+                if (!data.data || !Array.isArray(data.data)) {
+                    throw new Error('Invalid response format');
+                }
+
                 data.data.forEach(user => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -326,11 +353,14 @@
                 });
             } catch (error) {
                 console.error('Error loading users:', error);
-                if (!localStorage.getItem('token')) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+                
+                if (error.message.includes('No token provided') || error.message.includes('Invalid token')) {
+                    localStorage.clear();
                     window.location.href = '/login.html';
                     return;
                 }
-                alert(error.message || 'Failed to load users. Please try again.');
             }
         }
 
@@ -526,11 +556,8 @@
 
         // Handle logout
         function handleLogout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('username');
-            localStorage.removeItem('role');
-            window.location.href = '/';
+            localStorage.clear();
+            window.location.href = '/login.html';
         }
 
         // Check authentication and load users when page loads
