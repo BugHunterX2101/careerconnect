@@ -511,4 +511,219 @@ nav {
         transition: none !important;
     }
 }
+
+/* Button Base Styles */
+.btn,
+.nav-links a,
+.login-form button,
+.submit-button,
+.contact-form button,
+.service-card button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+/* Hover Effect - Glow */
+.btn:hover,
+.nav-links a:hover,
+.login-form button:hover,
+.submit-button:hover,
+.contact-form button:hover,
+.service-card button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 247, 255, 0.4);
+    color: #00f7ff;
+    text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+}
+
+/* Click Effect */
+.btn:active,
+.nav-links a:active,
+.login-form button:active,
+.submit-button:active,
+.contact-form button:active,
+.service-card button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 247, 255, 0.2);
+    transition-duration: 0.1s;
+}
+
+/* Shine Effect */
+.btn::before,
+.nav-links a::before,
+.login-form button::before,
+.submit-button::before,
+.contact-form button::before,
+.service-card button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover::before,
+.nav-links a:hover::before,
+.login-form button:hover::before,
+.submit-button:hover::before,
+.contact-form button:hover::before,
+.service-card button:hover::before {
+    left: 100%;
+}
+
+/* Focus Effect */
+.btn:focus,
+.nav-links a:focus,
+.login-form button:focus,
+.submit-button:focus,
+.contact-form button:focus,
+.service-card button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 247, 255, 0.5);
+}
+
+/* Disabled State */
+.btn:disabled,
+.login-form button:disabled,
+.submit-button:disabled,
+.contact-form button:disabled,
+.service-card button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Loading State */
+.btn.loading,
+.login-form button.loading,
+.submit-button.loading,
+.contact-form button.loading,
+.service-card button.loading {
+    background: linear-gradient(45deg, #006c7d, #00f7ff);
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn.loading::after,
+.login-form button.loading::after,
+.submit-button.loading::after,
+.contact-form button.loading::after,
+.service-card button.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: loading 0.8s linear infinite;
+}
+
+/* Success State */
+.btn.success,
+.login-form button.success,
+.submit-button.success,
+.contact-form button.success,
+.service-card button.success {
+    background: linear-gradient(45deg, #00c853, #69f0ae);
+    color: #fff;
+}
+
+/* Error State */
+.btn.error,
+.login-form button.error,
+.submit-button.error,
+.contact-form button.error,
+.service-card button.error {
+    background: linear-gradient(45deg, #ff1744, #ff5252);
+    color: #fff;
+}
+
+/* Navigation Links Specific Styles */
+.nav-links a {
+    position: relative;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #00f7ff;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Service Cards Button Specific Styles */
+.service-card button {
+    background: transparent;
+    border: 1px solid #00f7ff;
+    color: #00f7ff;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.service-card button:hover {
+    background: rgba(0, 247, 255, 0.1);
+}
+
+/* Contact Form Button Specific Styles */
+.contact-form button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #006c7d, #00f7ff);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Mobile Optimizations */
+@media (hover: none) {
+    .btn:hover,
+    .nav-links a:hover,
+    .login-form button:hover,
+    .submit-button:hover,
+    .contact-form button:hover,
+    .service-card button:hover {
+        transform: none;
+    }
+    
+    .btn:active,
+    .nav-links a:active,
+    .login-form button:active,
+    .submit-button:active,
+    .contact-form button:active,
+    .service-card button:active {
+        transform: scale(0.98);
+        transition-duration: 0.1s;
+    }
+}
+
+/* Animation Keyframes */
+@keyframes loading {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
  
