@@ -367,9 +367,10 @@
             // Add click handlers for navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const href = this.getAttribute('href');
                     if (href) {
-                        window.location.href = href;
+                        window.location.replace(href);
                     }
                 });
             });
@@ -387,7 +388,8 @@
                     if (!e.target.classList.contains('stat-link')) {
                         const link = this.querySelector('.stat-link');
                         if (link) {
-                            window.location.href = link.getAttribute('href');
+                            e.preventDefault();
+                            window.location.replace(link.getAttribute('href'));
                         }
                     }
                 });
