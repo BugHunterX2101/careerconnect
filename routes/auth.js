@@ -34,7 +34,7 @@ router.post('/register', async (req, res) => {
         );
 
         // Return success with token
-        res.status(201).json({
+        return res.status(201).json({
             status: 'success',
             message: 'Registration successful',
             data: {
@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
             });
         }
 
-        res.status(500).json({
+        return res.status(500).json({
             status: 'error',
             message: 'Registration failed'
         });
@@ -67,6 +67,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log('Login attempt:', { email, body: req.body });
 
         // Basic validation
         if (!email || !password) {
@@ -76,8 +77,8 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // Find user
-        const user = await User.findOne({ email });
+        // Find user with password
+        const user = await User.findOne({ email }).select('+password');
         if (!user) {
             return res.status(401).json({
                 status: 'error',
@@ -97,27 +98,32 @@ router.post('/login', async (req, res) => {
         // Generate JWT token
         const token = jwt.sign(
             { userId: user._id },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || 'your-secret-key',
             { expiresIn: '24h' }
         );
 
-        // Return success with token
-        res.json({
+        // Create response object
+        const responseData = {
             status: 'success',
             message: 'Login successful',
             data: {
-                userId: user._id,
+                userId: user._id.toString(),
                 username: user.username,
                 email: user.email,
                 role: user.role,
-                token
+                token: token
             }
-        });
+        };
+
+        console.log('Login successful:', { email, role: user.role });
+
+        // Send response
+        return res.status(200).json(responseData);
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({
+        return res.status(500).json({
             status: 'error',
-            message: 'Login failed'
+            message: 'An error occurred during login'
         });
     }
 });

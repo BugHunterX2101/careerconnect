@@ -260,6 +260,8 @@
                 };
 
                 try {
+                    console.log('Sending login request:', { email: formData.email });
+                    
                     const response = await fetch('/api/login', {
                         method: 'POST',
                         headers: {
@@ -268,7 +270,15 @@
                         body: JSON.stringify(formData)
                     });
 
+                    console.log('Response status:', response.status);
+                    
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        throw new Error('Server response was not JSON');
+                    }
+
                     const data = await response.json();
+                    console.log('Response data:', data);
 
                     if (!response.ok) {
                         throw new Error(data.message || 'Login failed');
@@ -281,6 +291,8 @@
                         localStorage.setItem('username', data.data.username);
                         localStorage.setItem('role', data.data.role);
 
+                        console.log('Login successful, redirecting...');
+
                         // Redirect based on role
                         if (data.data.role === 'admin') {
                             window.location.href = '/admin.html';
@@ -291,7 +303,7 @@
                         throw new Error('Invalid response format');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Login error:', error);
                     alert(error.message || 'An error occurred during login. Please try again.');
                 } finally {
                     submitButton.disabled = false;
