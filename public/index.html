@@ -248,51 +248,30 @@
 
             // Login form submission
             const loginForm = document.querySelector('#loginForm');
-            loginForm.addEventListener('submit', async (e) => {
+            loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const submitButton = loginForm.querySelector('button[type="submit"]');
-                submitButton.disabled = true;
-                submitButton.textContent = 'Logging in...';
-
-                const formData = {
-                    email: document.getElementById('loginEmail').value.trim(),
-                    password: document.getElementById('loginPassword').value.trim()
-                };
-
+                
+                const email = document.querySelector('#loginEmail').value;
+                const password = document.querySelector('#loginPassword').value;
+                
                 try {
-                    console.log('Sending login request:', { email: formData.email });
-                    
                     const response = await fetch('/api/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(formData)
+                        body: JSON.stringify({ email, password })
                     });
 
-                    console.log('Response status:', response.status);
-                    
-                    const contentType = response.headers.get('content-type');
-                    if (!contentType || !contentType.includes('application/json')) {
-                        throw new Error('Server response was not JSON');
-                    }
-
                     const data = await response.json();
-                    console.log('Response data:', data);
-
-                    if (!response.ok) {
-                        throw new Error(data.message || 'Login failed');
-                    }
-
-                    if (data.status === 'success' && data.data) {
-                        // Store user data in localStorage
+                    
+                    if (response.ok) {
+                        // Store token and user info
                         localStorage.setItem('token', data.data.token);
                         localStorage.setItem('userId', data.data.userId);
                         localStorage.setItem('username', data.data.username);
                         localStorage.setItem('role', data.data.role);
-
-                        console.log('Login successful, redirecting...');
-
+                        
                         // Redirect based on role
                         if (data.data.role === 'admin') {
                             window.location.href = '/admin.html';
@@ -300,14 +279,11 @@
                             window.location.href = '/dashboard.html';
                         }
                     } else {
-                        throw new Error('Invalid response format');
+                        alert(data.message || 'Login failed');
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    alert(error.message || 'An error occurred during login. Please try again.');
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Login';
+                    alert('An error occurred during login. Please try again.');
                 }
             });
         });

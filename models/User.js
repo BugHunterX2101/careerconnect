@@ -1,85 +1,33 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true,
-        trim: true
+        required: [true, 'Please provide a username'],
+        trim: true,
+        minlength: [3, 'Username must be at least 3 characters long']
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Please provide an email'],
         unique: true,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
     },
     password: {
         type: String,
-        required: true,
-        select: false // Don't include password by default in queries
+        required: [true, 'Please provide a password'],
+        minlength: [6, 'Password must be at least 6 characters long'],
+        select: false
     },
     role: {
         type: String,
         enum: ['jobseeker', 'employer', 'admin'],
         default: 'jobseeker'
     },
-    position: {
-        type: String,
-        trim: true
-    },
-    company: {
-        type: String,
-        trim: true
-    },
-    experience: {
-        type: String,
-        enum: ['entry', 'intermediate', 'senior']
-    },
-    location: {
-        type: String,
-        trim: true
-    },
-    skills: [{
-        type: String,
-        trim: true
-    }],
-    primaryField: {
-        type: String,
-        enum: ['technology', 'business', 'healthcare', 'education', 'engineering', 'other']
-    },
-    preferences: {
-        jobAlerts: {
-            type: Boolean,
-            default: false
-        },
-        newsletter: {
-            type: Boolean,
-            default: false
-        }
-    },
-    profile: {
-        education: [{
-            institution: String,
-            degree: String,
-            field: String,
-            year: Number
-        }],
-        workHistory: [{
-            company: String,
-            position: String,
-            duration: String,
-            description: String
-        }],
-        bio: String,
-        profilePicture: String
-    },
     createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    lastActive: {
         type: Date,
         default: Date.now
     }
@@ -87,11 +35,13 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
+    // Only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) return next();
+
     try {
-        if (!this.isModified('password')) {
-            return next();
-        }
+        // Generate salt
         const salt = await bcrypt.genSalt(10);
+        // Hash password
         this.password = await bcrypt.hash(this.password, salt);
         next();
     } catch (error) {
@@ -99,31 +49,15 @@ userSchema.pre('save', async function(next) {
     }
 });
 
-// Method to compare passwords
+// Method to compare password
 userSchema.methods.comparePassword = async function(candidatePassword) {
     try {
-        if (!this.password) {
-            throw new Error('Password not loaded');
-        }
         return await bcrypt.compare(candidatePassword, this.password);
     } catch (error) {
-        throw error;
+        throw new Error('Error comparing passwords');
     }
 };
 
-// Update lastActive timestamp
-userSchema.methods.updateLastActive = function() {
-    this.lastActive = new Date();
-    return this.save();
-};
+const User = mongoose.model('User', userSchema);
 
-// Create indexes for searching
-userSchema.index({ 
-    username: 'text', 
-    skills: 'text', 
-    location: 'text',
-    position: 'text',
-    company: 'text'
-});
-
-module.exports = mongoose.model('User', userSchema); 
+module.exports = User; 

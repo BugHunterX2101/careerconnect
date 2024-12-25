@@ -6,13 +6,26 @@ const jwt = require('jsonwebtoken');
 // Register route
 router.post('/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        console.log('Registration request received:', req.body);
+
+        const { username, email, password, role = 'jobseeker' } = req.body;
         
         // Basic validation
         if (!username || !email || !password) {
+            console.log('Missing required fields');
             return res.status(400).json({
                 status: 'error',
                 message: 'Please provide username, email and password'
+            });
+        }
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            console.log('User already exists:', email);
+            return res.status(400).json({
+                status: 'error',
+                message: 'Email already registered'
             });
         }
 
@@ -20,16 +33,18 @@ router.post('/register', async (req, res) => {
         const user = new User({
             username,
             email,
-            password
+            password,
+            role
         });
 
         // Save user
         await user.save();
+        console.log('User created successfully:', { email, role });
 
         // Generate JWT token
         const token = jwt.sign(
             { userId: user._id },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || 'your-secret-key',
             { expiresIn: '24h' }
         );
 
@@ -58,7 +73,8 @@ router.post('/register', async (req, res) => {
 
         return res.status(500).json({
             status: 'error',
-            message: 'Registration failed'
+            message: 'Registration failed',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 });
@@ -73,7 +89,6 @@ router.post('/login', async (req, res) => {
         // Basic validation
         if (!email || !password) {
             console.log('Missing credentials');
-            res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({
                 status: 'error',
                 message: 'Please provide email and password'
@@ -84,7 +99,6 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email }).select('+password');
         if (!user) {
             console.log('User not found:', email);
-            res.setHeader('Content-Type', 'application/json');
             return res.status(401).json({
                 status: 'error',
                 message: 'Invalid credentials'
@@ -95,7 +109,6 @@ router.post('/login', async (req, res) => {
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             console.log('Invalid password for:', email);
-            res.setHeader('Content-Type', 'application/json');
             return res.status(401).json({
                 status: 'error',
                 message: 'Invalid credentials'
@@ -123,12 +136,10 @@ router.post('/login', async (req, res) => {
 
         console.log('Login successful:', { email, role: user.role });
 
-        // Set headers and send response
-        res.setHeader('Content-Type', 'application/json');
+        // Send response
         return res.status(200).json(responseData);
     } catch (error) {
         console.error('Login error:', error);
-        res.setHeader('Content-Type', 'application/json');
         return res.status(500).json({
             status: 'error',
             message: 'An error occurred during login',
