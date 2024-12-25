@@ -208,7 +208,10 @@
                 <div class="login-section">
                     <div class="profile-icon"></div>
                     <form id="loginForm" class="login-form">
-                        <input type="email" id="loginEmail" placeholder="Email" required>
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" name="email" required>
+                        </div>
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
                             <div class="password-input-container">
@@ -225,7 +228,7 @@
                                 <label for="remember">Remember me</label>
                             </div>
                         </div>
-                        <button type="submit">Login</button>
+                        <button type="submit" class="login-button">Login</button>
                     </form>
                 </div>
             </div>
@@ -251,28 +254,41 @@
                 submitButton.disabled = true;
                 submitButton.textContent = 'Logging in...';
 
+                const formData = {
+                    email: document.getElementById('loginEmail').value.trim(),
+                    password: document.getElementById('loginPassword').value.trim()
+                };
+
                 try {
                     const response = await fetch('/api/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            email: document.getElementById('loginEmail').value,
-                            password: document.getElementById('loginPassword').value
-                        })
+                        body: JSON.stringify(formData)
                     });
 
                     const data = await response.json();
-                    
-                    if (response.ok) {
-                        // Store token and redirect to dashboard
+
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Login failed');
+                    }
+
+                    if (data.status === 'success' && data.data) {
+                        // Store user data in localStorage
                         localStorage.setItem('token', data.data.token);
                         localStorage.setItem('userId', data.data.userId);
                         localStorage.setItem('username', data.data.username);
-                        window.location.href = '/dashboard.html';
+                        localStorage.setItem('role', data.data.role);
+
+                        // Redirect based on role
+                        if (data.data.role === 'admin') {
+                            window.location.href = '/admin.html';
+                        } else {
+                            window.location.href = '/dashboard.html';
+                        }
                     } else {
-                        throw new Error(data.message || 'Login failed');
+                        throw new Error('Invalid response format');
                     }
                 } catch (error) {
                     console.error('Error:', error);
