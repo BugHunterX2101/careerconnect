@@ -322,29 +322,30 @@
             // Update header
             document.getElementById('currentContact').textContent = conversation.name;
 
-            // Sample messages for the conversation
-            const messages = [
-                {
-                    text: 'Hello! Thank you for your application.',
-                    time: '10:00 AM',
-                    type: 'received'
-                },
-                {
-                    text: 'We would like to schedule an interview with you.',
-                    time: '10:05 AM',
-                    type: 'received'
-                },
-                {
-                    text: 'That sounds great! I am available this week.',
-                    time: '10:10 AM',
-                    type: 'sent'
-                }
-            ];
+            // Get saved messages
+            const allMessages = JSON.parse(localStorage.getItem('messages') || '{}');
+            const conversationMessages = allMessages[conversation.name] || [];
+            
+            // Add default messages if none exist
+            if (conversationMessages.length === 0) {
+                conversationMessages.push(
+                    {
+                        text: 'Hello! Thank you for your application.',
+                        time: '10:00 AM',
+                        type: 'received'
+                    },
+                    {
+                        text: 'We would like to schedule an interview with you.',
+                        time: '10:05 AM',
+                        type: 'received'
+                    }
+                );
+            }
 
             // Render messages
             const chatMessages = document.getElementById('chatMessages');
             chatMessages.innerHTML = '';
-            messages.forEach(message => {
+            conversationMessages.forEach(message => {
                 const messageElement = createMessageElement(message);
                 chatMessages.appendChild(messageElement);
             });
@@ -365,15 +366,51 @@
 
         function sendMessage(text) {
             const chatMessages = document.getElementById('chatMessages');
+            const currentContact = document.getElementById('currentContact').textContent;
+            
+            // Create new message
             const message = {
                 text: text,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                type: 'sent'
+                type: 'sent',
+                contact: currentContact,
+                timestamp: new Date().toISOString()
             };
             
+            // Get existing messages
+            const messages = JSON.parse(localStorage.getItem('messages') || '{}');
+            if (!messages[currentContact]) {
+                messages[currentContact] = [];
+            }
+            messages[currentContact].push(message);
+            
+            // Save messages
+            localStorage.setItem('messages', JSON.stringify(messages));
+            
+            // Update UI
             const messageElement = createMessageElement(message);
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Update conversation list
+            updateConversationLastMessage(currentContact, text);
+        }
+
+        function updateConversationLastMessage(contact, text) {
+            const conversations = document.querySelectorAll('.conversation-item');
+            conversations.forEach(conv => {
+                const nameEl = conv.querySelector('h3');
+                if (nameEl && nameEl.textContent === contact) {
+                    const lastMessageEl = conv.querySelector('.last-message');
+                    if (lastMessageEl) {
+                        lastMessageEl.textContent = text;
+                    }
+                    const timeEl = conv.querySelector('.message-time');
+                    if (timeEl) {
+                        timeEl.textContent = 'Just now';
+                    }
+                }
+            });
         }
     </script>
 </body>
