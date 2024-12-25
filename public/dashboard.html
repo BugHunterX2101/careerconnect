@@ -279,7 +279,7 @@
             <div class="content-header">
                 <h2>Welcome to CareerConnect</h2>
                 <p>Your journey to success starts here</p>
-            </div>
+                </div>
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <i class="fas fa-briefcase"></i>
@@ -304,19 +304,19 @@
                     <h3>Profile Views</h3>
                     <p class="stat-number">0</p>
                     <a href="/profile" class="stat-link">Update Profile</a>
+                    </div>
                 </div>
-            </div>
         </main>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Check authentication
-            const token = localStorage.getItem('token');
-            if (!token) {
+                const token = localStorage.getItem('token');
+                if (!token) {
                 window.location.replace('/');
-                return;
-            }
+                    return;
+                }
 
             // Set up user profile
             const username = localStorage.getItem('username');
