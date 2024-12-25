@@ -367,7 +367,6 @@
             // Add click handlers for navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
                     const href = this.getAttribute('href');
                     if (href) {
                         window.location.href = href;

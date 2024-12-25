@@ -120,7 +120,7 @@
             <div id="errorMessage" class="error-message"></div>
         </form>
         <div class="signup-link">
-            Don't have an account? <a href="/signup.html">Sign up</a>
+            Don't have an account? <a href="./signup.html">Sign up</a>
         </div>
     </div>
 
@@ -167,11 +167,11 @@
                 
                 // Redirect based on role
                 if (data.data.role === 'admin') {
-                    window.location.href = '/admin.html';
+                    window.location.href = './admin.html';
                 } else if (data.data.role === 'employer') {
-                    window.location.href = '/employer-dashboard.html';
+                    window.location.href = './employer-dashboard.html';
                 } else {
-                    window.location.href = '/dashboard.html';
+                    window.location.href = './dashboard.html';
                 }
             } catch (error) {
                 console.error('Login error:', error);
@@ -190,11 +190,11 @@
             
             if (token) {
                 if (role === 'admin') {
-                    window.location.href = '/admin.html';
+                    window.location.href = './admin.html';
                 } else if (role === 'employer') {
-                    window.location.href = '/employer-dashboard.html';
+                    window.location.href = './employer-dashboard.html';
                 } else {
-                    window.location.href = '/dashboard.html';
+                    window.location.href = './dashboard.html';
                 }
             }
         });
