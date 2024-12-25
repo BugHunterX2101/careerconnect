@@ -12,19 +12,17 @@
     ],
     "routes": [
         {
-            "src": "/api/auth/register",
-            "dest": "index.js"
-        },
-        {
-            "src": "/api/auth/login",
-            "dest": "index.js"
-        },
-        {
-            "src": "/api/auth/dashboard",
+            "src": "/api/health",
             "dest": "index.js"
         },
         {
             "src": "/api/auth/(.*)",
+            "methods": ["POST", "GET", "OPTIONS"],
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+            },
             "dest": "index.js"
         },
         {

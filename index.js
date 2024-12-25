@@ -7,14 +7,25 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-// CORS configuration
-app.use(cors());
+// CORS configuration with specific origin
+app.use(cors({
+    origin: ['https://careerconnect-7af1.vercel.app', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+}));
 
 // Security headers
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+});
+
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
     next();
 });
 
@@ -27,6 +38,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // API Routes
 app.use('/api/auth', authRoutes);
+
+// Health check route
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Server is running' });
+});
 
 // Handle SPA routing
 app.get('*', (req, res) => {
@@ -43,20 +59,39 @@ app.use((err, req, res, next) => {
     });
 });
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-})
-.then(() => {
-    console.log('Connected to MongoDB');
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-})
-.catch((error) => {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-});
+// MongoDB connection with retry logic
+async function connectToMongoDB(retries = 5) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            await mongoose.connect(process.env.MONGODB_URI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                serverSelectionTimeoutMS: 5000,
+            });
+            console.log('Connected to MongoDB successfully');
+            return true;
+        } catch (error) {
+            console.error(`MongoDB connection attempt ${i + 1} failed:`, error.message);
+            if (i === retries - 1) throw error;
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before retrying
+        }
+    }
+    return false;
+}
+
+// Start server with database connection
+async function startServer() {
+    try {
+        await connectToMongoDB();
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+            console.log('Environment:', process.env.NODE_ENV || 'development');
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+}
+
+startServer();
