@@ -6,7 +6,10 @@ const auth = require('../middleware/auth');
 // Admin middleware to check if user is admin
 const isAdmin = async (req, res, next) => {
     try {
+        console.log('Admin middleware - checking auth:', req.user);
+        
         if (!req.user || !req.user.userId) {
+            console.log('No user ID found in request');
             return res.status(401).json({
                 status: 'error',
                 message: 'Authentication required'
@@ -14,6 +17,8 @@ const isAdmin = async (req, res, next) => {
         }
 
         const user = await User.findById(req.user.userId);
+        console.log('Found user:', user ? 'User exists' : 'User not found');
+        
         if (!user) {
             return res.status(404).json({
                 status: 'error',
@@ -22,12 +27,14 @@ const isAdmin = async (req, res, next) => {
         }
 
         if (user.role !== 'admin') {
+            console.log('User is not admin, role:', user.role);
             return res.status(403).json({
                 status: 'error',
                 message: 'Access denied. Admin only.'
             });
         }
 
+        console.log('Admin access granted for user:', user.email);
         // Add user info to request for later use
         req.adminUser = user;
         next();
@@ -44,7 +51,10 @@ const isAdmin = async (req, res, next) => {
 // Get all users
 router.get('/users', auth, isAdmin, async (req, res) => {
     try {
+        console.log('Fetching all users...');
         const users = await User.find().select('-password');
+        console.log('Found users:', users.length);
+        
         res.json({
             status: 'success',
             data: users
@@ -62,13 +72,18 @@ router.get('/users', auth, isAdmin, async (req, res) => {
 // Get user by ID
 router.get('/users/:id', auth, isAdmin, async (req, res) => {
     try {
+        console.log('Fetching user by ID:', req.params.id);
         const user = await User.findById(req.params.id).select('-password');
+        
         if (!user) {
+            console.log('User not found with ID:', req.params.id);
             return res.status(404).json({
                 status: 'error',
                 message: 'User not found'
             });
         }
+
+        console.log('Found user:', user.email);
         res.json({
             status: 'success',
             data: user
@@ -86,6 +101,9 @@ router.get('/users/:id', auth, isAdmin, async (req, res) => {
 // Update user
 router.put('/users/:id', auth, isAdmin, async (req, res) => {
     try {
+        console.log('Updating user:', req.params.id);
+        console.log('Update data:', req.body);
+
         // Prevent updating password through this route
         const { password, ...updateData } = req.body;
 
@@ -96,12 +114,14 @@ router.put('/users/:id', auth, isAdmin, async (req, res) => {
         ).select('-password');
 
         if (!user) {
+            console.log('User not found for update:', req.params.id);
             return res.status(404).json({
                 status: 'error',
                 message: 'User not found'
             });
         }
 
+        console.log('User updated successfully:', user.email);
         res.json({
             status: 'success',
             data: user
@@ -119,8 +139,11 @@ router.put('/users/:id', auth, isAdmin, async (req, res) => {
 // Delete user
 router.delete('/users/:id', auth, isAdmin, async (req, res) => {
     try {
+        console.log('Deleting user:', req.params.id);
+        
         // Prevent admin from deleting themselves
         if (req.params.id === req.adminUser._id.toString()) {
+            console.log('Admin attempted to delete their own account');
             return res.status(400).json({
                 status: 'error',
                 message: 'Cannot delete your own admin account'
@@ -129,12 +152,14 @@ router.delete('/users/:id', auth, isAdmin, async (req, res) => {
 
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
+            console.log('User not found for deletion:', req.params.id);
             return res.status(404).json({
                 status: 'error',
                 message: 'User not found'
             });
         }
 
+        console.log('User deleted successfully:', user.email);
         res.json({
             status: 'success',
             message: 'User deleted successfully'
