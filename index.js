@@ -11,21 +11,14 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-// CORS configuration for production
-app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://careerconnect-7af1-fij97xz8w-vedit-agrawals-projects.vercel.app', 'https://careerconnect.vercel.app']
-        : '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// CORS configuration
+app.use(cors());
 
 // Security headers
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     next();
 });
 
@@ -41,11 +34,13 @@ app.use('/api', (req, res, next) => {
     console.log('API Request:', {
         method: req.method,
         path: req.path,
+        headers: req.headers,
         body: req.body
     });
     next();
-}, authRoutes);
+});
 
+app.use('/api', authRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Error handling middleware

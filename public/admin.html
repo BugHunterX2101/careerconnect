@@ -257,10 +257,18 @@
             const token = localStorage.getItem('token');
             const role = localStorage.getItem('role');
             
-            if (!token || role !== 'admin') {
+            if (!token) {
+                console.error('No authentication token found');
+                window.location.href = '/login.html';
+                return false;
+            }
+            
+            if (role !== 'admin') {
+                console.error('User is not an admin');
                 window.location.href = '/';
                 return false;
             }
+            
             return true;
         }
 
@@ -269,18 +277,35 @@
             if (!checkAuth()) return;
 
             try {
+                console.log('Fetching users...');
+                const token = localStorage.getItem('token');
+                console.log('Using token:', token ? 'Token exists' : 'No token');
+                
                 const response = await fetch('/api/admin/users', {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
                     }
                 });
 
+                console.log('Response status:', response.status);
+                const contentType = response.headers.get('content-type');
+                console.log('Response content type:', contentType);
+
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to load users');
+                    const text = await response.text();
+                    console.error('Error response:', text);
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || 'Failed to load users');
+                    } catch (e) {
+                        throw new Error('Failed to load users: ' + text);
+                    }
                 }
 
                 const data = await response.json();
+                console.log('Users data:', data);
+
                 const tbody = document.getElementById('usersTableBody');
                 tbody.innerHTML = '';
 
@@ -301,6 +326,10 @@
                 });
             } catch (error) {
                 console.error('Error loading users:', error);
+                if (!localStorage.getItem('token')) {
+                    window.location.href = '/login.html';
+                    return;
+                }
                 alert(error.message || 'Failed to load users. Please try again.');
             }
         }
@@ -312,13 +341,20 @@
             try {
                 const response = await fetch(`/api/admin/users/${userId}`, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Accept': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to load user details');
+                    const text = await response.text();
+                    console.error('Error response:', text);
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || 'Failed to load user details');
+                    } catch (e) {
+                        throw new Error('Failed to load user details: ' + text);
+                    }
                 }
 
                 const { data: user } = await response.json();
@@ -350,13 +386,20 @@
             try {
                 const response = await fetch(`/api/admin/users/${userId}`, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Accept': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to load user details');
+                    const text = await response.text();
+                    console.error('Error response:', text);
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || 'Failed to load user details');
+                    } catch (e) {
+                        throw new Error('Failed to load user details: ' + text);
+                    }
                 }
 
                 const { data: user } = await response.json();
@@ -387,7 +430,8 @@
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                'Accept': 'application/json'
                             },
                             body: JSON.stringify({
                                 username: document.getElementById('username').value,
@@ -397,8 +441,14 @@
                         });
 
                         if (!response.ok) {
-                            const errorData = await response.json();
-                            throw new Error(errorData.message || 'Failed to update user');
+                            const text = await response.text();
+                            console.error('Error response:', text);
+                            try {
+                                const errorData = JSON.parse(text);
+                                throw new Error(errorData.message || 'Failed to update user');
+                            } catch (e) {
+                                throw new Error('Failed to update user: ' + text);
+                            }
                         }
 
                         closeModal();
@@ -431,13 +481,20 @@
                 const response = await fetch(`/api/admin/users/${userId}`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Accept': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to delete user');
+                    const text = await response.text();
+                    console.error('Error response:', text);
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || 'Failed to delete user');
+                    } catch (e) {
+                        throw new Error('Failed to delete user: ' + text);
+                    }
                 }
 
                 loadUsers();
