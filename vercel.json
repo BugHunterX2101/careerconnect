@@ -12,45 +12,36 @@
     ],
     "routes": [
         {
-            "src": "/api/health",
-            "dest": "index.js"
-        },
-        {
-            "src": "/api/auth/(.*)",
-            "methods": ["POST", "GET", "OPTIONS"],
+            "src": "/api/(.*)",
             "headers": {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
                 "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
             },
-            "dest": "index.js"
+            "continue": true
+        },
+        {
+            "src": "/api/health",
+            "dest": "/api/health"
+        },
+        {
+            "src": "/api/auth/(.*)",
+            "dest": "/api/auth/$1"
+        },
+        {
+            "src": "/signup",
+            "dest": "/signup.html"
+        },
+        {
+            "src": "/dashboard",
+            "dest": "/dashboard.html"
         },
         {
             "handle": "filesystem"
         },
         {
-            "src": "/signup.html",
-            "dest": "public/signup.html"
-        },
-        {
-            "src": "/dashboard.html",
-            "dest": "public/dashboard.html"
-        },
-        {
-            "src": "/script.js",
-            "dest": "public/script.js"
-        },
-        {
-            "src": "/styles.css",
-            "dest": "public/styles.css"
-        },
-        {
-            "src": "^/$",
-            "dest": "public/index.html"
-        },
-        {
             "src": "/(.*)",
-            "dest": "public/$1"
+            "dest": "/index.html"
         }
     ],
     "env": {
