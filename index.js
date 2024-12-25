@@ -11,16 +11,21 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-// CORS configuration
+// CORS configuration for production
 app.use(cors({
-    origin: '*',
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://careerconnect-7af1-fij97xz8w-vedit-agrawals-projects.vercel.app', 'https://careerconnect.vercel.app']
+        : '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Set default headers
+// Security headers
 app.use((req, res, next) => {
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     next();
 });
 
@@ -63,22 +68,18 @@ app.use((err, req, res, next) => {
 
 // Serve HTML files
 app.get('/', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/signup', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
 app.get('/dashboard', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
 app.get('/admin', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
@@ -103,8 +104,10 @@ const startServer = async () => {
 
         // Start server
         const PORT = process.env.PORT || 3000;
-        app.listen(PORT, '127.0.0.1', () => {
-            console.log(`Server running at http://127.0.0.1:${PORT}`);
+        const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
+        
+        app.listen(PORT, HOST, () => {
+            console.log(`Server running at http://${HOST}:${PORT}`);
             console.log('Environment:', process.env.NODE_ENV || 'development');
         });
     } catch (error) {
