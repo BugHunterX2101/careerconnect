@@ -19,31 +19,23 @@
                 "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS"
             },
-            "dest": "/index.js"
-        },
-        {
-            "handle": "filesystem"
+            "dest": "index.js"
         },
         {
             "src": "/favicon.ico",
-            "dest": "/public/favicon.ico"
+            "dest": "public/favicon.ico"
         },
         {
             "src": "/signup",
-            "dest": "/public/signup.html"
+            "dest": "public/signup.html"
         },
         {
             "src": "/dashboard",
-            "dest": "/public/dashboard.html"
+            "dest": "public/dashboard.html"
         },
         {
             "src": "/(.*)",
-            "dest": "/public/$1"
+            "dest": "public/$1"
         }
-    ],
-    "env": {
-        "NODE_ENV": "production",
-        "MONGODB_URI": "@mongodb_uri",
-        "JWT_SECRET": "@jwt_secret"
-    }
+    ]
 } 

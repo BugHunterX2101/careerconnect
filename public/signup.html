@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="mobile-web-app-capable" content="yes">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
         <title>CareerConnect - Sign Up</title>
         <link rel="stylesheet" href="styles.css">
         <style>
@@ -799,7 +800,7 @@
                 }
                 
                 try {
-                    const response = await fetch('/api/auth/register', {
+                    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -813,7 +814,14 @@
                         })
                     });
 
-                    const data = await response.json();
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (jsonError) {
+                        console.error('JSON parsing error:', jsonError);
+                        throw new Error('Invalid response from server');
+                    }
+
                     console.log('Registration response:', data);
                     
                     if (response.ok && data.status === 'success') {
