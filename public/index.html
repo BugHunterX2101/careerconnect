@@ -33,11 +33,16 @@
             .nav {
                 position: fixed;
                 top: 0;
+                left: 0;
                 right: 0;
                 padding: 2rem;
                 display: flex;
+                justify-content: flex-end;
                 gap: 2rem;
                 z-index: 100;
+                background: rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
             }
 
             .nav-link {
@@ -55,21 +60,23 @@
             .container {
                 flex: 1;
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
                 align-items: center;
-                padding: 2rem;
+                padding: 6rem 2rem 2rem;
                 position: relative;
+                gap: 4rem;
             }
 
             /* Background Effects */
             .background-effects {
-                position: absolute;
+                position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
                 pointer-events: none;
                 overflow: hidden;
+                z-index: 0;
             }
 
             .dot {
@@ -87,32 +94,18 @@
                 opacity: 0.1;
             }
 
-            /* Main Content */
-            .content-wrapper {
-                display: flex;
-                width: 100%;
-                max-width: 1200px;
-                justify-content: space-between;
-                align-items: center;
-                gap: 4rem;
+            /* Logo Section */
+            .logo-section {
+                text-align: center;
+                margin-bottom: 2rem;
                 z-index: 1;
             }
 
-            /* Logo Section */
-            .logo-section {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
             .logo {
-                font-size: 4rem;
+                font-size: 4.5rem;
                 color: var(--primary-color);
                 text-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
                 animation: glow 2s ease-in-out infinite alternate;
-                text-align: center;
-                position: relative;
             }
 
             @keyframes glow {
@@ -122,8 +115,9 @@
 
             /* Login Section */
             .login-section {
-                width: 400px;
-                padding: 2rem;
+                width: 100%;
+                max-width: 400px;
+                z-index: 1;
             }
 
             .login-container {
@@ -135,19 +129,6 @@
                 -webkit-backdrop-filter: blur(10px);
             }
 
-            .user-icon {
-                width: 80px;
-                height: 80px;
-                background: rgba(0, 247, 255, 0.1);
-                border-radius: 50%;
-                margin: 0 auto 2rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 2.5rem;
-                color: var(--primary-color);
-            }
-
             .form-group {
                 margin-bottom: 1.5rem;
             }
@@ -156,6 +137,7 @@
                 display: block;
                 margin-bottom: 0.5rem;
                 color: rgba(255, 255, 255, 0.8);
+                font-size: 0.9rem;
             }
 
             .form-group input {
@@ -174,16 +156,24 @@
                 box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
             }
 
-            .remember-me {
+            .checkbox-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 1.5rem;
+            }
+
+            .checkbox-group {
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
-                margin: 1rem 0;
                 color: rgba(255, 255, 255, 0.8);
+                font-size: 0.9rem;
             }
 
-            .remember-me input[type="checkbox"] {
+            .checkbox-group input[type="checkbox"] {
                 accent-color: var(--primary-color);
+                width: 16px;
+                height: 16px;
             }
 
             .login-button {
@@ -197,6 +187,7 @@
                 font-weight: 600;
                 cursor: pointer;
                 transition: all 0.3s ease;
+                margin-bottom: 1rem;
             }
 
             .login-button:hover {
@@ -209,22 +200,7 @@
                 text-align: center;
                 margin-top: 1rem;
                 display: none;
-            }
-
-            @media (max-width: 1024px) {
-                .content-wrapper {
-                    flex-direction: column;
-                    gap: 2rem;
-                }
-
-                .logo-section {
-                    padding-top: 4rem;
-                }
-
-                .login-section {
-                    width: 100%;
-                    max-width: 400px;
-                }
+                font-size: 0.9rem;
             }
 
             @media (max-width: 768px) {
@@ -232,8 +208,16 @@
                     padding: 1rem;
                 }
 
+                .container {
+                    padding: 5rem 1rem 1rem;
+                }
+
                 .logo {
                     font-size: 3rem;
+                }
+
+                .login-section {
+                    padding: 0 1rem;
                 }
             }
         </style>
@@ -249,35 +233,36 @@
         <div class="background-effects" id="backgroundEffects"></div>
 
         <div class="container">
-            <div class="content-wrapper">
-                <div class="logo-section">
-                    <div class="logo">CareerConnect</div>
-                </div>
+            <div class="logo-section">
+                <div class="logo">CareerConnect</div>
+            </div>
 
-                <section class="login-section">
-                    <div class="login-container">
-                        <div class="user-icon">
-                            <i class="fas fa-user"></i>
+            <section class="login-section">
+                <div class="login-container">
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
                         </div>
-                        <form id="loginForm" onsubmit="handleLogin(event)">
-                            <div class="form-group">
-                                <label for="email">Username</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" required>
-                            </div>
-                            <label class="remember-me">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="checkbox-row">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="showPassword">
+                                Show password
+                            </label>
+                            <label class="checkbox-group">
                                 <input type="checkbox" id="remember">
                                 Remember me
                             </label>
-                            <button type="submit" class="login-button" id="loginButton">Sign In</button>
-                            <div id="errorMessage" class="error-message"></div>
-                        </form>
-                    </div>
-                </section>
-            </div>
+                        </div>
+                        <button type="submit" class="login-button" id="loginButton">Sign In</button>
+                        <div id="errorMessage" class="error-message"></div>
+                    </form>
+                </div>
+            </section>
         </div>
 
         <script>
@@ -320,6 +305,12 @@
 
             // Initialize background effects
             createBackgroundEffects();
+
+            // Toggle password visibility
+            document.getElementById('showPassword').addEventListener('change', function() {
+                const passwordInput = document.getElementById('password');
+                passwordInput.type = this.checked ? 'text' : 'password';
+            });
 
             async function handleLogin(event) {
                 event.preventDefault();
@@ -394,6 +385,5 @@
                 }
             });
         </script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </body>
 </html> 
