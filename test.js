@@ -1,15 +1,38 @@
 const BASE_URL = 'https://careerconnect-7af1.vercel.app';
 const TEST_USER = {
-    username: 'John Doe',
-    email: 'johndoe@example.com',
-    password: 'JohnDoe123!',
+    username: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    password: 'JaneSmith123!',
     role: 'jobseeker'
 };
+
+async function testHealthCheck() {
+    try {
+        console.log('Testing API Health...');
+        const response = await fetch(`${BASE_URL}/api/health`);
+        const data = await response.json();
+        console.log('Health Check Response:', data);
+        console.log('Status:', response.status);
+        return response.ok;
+    } catch (error) {
+        console.error('Health Check Failed:', error.message);
+        return false;
+    }
+}
 
 async function runTests() {
     console.log('Starting API tests with test user:', TEST_USER.username);
     console.log('----------------------------------------\n');
     let token;
+
+    // Test 0: Health Check
+    const isHealthy = await testHealthCheck();
+    if (!isHealthy) {
+        console.log('❌ API is not healthy. Skipping remaining tests.');
+        return;
+    }
+    console.log('✅ API is healthy. Proceeding with tests.\n');
+    console.log('----------------------------------------\n');
 
     // Test 1: Registration
     try {
@@ -25,6 +48,7 @@ async function runTests() {
             body: JSON.stringify(TEST_USER)
         });
         
+        console.log('Registration Response Headers:', Object.fromEntries(registerResponse.headers));
         const registerData = await registerResponse.json();
         console.log('\nRegistration Response:');
         console.log('Status Code:', registerResponse.status);
@@ -58,6 +82,7 @@ async function runTests() {
             })
         });
         
+        console.log('Login Response Headers:', Object.fromEntries(loginResponse.headers));
         const loginData = await loginResponse.json();
         console.log('\nLogin Response:');
         console.log('Status Code:', loginResponse.status);
@@ -91,6 +116,7 @@ async function runTests() {
                 }
             });
             
+            console.log('Dashboard Response Headers:', Object.fromEntries(dashboardResponse.headers));
             const dashboardData = await dashboardResponse.json();
             console.log('\nDashboard Access Response:');
             console.log('Status Code:', dashboardResponse.status);
