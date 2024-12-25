@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
             console.log('User not found:', email);
             return res.status(401).json({
                 status: 'error',
-                message: 'Invalid credentials'
+                message: 'Invalid email or password'
             });
         }
 
@@ -111,7 +111,7 @@ router.post('/login', async (req, res) => {
             console.log('Invalid password for:', email);
             return res.status(401).json({
                 status: 'error',
-                message: 'Invalid credentials'
+                message: 'Invalid email or password'
             });
         }
 
@@ -142,7 +142,7 @@ router.post('/login', async (req, res) => {
         console.error('Login error:', error);
         return res.status(500).json({
             status: 'error',
-            message: 'An error occurred during login',
+            message: 'An error occurred during login. Please try again.',
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
