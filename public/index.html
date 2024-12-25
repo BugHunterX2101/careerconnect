@@ -281,6 +281,11 @@
         <script src="script.js" defer></script>
 
         <script>
+            // Get the API base URL based on environment
+            const API_BASE_URL = window.location.hostname === 'localhost' 
+                ? '' 
+                : 'https://careerconnect-7af1.vercel.app';
+
             document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
@@ -288,7 +293,7 @@
                 const password = document.getElementById('password').value;
                 
                 try {
-                    const response = await fetch('/api/auth/login', {
+                    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

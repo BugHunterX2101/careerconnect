@@ -4,12 +4,40 @@
         {
             "src": "index.js",
             "use": "@vercel/node"
+        },
+        {
+            "src": "public/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
+            "src": "/api/auth/(.*)",
             "dest": "/index.js"
+        },
+        {
+            "src": "^/favicon.ico$",
+            "dest": "/public/favicon.ico"
+        },
+        {
+            "src": "^/dashboard.html",
+            "dest": "/public/dashboard.html"
+        },
+        {
+            "src": "^/signup.html",
+            "dest": "/public/signup.html"
+        },
+        {
+            "src": "^/script.js",
+            "dest": "/public/script.js"
+        },
+        {
+            "src": "^/styles.css",
+            "dest": "/public/styles.css"
+        },
+        {
+            "src": "^/$",
+            "dest": "/public/index.html"
         },
         {
             "src": "/(.*)",
