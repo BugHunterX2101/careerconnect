@@ -192,6 +192,19 @@
                 left: 1rem;
             }
         }
+
+        /* Add back button styles */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            color: #00f7ff;
+            text-decoration: none;
+            margin-bottom: 1rem;
+        }
+        
+        .back-button:hover {
+            text-decoration: underline;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -201,8 +214,9 @@
     </button>
 
     <div class="settings-container">
-        <a href="/dashboard" class="back-button" style="color: #00f7ff; text-decoration: none; display: inline-block; margin-bottom: 1rem;">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        <!-- Add back button -->
+        <a href="dashboard.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>&nbsp; Back to Dashboard
         </a>
 
         <div class="page-header">

@@ -254,11 +254,11 @@
         <div class="sidebar">
             <a href="/dashboard" class="brand">CareerConnect</a>
             <nav class="nav-links">
-                <a href="/profile" class="nav-link">Profile</a>
-                <a href="/jobs" class="nav-link">Job Search</a>
-                <a href="/applications" class="nav-link">Applications</a>
-                <a href="/messages" class="nav-link">Messages</a>
-                <a href="/settings" class="nav-link">Settings</a>
+                <a href="/profile.html" class="nav-link">Profile</a>
+                <a href="/jobs.html" class="nav-link">Job Search</a>
+                <a href="/applications.html" class="nav-link">Applications</a>
+                <a href="/messages.html" class="nav-link">Messages</a>
+                <a href="/settings.html" class="nav-link">Settings</a>
             </nav>
             <div class="user-profile">
                 <div class="profile-avatar">
@@ -373,6 +373,16 @@
                             history.pushState({}, '', href);
                             window.location = href;
                         }
+                    }
+                });
+            });
+
+            // Add click handlers for stat cards
+            document.querySelectorAll('.stat-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const href = this.getAttribute('href');
+                    if (href) {
+                        window.location.href = href + '.html';
                     }
                 });
             });
