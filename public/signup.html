@@ -536,6 +536,132 @@
                 align-items: center;
                 margin-top: 2rem;
             }
+
+            /* Responsive Design for Signup Page */
+            @media screen and (max-width: 1200px) {
+                .signup-form-container {
+                    max-width: 90%;
+                }
+            }
+
+            @media screen and (max-width: 992px) {
+                .form-grid {
+                    grid-template-columns: 1fr;
+                    gap: 1.5rem;
+                }
+
+                .form-section {
+                    margin-bottom: 1rem;
+                }
+            }
+
+            @media screen and (max-width: 768px) {
+                .signup-form-container {
+                    padding: 1.5rem;
+                    margin: 1rem;
+                }
+
+                .form-title {
+                    font-size: 1.8rem;
+                    margin-bottom: 1.5rem;
+                }
+
+                .form-section h3 {
+                    font-size: 1.1rem;
+                }
+
+                .form-group {
+                    margin-bottom: 1rem;
+                }
+            }
+
+            @media screen and (max-width: 576px) {
+                .signup-form-container {
+                    padding: 1rem;
+                    margin: 0.5rem;
+                }
+
+                .form-title {
+                    font-size: 1.5rem;
+                    margin-bottom: 1rem;
+                }
+
+                .form-section {
+                    padding: 1rem;
+                }
+
+                .form-group label {
+                    font-size: 0.9rem;
+                }
+
+                .form-group input,
+                .form-group select,
+                .form-group textarea {
+                    padding: 0.7rem;
+                    font-size: 0.9rem;
+                }
+
+                .submit-button {
+                    width: 100%;
+                    padding: 0.8rem;
+                    font-size: 1rem;
+                }
+
+                .skills-container {
+                    padding: 0.3rem;
+                }
+
+                .skill-tag {
+                    padding: 0.2rem 0.6rem;
+                    font-size: 0.9rem;
+                }
+            }
+
+            /* Touch device optimizations */
+            @media (hover: none) {
+                .form-section:hover,
+                .skill-tag:hover,
+                .submit-button:hover {
+                    transform: none;
+                }
+
+                .form-section:active,
+                .skill-tag:active,
+                .submit-button:active {
+                    transform: scale(0.98);
+                }
+            }
+
+            /* Ensure minimum touch target size */
+            @media (pointer: coarse) {
+                .form-group input,
+                .form-group select,
+                .submit-button,
+                .skill-tag,
+                .remove-skill {
+                    min-height: 44px;
+                }
+
+                .remove-skill {
+                    padding: 0 10px;
+                }
+            }
+
+            /* Landscape mode optimization */
+            @media screen and (max-height: 600px) and (orientation: landscape) {
+                .container {
+                    height: auto;
+                    min-height: 100vh;
+                }
+
+                .main-content {
+                    padding: 1rem 0;
+                }
+
+                .signup-form-container {
+                    margin: 0.5rem auto;
+                }
+            }
         </style>
     </head>
     <body>
