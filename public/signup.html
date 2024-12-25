@@ -790,12 +790,20 @@
                     alert('Passwords do not match');
                     return;
                 }
+
+                // Validate password strength
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters long');
+                    return;
+                }
                 
                 try {
+                    console.log('Sending registration request:', { username, email, role });
                     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({
                             username,
@@ -806,8 +814,9 @@
                     });
                     
                     const data = await response.json();
+                    console.log('Registration response:', data);
                     
-                    if (data.status === 'success') {
+                    if (response.ok && data.status === 'success') {
                         // Store the token and user data
                         localStorage.setItem('token', data.data.token);
                         localStorage.setItem('user', JSON.stringify(data.data));
@@ -815,11 +824,11 @@
                         // Redirect to dashboard with relative path
                         window.location.href = './dashboard.html';
                     } else {
-                        alert(data.message || 'Registration failed');
+                        alert(data.message || 'Registration failed. Please try again.');
                     }
                 } catch (error) {
                     console.error('Registration error:', error);
-                    alert('An error occurred during registration');
+                    alert('An error occurred during registration. Please try again.');
                 }
             });
 

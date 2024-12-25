@@ -293,17 +293,20 @@
                 const password = document.getElementById('password').value;
                 
                 try {
+                    console.log('Sending login request:', { email });
                     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({ email, password })
                     });
                     
                     const data = await response.json();
+                    console.log('Login response:', data);
                     
-                    if (data.status === 'success') {
+                    if (response.ok && data.status === 'success') {
                         // Store the token
                         localStorage.setItem('token', data.data.token);
                         localStorage.setItem('user', JSON.stringify(data.data));
@@ -311,11 +314,11 @@
                         // Redirect to dashboard with relative path
                         window.location.href = './dashboard.html';
                     } else {
-                        alert(data.message || 'Login failed');
+                        alert(data.message || 'Login failed. Please check your credentials.');
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    alert('An error occurred during login');
+                    alert('An error occurred during login. Please try again.');
                 }
             });
 
