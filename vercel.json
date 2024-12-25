@@ -13,20 +13,7 @@
     "routes": [
         {
             "src": "/api/(.*)",
-            "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
-                "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
-            },
-            "continue": true
-        },
-        {
-            "src": "/api/health",
-            "dest": "/api/health"
-        },
-        {
-            "src": "/api/auth/(.*)",
-            "dest": "/api/auth/$1"
+            "dest": "index.js"
         },
         {
             "src": "/signup",
