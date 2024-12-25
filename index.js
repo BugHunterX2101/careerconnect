@@ -12,7 +12,14 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 
 // CORS configuration
-app.use(cors());
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://careerconnect-7af1.vercel.app', 'https://careerconnect-7af1-pzw7bv0bq-vedit-agrawals-projects.vercel.app']
+        : true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+}));
 
 // Security headers
 app.use((req, res, next) => {

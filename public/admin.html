@@ -305,9 +305,12 @@
                 console.log('Using token:', token ? 'Token exists' : 'No token');
                 
                 const response = await fetch('/api/admin/users', {
+                    method: 'GET',
+                    credentials: 'same-origin',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
 
@@ -369,10 +372,14 @@
             if (!checkAuth()) return;
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'GET',
+                    credentials: 'same-origin',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Accept': 'application/json'
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
 
@@ -414,10 +421,14 @@
             if (!checkAuth()) return;
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'GET',
+                    credentials: 'same-origin',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Accept': 'application/json'
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
 
@@ -456,12 +467,14 @@
                         saveButton.disabled = true;
                         saveButton.textContent = 'Saving...';
 
+                        const token = localStorage.getItem('token');
                         const response = await fetch(`/api/admin/users/${userId}`, {
                             method: 'PUT',
+                            credentials: 'same-origin',
                             headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                'Accept': 'application/json'
+                                'Authorization': `Bearer ${token}`,
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
                                 username: document.getElementById('username').value,
@@ -508,11 +521,14 @@
             }
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(`/api/admin/users/${userId}`, {
                     method: 'DELETE',
+                    credentials: 'same-origin',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Accept': 'application/json'
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
 
