@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CareerConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: #00f7ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .settings-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header i {
+            font-size: 1.5rem;
+            color: #00f7ff;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h3 {
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+
+        .setting-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #00f7ff;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .select-input {
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 6px;
+            color: #fff;
+            min-width: 150px;
+        }
+
+        .select-input option {
+            background: #0a0a0a;
+        }
+
+        .save-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 8px;
+            color: #00f7ff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .save-btn:hover {
+            background: rgba(0, 247, 255, 0.2);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            padding: 0.8rem;
+            background: rgba(0, 247, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: #00f7ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 247, 255, 0.2);
+            transform: translateX(-3px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='dashboard.html'" aria-label="Back to Dashboard">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <div class="settings-container">
+        <div class="page-header">
+            <h1>Settings</h1>
+            <p>Customize your CareerConnect experience</p>
+        </div>
+
+        <form id="settingsForm" onsubmit="saveSettings(event)">
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-bell"></i>
+                    <h2>Notifications</h2>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Job Alerts</h3>
+                        <p>Receive notifications for new job matches</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="jobAlerts" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Application Updates</h3>
+                        <p>Get notified about your application status</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="applicationUpdates" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Messages</h3>
+                        <p>Receive notifications for new messages</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="messageNotifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-eye"></i>
+                    <h2>Appearance</h2>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Theme</h3>
+                        <p>Choose your preferred theme</p>
+                    </div>
+                    <select class="select-input" id="theme">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                        <option value="system">System Default</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-lock"></i>
+                    <h2>Privacy</h2>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Profile Visibility</h3>
+                        <p>Control who can see your profile</p>
+                    </div>
+                    <select class="select-input" id="profileVisibility">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                        <option value="connections">Connections Only</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Activity Status</h3>
+                        <p>Show when you're active on CareerConnect</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="activityStatus" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load saved settings
+            loadSettings();
+        });
+
+        function loadSettings() {
+            // In a real app, these would be loaded from an API
+            const settings = {
+                jobAlerts: true,
+                applicationUpdates: true,
+                messageNotifications: true,
+                theme: 'dark',
+                profileVisibility: 'public',
+                activityStatus: true
+            };
+
+            // Apply settings to form
+            Object.keys(settings).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = settings[key];
+                    } else {
+                        element.value = settings[key];
+                    }
+                }
+            });
+        }
+
+        function saveSettings(event) {
+            event.preventDefault();
+
+            // In a real app, this would be sent to an API
+            const settings = {
+                jobAlerts: document.getElementById('jobAlerts').checked,
+                applicationUpdates: document.getElementById('applicationUpdates').checked,
+                messageNotifications: document.getElementById('messageNotifications').checked,
+                theme: document.getElementById('theme').value,
+                profileVisibility: document.getElementById('profileVisibility').value,
+                activityStatus: document.getElementById('activityStatus').checked
+            };
+
+            // Simulate saving
+            setTimeout(() => {
+                alert('Settings saved successfully!');
+            }, 500);
+        }
+    </script>
+</body>
+</html> 
