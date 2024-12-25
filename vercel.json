@@ -13,35 +13,22 @@
     "routes": [
         {
             "src": "/api/auth/(.*)",
-            "dest": "/index.js"
+            "dest": "index.js"
         },
         {
-            "src": "^/favicon.ico$",
-            "dest": "/public/favicon.ico"
+            "src": "/favicon.ico",
+            "dest": "public/favicon.ico"
         },
         {
-            "src": "^/dashboard.html",
-            "dest": "/public/dashboard.html"
+            "src": "/",
+            "dest": "public/index.html"
         },
         {
-            "src": "^/signup.html",
-            "dest": "/public/signup.html"
-        },
-        {
-            "src": "^/script.js",
-            "dest": "/public/script.js"
-        },
-        {
-            "src": "^/styles.css",
-            "dest": "/public/styles.css"
-        },
-        {
-            "src": "^/$",
-            "dest": "/public/index.html"
+            "handle": "filesystem"
         },
         {
             "src": "/(.*)",
-            "dest": "/public/$1"
+            "dest": "public/$1"
         }
     ],
     "env": {
