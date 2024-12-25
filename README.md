@@ -1,78 +1,96 @@
-# CareerConnect - Job Portal Backend
+# CareerConnect
 
-A comprehensive job portal backend built with Node.js, Express, and MongoDB.
+A modern job search and career networking platform built with Node.js, Express, and MongoDB.
 
 ## Features
 
-- User Authentication (Job Seekers & Employers)
-- Job Posting & Management
-- Skill Assessment Quizzes
-- Profile Management
-- Advanced Job Search
-- Application Tracking
+- User authentication (login/signup)
+- Professional profile management
+- Job search and application
+- Career networking
+- Real-time notifications
+- Mobile-responsive design
 
-## Database Models
+## Tech Stack
 
-### User Model
-- Authentication & Profile Management
-- Role-based Access (Job Seeker/Employer)
-- Skills & Experience Tracking
-- Education & Work History
+### Backend
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- JWT for authentication
+- CORS for cross-origin requests
 
-### Job Model
-- Job Listings
-- Application Management
-- Search Indexing
-- Status Tracking
+### Frontend
+- HTML5
+- CSS3 with modern animations
+- Vanilla JavaScript
+- Responsive design
 
-### Quiz Model
-- Skill Assessments
-- Performance Tracking
-- Difficulty Levels
-- Success Rate Calculation
+## Getting Started
 
-## Setup
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB
+- Git
 
-1. Install dependencies:
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/careerconnect.git
+cd careerconnect
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Create .env file:
+3. Create a `.env` file in the root directory and add your environment variables:
 ```env
-MONGODB_URI=your_mongodb_uri
-PORT=3000
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+PORT=3000
 ```
 
-3. Run the server:
+4. Start the development server:
 ```bash
-# Development
 npm run dev
-
-# Production
-npm run prod
 ```
 
-## API Endpoints
+The application will be available at `http://localhost:3000`
 
-### Authentication
-- POST /api/register - User registration
-- POST /api/login - User login
+## Project Structure
 
-### Jobs
-- POST /jobs/create - Create job listing
-- GET /jobs/search - Search jobs
-- GET /jobs/recommendations - Get job recommendations
+```
+careerconnect/
+├── config/             # Configuration files
+├── middleware/         # Express middleware
+├── models/            # Mongoose models
+├── public/            # Static files
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── routes/            # Express routes
+├── .env              # Environment variables
+├── .gitignore        # Git ignore rules
+├── index.js          # Entry point
+└── package.json      # Project metadata
+```
 
-### Quizzes
-- GET /quiz/random - Get random quiz
-- POST /quiz/submit - Submit quiz answer
+## Contributing
 
-## Tech Stack
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT Authentication
-- Vercel Deployment 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+Your Name - your.email@example.com
+Project Link: https://github.com/yourusername/careerconnect 

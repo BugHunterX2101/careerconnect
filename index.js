@@ -6,6 +6,7 @@ const connectDB = require('./config/database');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const jwt = require('jsonwebtoken');
+const auth = require('./middleware/auth');
 
 const app = express();
 
@@ -59,10 +60,34 @@ app.get('/signup.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
+// Serve the dashboard page
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+// Serve the dashboard page for the .html extension as well
+app.get('/dashboard.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
 // Register endpoint
 app.post('/api/register', async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
+        const { 
+            username, 
+            email, 
+            password,
+            phone,
+            role,
+            position,
+            company,
+            experience,
+            location,
+            skills,
+            primaryField,
+            preferences,
+            profile
+        } = req.body;
         
         // Basic validation
         if (!username || !email || !password) {
@@ -72,12 +97,28 @@ app.post('/api/register', async (req, res) => {
             });
         }
 
-        // Create user with role
+        // Create user with all fields
         const user = new User({
             username,
             email,
             password,
-            role: role || 'jobseeker' // Default to jobseeker if no role provided
+            phone,
+            role: role || 'jobseeker',
+            position,
+            company,
+            experience,
+            location,
+            skills,
+            primaryField,
+            preferences: {
+                jobAlerts: preferences?.jobAlerts || false,
+                newsletter: preferences?.newsletter || false
+            },
+            profile: {
+                education: profile?.education || [],
+                bio: profile?.bio || '',
+                workHistory: profile?.workHistory || []
+            }
         });
 
         // Save user
@@ -166,6 +207,7 @@ app.post('/api/login', async (req, res) => {
                 userId: user._id,
                 username: user.username,
                 email: user.email,
+                role: user.role,
                 token
             }
         });
@@ -174,6 +216,30 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({
             status: 'error',
             message: 'Login failed'
+        });
+    }
+});
+
+// User profile endpoint
+app.get('/api/user/profile', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select('-password');
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        res.json({
+            status: 'success',
+            data: user
+        });
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to fetch user profile'
         });
     }
 });
@@ -266,14 +332,36 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Export for Vercel
-module.exports = app;
+// Start the server
+const PORT = process.env.PORT || 5000;
 
-// Start server if not in production
-if (process.env.NODE_ENV !== 'production') {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+// Handle server shutdown
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM. Performing graceful shutdown...');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
     });
-}
+});
+
+const startServer = () => {
+    const server = app.listen(PORT, '127.0.0.1', () => {
+        console.log(`Server running at http://127.0.0.1:${PORT}`);
+        console.log('Environment:', process.env.NODE_ENV || 'development');
+        console.log('Server address:', server.address());
+    }).on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.log(`Port ${PORT} is busy. Retrying in 1 second...`);
+            setTimeout(() => {
+                server.close();
+                startServer();
+            }, 1000);
+        } else {
+            console.error('Server error:', err);
+        }
+    });
+    
+    return server;
+};
+
+const server = startServer();

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 // Register route
 router.post('/register', async (req, res) => {
@@ -25,14 +26,23 @@ router.post('/register', async (req, res) => {
         // Save user
         await user.save();
 
-        // Return success
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Return success with token
         res.status(201).json({
             status: 'success',
             message: 'Registration successful',
             data: {
                 userId: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role: user.role,
+                token
             }
         });
     } catch (error) {
@@ -84,14 +94,23 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // Return success
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Return success with token
         res.json({
             status: 'success',
             message: 'Login successful',
             data: {
                 userId: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role: user.role,
+                token
             }
         });
     } catch (error) {

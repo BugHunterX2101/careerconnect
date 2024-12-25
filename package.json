@@ -1,37 +1,32 @@
 {
   "name": "careerconnect",
   "version": "1.0.0",
+  "description": "A modern job search and career networking platform",
   "main": "index.js",
-  "engines": {
-    "node": "18.x"
-  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "echo 'Build step completed'",
-    "vercel-build": "npm install && npm run build"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "job-search",
+    "career",
+    "networking",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.9.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
-  "description": "",
-  "nodemonConfig": {
-    "ignore": [
-      "node_modules/*",
-      "public/*"
-    ],
-    "delay": 0,
-    "verbose": false
+    "nodemon": "^2.0.22"
   }
 }
