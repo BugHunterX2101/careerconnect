@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CareerConnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary-color: #00f7ff;
+            --background: #0a0a0a;
+            --card-bg: #151515;
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: var(--background);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .login-title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: var(--background);
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            filter: brightness(1.2);
+        }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1 class="login-title">Login</h1>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-button" id="loginButton">Login</button>
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+        <div class="signup-link">
+            Don't have an account? <a href="/signup.html">Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginButton = document.getElementById('loginButton');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            try {
+                loginButton.disabled = true;
+                loginButton.textContent = 'Logging in...';
+                errorMessage.style.display = 'none';
+                
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || 'Login failed');
+                    } catch (e) {
+                        throw new Error('Login failed: ' + text);
+                    }
+                }
+
+                const data = await response.json();
+                
+                // Store auth data
+                localStorage.setItem('token', data.data.token);
+                localStorage.setItem('userId', data.data.userId);
+                localStorage.setItem('username', data.data.username);
+                localStorage.setItem('role', data.data.role);
+                
+                // Redirect based on role
+                if (data.data.role === 'admin') {
+                    window.location.href = '/admin.html';
+                } else if (data.data.role === 'employer') {
+                    window.location.href = '/employer-dashboard.html';
+                } else {
+                    window.location.href = '/dashboard.html';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = 'Login';
+            }
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+            
+            if (token) {
+                if (role === 'admin') {
+                    window.location.href = '/admin.html';
+                } else if (role === 'employer') {
+                    window.location.href = '/employer-dashboard.html';
+                } else {
+                    window.location.href = '/dashboard.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

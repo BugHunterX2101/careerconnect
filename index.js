@@ -63,7 +63,11 @@ app.use((err, req, res, next) => {
 
 // Serve HTML files
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.redirect('/login.html');
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 app.get('/signup', (req, res) => {
