@@ -4,91 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CareerConnect</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary-color: #00f7ff;
-            --background: #0a0a0a;
-            --card-bg: #151515;
-            --text-color: #ffffff;
-            --sidebar-width: 240px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
         }
 
         .dashboard-container {
             display: flex;
             min-height: 100vh;
-            background: var(--background);
         }
 
         /* Sidebar Styles */
         .sidebar {
-            width: var(--sidebar-width);
-            background: var(--card-bg);
-            padding: 2rem;
+            width: 250px;
+            background: rgba(0, 247, 255, 0.05);
+            border-right: 1px solid rgba(0, 247, 255, 0.1);
+            padding: 2rem 0;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid rgba(0, 247, 255, 0.1);
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .brand {
+            padding: 0 1.5rem;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+            font-size: 1.5rem;
+            color: #00f7ff;
+            text-decoration: none;
         }
 
-        .profile-image {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(0, 247, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: var(--primary-color);
-        }
-
-        .user-info {
-            color: var(--text-color);
-        }
-
-        .user-name {
-            font-weight: bold;
-            margin-bottom: 0.25rem;
-        }
-
-        .user-role {
-            font-size: 0.875rem;
-            opacity: 0.7;
-        }
-
-        .nav-menu {
+        .nav-links {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            padding: 0 1rem;
         }
 
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            color: var(--text-color);
+        .nav-link {
+            padding: 0.8rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
-        .nav-item:hover {
+        .nav-link:hover, .nav-link.active {
             background: rgba(0, 247, 255, 0.1);
+            color: #00f7ff;
         }
 
-        .nav-item.active {
-            background: rgba(0, 247, 255, 0.15);
-            color: var(--primary-color);
+        .nav-link i {
+            font-size: 1.2rem;
+            opacity: 0.8;
         }
 
         /* Main Content Styles */
@@ -98,69 +76,87 @@
             overflow-y: auto;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header Styles */
+        .content-header {
             margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
         }
 
-        .welcome-message {
-            color: var(--text-color);
-            font-size: 1.5rem;
+        .content-header h2 {
+            font-size: 1.8rem;
+            color: #00f7ff;
+            margin-bottom: 0.5rem;
         }
 
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .content-header p {
+            color: rgba(255, 255, 255, 0.6);
         }
 
-        .logout-button {
-            background: rgba(0, 247, 255, 0.1);
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .logout-button:hover {
-            background: var(--primary-color);
-            color: var(--background);
-        }
-
-        /* Categories Section */
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .category-card {
-            background: var(--card-bg);
+        /* User Profile Section */
+        .user-profile {
+            margin-top: auto;
             padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-            color: var(--text-color);
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            transition: all 0.3s ease;
+            border-top: 1px solid rgba(0, 247, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .category-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 247, 255, 0.1);
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 247, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #00f7ff;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .profile-email {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .logout-btn {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            color: #00f7ff;
         }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
-            .categories {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
         @media (max-width: 768px) {
             .dashboard-container {
                 flex-direction: column;
@@ -168,101 +164,197 @@
 
             .sidebar {
                 width: 100%;
-                border-right: none;
-                border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+                padding: 1rem;
             }
 
-            .categories {
-                grid-template-columns: 1fr;
+            .nav-links {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 0.5rem;
+            }
+
+            .nav-link {
+                white-space: nowrap;
+            }
+
+            .main-content {
+                padding: 1rem;
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Sidebar -->
         <div class="sidebar">
-            <div class="user-profile">
-                <div class="profile-image" id="profileInitial"></div>
-                <div class="user-info">
-                    <div class="user-name" id="userName">Loading...</div>
-                    <div class="user-role" id="userRole">Loading...</div>
-                </div>
-            </div>
-            <nav class="nav-menu">
-                <a href="#" class="nav-item active">Dashboard</a>
-                <a href="#" class="nav-item">Profile</a>
-                <a href="#" class="nav-item">Job Search</a>
-                <a href="#" class="nav-item">Applications</a>
-                <a href="#" class="nav-item">Messages</a>
-                <a href="#" class="nav-item">Settings</a>
+            <a href="/dashboard.html" class="brand">CareerConnect</a>
+            <nav class="nav-links">
+                <a href="#home" class="nav-link active" data-section="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#profile" class="nav-link" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#jobs" class="nav-link" data-section="jobs">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                </a>
+                <a href="#applications" class="nav-link" data-section="applications">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </a>
+                <a href="#messages" class="nav-link" data-section="messages">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#settings" class="nav-link" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
             </nav>
-        </div>
-
-        <div class="main-content">
-            <div class="header">
-                <div class="welcome-message" id="welcomeMessage">Welcome back!</div>
-                <div class="user-actions">
-                    <button class="logout-button" onclick="handleLogout()">Logout</button>
+            <div class="user-profile">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
-            </div>
-
-            <div class="categories">
-                <div class="category-card">
-                    <h3>Job Applications</h3>
-                    <p>0 Active</p>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">Loading...</div>
+                    <div class="profile-email" id="profileEmail">Loading...</div>
                 </div>
-                <div class="category-card">
-                    <h3>Saved Jobs</h3>
-                    <p>0 Saved</p>
-                </div>
-                <div class="category-card">
-                    <h3>Profile Views</h3>
-                    <p>0 Views</p>
-                </div>
-                <div class="category-card">
-                    <h3>Messages</h3>
-                    <p>0 Unread</p>
-                </div>
+                <button class="logout-btn" id="logoutBtn" aria-label="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
         </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="homeSection" class="content-section active">
+                <div class="content-header">
+                    <h2>Welcome to CareerConnect</h2>
+                    <p>Your journey to success starts here</p>
+                </div>
+                <div class="content">
+                    <!-- Add home content here -->
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profileSection" class="content-section">
+                <div class="content-header">
+                    <h2>Your Profile</h2>
+                    <p>Manage your professional information</p>
+                </div>
+                <div class="content">
+                    <!-- Add profile content here -->
+                </div>
+            </section>
+
+            <!-- Jobs Section -->
+            <section id="jobsSection" class="content-section">
+                <div class="content-header">
+                    <h2>Available Jobs</h2>
+                    <p>Explore career opportunities</p>
+                </div>
+                <div class="content">
+                    <!-- Add jobs content here -->
+                </div>
+            </section>
+
+            <!-- Applications Section -->
+            <section id="applicationsSection" class="content-section">
+                <div class="content-header">
+                    <h2>Your Applications</h2>
+                    <p>Track your job applications</p>
+                </div>
+                <div class="content">
+                    <!-- Add applications content here -->
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messagesSection" class="content-section">
+                <div class="content-header">
+                    <h2>Messages</h2>
+                    <p>Your communications hub</p>
+                </div>
+                <div class="content">
+                    <!-- Add messages content here -->
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settingsSection" class="content-section">
+                <div class="content-header">
+                    <h2>Settings</h2>
+                    <p>Customize your experience</p>
+                </div>
+                <div class="content">
+                    <!-- Add settings content here -->
+                </div>
+            </section>
+        </main>
     </div>
 
     <script>
-        // Check authentication on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
             const token = localStorage.getItem('token');
             if (!token) {
                 window.location.href = '/index.html';
                 return;
             }
 
-            // Get user info from localStorage
-            const username = localStorage.getItem('username');
-            const role = localStorage.getItem('role');
+            // Set up navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
 
-            // Update UI with user info
-            document.getElementById('userName').textContent = username || 'User';
-            document.getElementById('userRole').textContent = role || 'Member';
-            document.getElementById('welcomeMessage').textContent = `Welcome back, ${username}!`;
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Update active states
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
 
-            // Set profile initial
-            const profileInitial = document.getElementById('profileInitial');
-            if (username) {
-                profileInitial.textContent = username.charAt(0).toUpperCase();
+                    // Show corresponding section
+                    const sectionId = link.getAttribute('data-section') + 'Section';
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === sectionId) {
+                            section.classList.add('active');
+                        }
+                    });
+
+                    // Update URL hash
+                    window.location.hash = link.getAttribute('data-section');
+                });
+            });
+
+            // Handle initial hash
+            const initialHash = window.location.hash.slice(1) || 'home';
+            const initialLink = document.querySelector(`[data-section="${initialHash}"]`);
+            if (initialLink) {
+                initialLink.click();
             }
+
+            // Set up user profile
+            const username = localStorage.getItem('username');
+            const userId = localStorage.getItem('userId');
+            if (username) {
+                document.getElementById('profileName').textContent = username;
+                document.getElementById('profileEmail').textContent = userId;
+            }
+
+            // Set up logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.clear();
+                window.location.href = '/index.html';
+            });
         });
-
-        // Logout handler
-        function handleLogout() {
-            // Clear localStorage
-            localStorage.removeItem('token');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('username');
-            localStorage.removeItem('role');
-
-            // Redirect to login page
-            window.location.href = '/index.html';
-        }
     </script>
 </body>
 </html> 
