@@ -2,42 +2,77 @@
     "version": 2,
     "builds": [
         {
+            "src": "index.js",
+            "use": "@vercel/node"
+        },
+        {
             "src": "public/**",
             "use": "@vercel/static"
         }
     ],
     "routes": [
         {
+            "src": "/api/(.*)",
+            "dest": "/index.js"
+        },
+        {
             "src": "/",
             "dest": "/public/index.html"
         },
         {
             "src": "/dashboard",
-            "dest": "/public/dashboard.html"
+            "dest": "/public/dashboard.html",
+            "continue": true
         },
         {
             "src": "/profile",
-            "dest": "/public/profile.html"
+            "dest": "/public/profile.html",
+            "continue": true
         },
         {
             "src": "/jobs",
-            "dest": "/public/jobs.html"
+            "dest": "/public/jobs.html",
+            "continue": true
         },
         {
             "src": "/applications",
-            "dest": "/public/applications.html"
+            "dest": "/public/applications.html",
+            "continue": true
         },
         {
             "src": "/messages",
-            "dest": "/public/messages.html"
+            "dest": "/public/messages.html",
+            "continue": true
         },
         {
             "src": "/settings",
-            "dest": "/public/settings.html"
+            "dest": "/public/settings.html",
+            "continue": true
         },
         {
-            "src": "/(.+)",
-            "dest": "/public/$1"
+            "src": "/css/(.*)",
+            "dest": "/public/css/$1"
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "/public/js/$1"
+        },
+        {
+            "src": "/images/(.*)",
+            "dest": "/public/images/$1"
+        },
+        {
+            "handle": "filesystem"
         }
-    ]
+    ],
+    "rewrites": [
+        { "source": "/(.*)", "destination": "/public/$1" }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "env": {
+        "NODE_ENV": "production",
+        "MONGODB_URI": "@mongodb_uri",
+        "JWT_SECRET": "@jwt_secret"
+    }
 } 
