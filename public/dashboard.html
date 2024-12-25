@@ -329,38 +329,31 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
+        // Check if user is authenticated
+        window.addEventListener('load', () => {
             const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
             if (!token) {
-                window.location.href = './index.html';
+                // Redirect to login if not authenticated
+                window.location.href = '/index.html';
                 return;
             }
 
-            // Set up user profile
-            const username = localStorage.getItem('username');
-            const userId = localStorage.getItem('userId');
-            if (username) {
-                document.getElementById('profileName').textContent = username;
-                document.getElementById('profileEmail').textContent = userId;
-            }
+            // Update profile section with user info
+            const profileName = document.querySelector('.profile-name');
+            const profileEmail = document.querySelector('.profile-email');
+            const profileAvatar = document.querySelector('.profile-avatar');
+            
+            if (profileName) profileName.textContent = user.username || 'User';
+            if (profileEmail) profileEmail.textContent = user.email || '';
+            if (profileAvatar) profileAvatar.textContent = (user.username || 'U')[0].toUpperCase();
 
-            // Set up logout
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                localStorage.clear();
-                window.location.href = './index.html';
-            });
-
-            // Highlight current page in navigation
-            const currentPath = window.location.pathname.split('/').pop() || 'dashboard.html';
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                const linkPath = link.getAttribute('href').split('/').pop();
-                if (linkPath === currentPath) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
+            // Handle logout
+            document.querySelector('.logout-btn')?.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/index.html';
             });
         });
     </script>

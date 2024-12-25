@@ -12,7 +12,7 @@ router.post('/register', async (req, res) => {
         
         // Basic validation
         if (!username || !email || !password) {
-            console.log('Missing required fields');
+            console.log('Missing required fields:', { username: !!username, email: !!email, password: !!password });
             return res.status(400).json({
                 status: 'error',
                 message: 'Please provide username, email and password'
@@ -62,15 +62,6 @@ router.post('/register', async (req, res) => {
         });
     } catch (error) {
         console.error('Registration error:', error);
-        
-        // Handle duplicate key error
-        if (error.code === 11000) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Username or email already exists'
-            });
-        }
-
         return res.status(500).json({
             status: 'error',
             message: 'Registration failed',
@@ -88,14 +79,14 @@ router.post('/login', async (req, res) => {
 
         // Basic validation
         if (!email || !password) {
-            console.log('Missing credentials');
+            console.log('Missing credentials:', { email: !!email, password: !!password });
             return res.status(400).json({
                 status: 'error',
                 message: 'Please provide email and password'
             });
         }
 
-        // Find user with password
+        // Find user
         const user = await User.findOne({ email }).select('+password');
         if (!user) {
             console.log('User not found:', email);
@@ -122,22 +113,20 @@ router.post('/login', async (req, res) => {
             { expiresIn: '24h' }
         );
 
-        const responseData = {
-            status: 'success',
-            message: 'Login successful',
-            data: {
-                userId: user._id.toString(),
-                username: user.username,
-                email: user.email,
-                role: user.role,
-                token: token
-            }
-        };
-
         console.log('Login successful:', { email, role: user.role });
 
         // Send response
-        return res.status(200).json(responseData);
+        return res.status(200).json({
+            status: 'success',
+            message: 'Login successful',
+            data: {
+                userId: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                token
+            }
+        });
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).json({
