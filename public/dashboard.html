@@ -314,7 +314,7 @@
             // Check authentication
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '/';
+                window.location.replace('/');
                 return;
             }
 
@@ -329,28 +329,27 @@
             // Set up logout
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 localStorage.clear();
-                window.location.href = '/';
-            });
-
-            // Highlight current page in navigation
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                const linkPath = link.getAttribute('href');
-                if (currentPath === linkPath || 
-                    (currentPath === '/' && linkPath === '/dashboard')) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
+                window.location.replace('/');
             });
 
             // Add click handlers for navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function() {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const href = this.getAttribute('href');
                     if (href) {
-                        window.location.href = href;
+                        window.location.replace(href);
+                    }
+                });
+            });
+
+            // Add click handlers for stat cards
+            document.querySelectorAll('.stat-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    if (href) {
+                        window.location.replace(href + '.html');
                     }
                 });
             });
@@ -361,31 +360,6 @@
             // Update stats based on stored data
             const applications = JSON.parse(localStorage.getItem('applications') || '[]');
             document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = applications.length;
-
-            // Add click handlers for stat cards
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('stat-link')) {
-                        const link = this.querySelector('.stat-link');
-                        if (link) {
-                            e.preventDefault();
-                            const href = link.getAttribute('href');
-                            history.pushState({}, '', href);
-                            window.location = href;
-                        }
-                    }
-                });
-            });
-
-            // Add click handlers for stat cards
-            document.querySelectorAll('.stat-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    const href = this.getAttribute('href');
-                    if (href) {
-                        window.location.href = href + '.html';
-                    }
-                });
-            });
         });
     </script>
 </body>

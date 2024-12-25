@@ -207,21 +207,20 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Add navigation handler using window.location.replace()
+        function handleBackNavigation() {
+            window.location.replace('/dashboard.html');
+        }
+    </script>
 </head>
 <body>
-    <button class="back-btn" onclick="window.location.href='/dashboard'" aria-label="Back to Dashboard" title="Back to Dashboard">
-        <i class="fas fa-arrow-left"></i>
-    </button>
-
     <div class="settings-container">
-        <!-- Add back button -->
-        <a href="dashboard.html" class="back-button">
-            <i class="fas fa-arrow-left"></i>&nbsp; Back to Dashboard
-        </a>
-
         <div class="page-header">
+            <!-- Add back button with updated click handler -->
+            <button onclick="handleBackNavigation()" class="back-btn">Back</button>
             <h1>Settings</h1>
-            <p>Customize your CareerConnect experience</p>
+            <p>Manage your account preferences</p>
         </div>
 
         <form id="settingsForm" onsubmit="saveSettings(event)">
