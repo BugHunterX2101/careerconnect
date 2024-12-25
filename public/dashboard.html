@@ -252,13 +252,32 @@
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <a href="/dashboard" class="brand">CareerConnect</a>
+            <a href="dashboard.html" class="brand">CareerConnect</a>
             <nav class="nav-links">
-                <a href="/profile" class="nav-link">Profile</a>
-                <a href="/jobs" class="nav-link">Job Search</a>
-                <a href="/applications" class="nav-link">Applications</a>
-                <a href="/messages" class="nav-link">Messages</a>
-                <a href="/settings" class="nav-link">Settings</a>
+                <a href="./dashboard.html" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="./profile.html" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="./jobs.html" class="nav-link">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                </a>
+                <a href="./applications.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </a>
+                <a href="./messages.html" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="./settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
             </nav>
             <div class="user-profile">
                 <div class="profile-avatar">
@@ -285,25 +304,25 @@
                     <i class="fas fa-briefcase"></i>
                     <h3>Available Jobs</h3>
                     <p class="stat-number">150+</p>
-                    <a href="/jobs" class="stat-link">Browse Jobs</a>
+                    <a href="./jobs.html" class="stat-link">Browse Jobs</a>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-file-alt"></i>
                     <h3>Your Applications</h3>
                     <p class="stat-number">0</p>
-                    <a href="/applications" class="stat-link">View Applications</a>
+                    <a href="./applications.html" class="stat-link">View Applications</a>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-envelope"></i>
                     <h3>Messages</h3>
                     <p class="stat-number">0</p>
-                    <a href="/messages" class="stat-link">Check Messages</a>
+                    <a href="./messages.html" class="stat-link">Check Messages</a>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-star"></i>
                     <h3>Profile Views</h3>
                     <p class="stat-number">0</p>
-                    <a href="/profile" class="stat-link">Update Profile</a>
+                    <a href="./profile.html" class="stat-link">Update Profile</a>
                 </div>
             </div>
         </main>
@@ -314,7 +333,7 @@
             // Check authentication
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '/';
+                window.location.href = './index.html';
                 return;
             }
 
@@ -329,52 +348,19 @@
             // Set up logout
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 localStorage.clear();
-                window.location.href = '/';
+                window.location.href = './index.html';
             });
 
             // Highlight current page in navigation
-            const currentPath = window.location.pathname;
+            const currentPath = window.location.pathname.split('/').pop() || 'dashboard.html';
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
-                const linkPath = link.getAttribute('href');
-                if (currentPath === linkPath || 
-                    (currentPath === '/' && linkPath === '/dashboard')) {
+                const linkPath = link.getAttribute('href').split('/').pop();
+                if (linkPath === currentPath) {
                     link.classList.add('active');
                 } else {
                     link.classList.remove('active');
                 }
-            });
-
-            // Add click handlers for navigation links
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    const href = this.getAttribute('href');
-                    if (href) {
-                        window.location.href = href;
-                    }
-                });
-            });
-
-            // Load user settings if available
-            const userSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-            
-            // Update stats based on stored data
-            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-            document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = applications.length;
-
-            // Add click handlers for stat cards
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('stat-link')) {
-                        const link = this.querySelector('.stat-link');
-                        if (link) {
-                            e.preventDefault();
-                            const href = link.getAttribute('href');
-                            history.pushState({}, '', href);
-                            window.location = href;
-                        }
-                    }
-                });
             });
         });
     </script>

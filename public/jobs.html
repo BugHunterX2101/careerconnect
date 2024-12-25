@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Search - CareerConnect</title>
+    <title>Jobs - CareerConnect</title>
     <style>
         * {
             margin: 0;
@@ -25,6 +25,9 @@
         }
 
         .search-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
             margin-bottom: 2rem;
         }
 
@@ -32,7 +35,6 @@
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 1rem;
-            margin-bottom: 1rem;
         }
 
         .search-input {
@@ -50,26 +52,24 @@
         }
 
         .search-btn {
-            padding: 0 2rem;
-            background: rgba(0, 247, 255, 0.1);
-            border: 1px solid rgba(0, 247, 255, 0.3);
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 247, 255, 0.2), rgba(0, 247, 255, 0.1));
+            border: none;
             border-radius: 8px;
-            color: #00f7ff;
+            color: #fff;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
         }
 
         .search-btn:hover {
-            background: rgba(0, 247, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 247, 255, 0.3), rgba(0, 247, 255, 0.2));
         }
 
         .filters {
             display: flex;
             gap: 1rem;
             margin-top: 1rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
         }
 
         .filter-btn {
@@ -80,14 +80,12 @@
             color: #fff;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
         }
 
         .filter-btn:hover,
         .filter-btn.active {
             background: rgba(0, 247, 255, 0.1);
-            border-color: #00f7ff;
-            color: #00f7ff;
+            border-color: rgba(0, 247, 255, 0.3);
         }
 
         .jobs-grid {
@@ -212,11 +210,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="jobs-container">
-        <a href="/dashboard" class="back-btn" style="display: inline-block; margin-bottom: 20px; color: #00f7ff; text-decoration: none;">
-            <span>&larr;</span> Back to Dashboard
-        </a>
+    <button class="back-btn" onclick="window.location.href='./dashboard.html'" aria-label="Back to Dashboard">
+        <i class="fas fa-arrow-left"></i>
+    </button>
 
+    <div class="jobs-container">
         <div class="search-section">
             <form class="search-form" onsubmit="handleSearch(event)">
                 <input type="text" class="search-input" placeholder="Search for jobs, companies, or keywords..." aria-label="Search jobs">
@@ -240,16 +238,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ensure back button works
-            document.querySelector('.back-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = '/dashboard';
-            });
-
             // Check authentication
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '/';
+                window.location.href = './index.html';
                 return;
             }
 
@@ -297,7 +289,7 @@
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    // In a real app, this would filter the jobs
+                    // In a real app, you would filter the jobs here
                 });
             });
         });
@@ -306,52 +298,33 @@
             const card = document.createElement('div');
             card.className = 'job-card';
             card.innerHTML = `
-                <div class="company-logo">${job.logo}</div>
+                <div class="company-logo">
+                    <i class="fas fa-building"></i>
+                </div>
                 <h3 class="job-title">${job.title}</h3>
                 <p class="company-name">${job.company}</p>
                 <div class="job-details">
                     <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
-                    <span><i class="fas fa-briefcase"></i> ${job.type}</span>
+                    <span><i class="fas fa-clock"></i> ${job.type}</span>
                     <span><i class="fas fa-money-bill-wave"></i> ${job.salary}</span>
                 </div>
                 <div class="job-tags">
                     ${job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('')}
                 </div>
-                <button class="apply-btn" onclick="applyForJob('${job.company}', '${job.title}')">Apply Now</button>
+                <button class="apply-btn" onclick="handleApply('${job.title}')">Apply Now</button>
             `;
             return card;
         }
 
         function handleSearch(event) {
             event.preventDefault();
-            // In a real app, this would trigger a search
-            const searchInput = document.querySelector('.search-input');
-            console.log('Searching for:', searchInput.value);
+            // In a real app, you would implement search functionality here
+            alert('Search functionality will be implemented soon!');
         }
 
-        function applyForJob(company, title) {
-            // Get existing applications
-            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-            
-            // Create new application
-            const application = {
-                id: Date.now().toString(),
-                company: company,
-                position: title,
-                date: new Date().toISOString(),
-                status: 'pending',
-                location: 'Remote', // This would come from the job data in a real app
-            };
-            
-            // Add to applications
-            applications.push(application);
-            localStorage.setItem('applications', JSON.stringify(applications));
-            
-            // Show success message
-            alert('Application submitted successfully! View it in the Applications section.');
-            
-            // Navigate to applications page
-            window.location.href = './applications.html';
+        function handleApply(jobTitle) {
+            // In a real app, you would handle the job application process here
+            alert(`Application submitted for ${jobTitle}!`);
         }
     </script>
 </body>
