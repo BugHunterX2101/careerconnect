@@ -4,31 +4,16 @@
         {
             "src": "index.js",
             "use": "@vercel/node"
-        },
-        {
-            "src": "public/**",
-            "use": "@vercel/static"
         }
     ],
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "index.js"
-        },
-        {
-            "src": "/signup",
-            "dest": "/signup.html"
-        },
-        {
-            "src": "/dashboard",
-            "dest": "/dashboard.html"
-        },
-        {
-            "handle": "filesystem"
+            "dest": "/index.js"
         },
         {
             "src": "/(.*)",
-            "dest": "/index.html"
+            "dest": "/index.js"
         }
     ],
     "env": {
