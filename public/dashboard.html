@@ -254,30 +254,11 @@
         <div class="sidebar">
             <a href="/dashboard" class="brand">CareerConnect</a>
             <nav class="nav-links">
-                <a href="/dashboard" class="nav-link active">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="/profile" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-                <a href="/jobs" class="nav-link">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Jobs</span>
-                </a>
-                <a href="/applications" class="nav-link">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Applications</span>
-                </a>
-                <a href="/messages" class="nav-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>Messages</span>
-                </a>
-                <a href="/settings" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
+                <a href="/profile" class="nav-link">Profile</a>
+                <a href="/jobs" class="nav-link">Job Search</a>
+                <a href="/applications" class="nav-link">Applications</a>
+                <a href="/messages" class="nav-link">Messages</a>
+                <a href="/settings" class="nav-link">Settings</a>
             </nav>
             <div class="user-profile">
                 <div class="profile-avatar">
@@ -366,11 +347,10 @@
 
             // Add click handlers for navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
+                link.addEventListener('click', function() {
                     const href = this.getAttribute('href');
                     if (href) {
-                        window.location.replace(href);
+                        window.location.href = href;
                     }
                 });
             });
@@ -389,7 +369,9 @@
                         const link = this.querySelector('.stat-link');
                         if (link) {
                             e.preventDefault();
-                            window.location.replace(link.getAttribute('href'));
+                            const href = link.getAttribute('href');
+                            history.pushState({}, '', href);
+                            window.location = href;
                         }
                     }
                 });
