@@ -196,7 +196,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <button class="back-btn" onclick="window.location.href='./dashboard.html'" aria-label="Back to Dashboard">
+    <button class="back-btn" onclick="window.location.href='./dashboard.html'" aria-label="Back to Dashboard" title="Back to Dashboard">
         <i class="fas fa-arrow-left"></i>
     </button>
 
@@ -254,7 +254,7 @@
                         <h3>Theme</h3>
                         <p>Choose your preferred theme</p>
                     </div>
-                    <select class="select-input" id="theme">
+                    <select class="select-input" id="theme" title="Select theme">
                         <option value="dark">Dark</option>
                         <option value="light">Light</option>
                         <option value="system">System Default</option>
@@ -272,7 +272,7 @@
                         <h3>Profile Visibility</h3>
                         <p>Control who can view your profile</p>
                     </div>
-                    <select class="select-input" id="profileVisibility">
+                    <select class="select-input" id="profileVisibility" title="Select profile visibility">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
                         <option value="connections">Connections Only</option>
@@ -283,8 +283,8 @@
                         <h3>Activity Status</h3>
                         <p>Show when you're active on CareerConnect</p>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="activityStatus" checked>
+                    <label class="toggle-switch" title="Toggle activity status">
+                        <input type="checkbox" id="activityStatus" name="activityStatus" title="Toggle activity status" checked>
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
