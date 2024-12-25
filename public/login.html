@@ -120,7 +120,7 @@
             <div id="errorMessage" class="error-message"></div>
         </form>
         <div class="signup-link">
-            Don't have an account? <a href="./signup.html">Sign up</a>
+            Don't have an account? <a href="/signup">Sign up</a>
         </div>
     </div>
 
@@ -147,17 +147,11 @@
                     body: JSON.stringify({ email, password })
                 });
 
-                if (!response.ok) {
-                    const text = await response.text();
-                    try {
-                        const errorData = JSON.parse(text);
-                        throw new Error(errorData.message || 'Login failed');
-                    } catch (e) {
-                        throw new Error('Login failed: ' + text);
-                    }
-                }
-
                 const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed');
+                }
                 
                 // Store auth data
                 localStorage.setItem('token', data.data.token);
@@ -167,15 +161,15 @@
                 
                 // Redirect based on role
                 if (data.data.role === 'admin') {
-                    window.location.href = './admin.html';
+                    window.location.href = '/admin';
                 } else if (data.data.role === 'employer') {
-                    window.location.href = './employer-dashboard.html';
+                    window.location.href = '/employer-dashboard';
                 } else {
-                    window.location.href = './dashboard.html';
+                    window.location.href = '/dashboard';
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorMessage.textContent = error.message;
+                errorMessage.textContent = error.message || 'Login failed. Please try again.';
                 errorMessage.style.display = 'block';
             } finally {
                 loginButton.disabled = false;
@@ -190,11 +184,11 @@
             
             if (token) {
                 if (role === 'admin') {
-                    window.location.href = './admin.html';
+                    window.location.href = '/admin';
                 } else if (role === 'employer') {
-                    window.location.href = './employer-dashboard.html';
+                    window.location.href = '/employer-dashboard';
                 } else {
-                    window.location.href = './dashboard.html';
+                    window.location.href = '/dashboard';
                 }
             }
         });
