@@ -227,9 +227,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <button id="backButton" class="back-btn" style="margin-bottom: 1rem;">Back</button>
-
     <div class="jobs-container">
+        <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+
         <div class="search-section">
             <form class="search-form" onsubmit="handleSearch(event)">
                 <input type="text" class="search-input" placeholder="Search for jobs, companies, or keywords..." aria-label="Search jobs">
@@ -366,10 +366,6 @@
             // Navigate to applications page
             window.location.href = './applications.html';
         }
-
-        document.getElementById('backButton').addEventListener('click', () => {
-            window.location.replace('/dashboard.html');
-        });
     </script>
 </body>
 </html> 

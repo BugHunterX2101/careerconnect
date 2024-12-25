@@ -279,7 +279,7 @@
             <div class="content-header">
                 <h2>Welcome to CareerConnect</h2>
                 <p>Your journey to success starts here</p>
-                </div>
+            </div>
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <i class="fas fa-briefcase"></i>
@@ -304,19 +304,19 @@
                     <h3>Profile Views</h3>
                     <p class="stat-number">0</p>
                     <a href="/profile" class="stat-link">Update Profile</a>
-                    </div>
                 </div>
+            </div>
         </main>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Check authentication
-                const token = localStorage.getItem('token');
-                if (!token) {
-                window.location.replace('/');
-                    return;
-                }
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
 
             // Set up user profile
             const username = localStorage.getItem('username');
@@ -329,27 +329,28 @@
             // Set up logout
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 localStorage.clear();
-                window.location.replace('/');
+                window.location.href = '/';
+            });
+
+            // Highlight current page in navigation
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (currentPath === linkPath || 
+                    (currentPath === '/' && linkPath === '/dashboard')) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
             });
 
             // Add click handlers for navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
+                link.addEventListener('click', function() {
                     const href = this.getAttribute('href');
                     if (href) {
-                        window.location.replace(href);
-                    }
-                });
-            });
-
-            // Add click handlers for stat cards
-            document.querySelectorAll('.stat-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const href = this.getAttribute('href');
-                    if (href) {
-                        window.location.replace(href + '.html');
+                        window.location.href = href;
                     }
                 });
             });
@@ -360,6 +361,31 @@
             // Update stats based on stored data
             const applications = JSON.parse(localStorage.getItem('applications') || '[]');
             document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = applications.length;
+
+            // Add click handlers for stat cards
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('stat-link')) {
+                        const link = this.querySelector('.stat-link');
+                        if (link) {
+                            e.preventDefault();
+                            const href = link.getAttribute('href');
+                            history.pushState({}, '', href);
+                            window.location = href;
+                        }
+                    }
+                });
+            });
+
+            // Add click handlers for stat cards
+            document.querySelectorAll('.stat-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const href = this.getAttribute('href');
+                    if (href) {
+                        window.location.href = href + '.html';
+                    }
+                });
+            });
         });
     </script>
 </body>
