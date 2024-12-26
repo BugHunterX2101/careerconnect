@@ -11,9 +11,20 @@
         <title>CareerConnect</title>
         <link rel="stylesheet" href="styles.css">
         <style>
-            /* Global animation settings */
+            /* Global styles */
             * {
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+
+            body {
+                background-color: #000;
+                color: #fff;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
             }
 
             /* Container layout */
@@ -22,34 +33,29 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                padding-top: 80px; /* Add space for fixed navigation */
             }
 
             /* Navigation styles */
             nav {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                padding: 1rem 2rem;
-                z-index: 100;
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
+                padding: 1.5rem 2rem;
             }
 
             .nav-links {
                 display: flex;
-                gap: 2rem;
                 justify-content: flex-end;
+                gap: 2rem;
             }
 
             .nav-links a {
-                color: #fff;
+                color: #00f7ff;
                 text-decoration: none;
-                font-size: 1.1rem;
-                position: relative;
+                font-size: 1rem;
                 padding: 0.5rem 1rem;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links a:hover {
+                color: #fff;
             }
 
             /* Content layout */
@@ -58,8 +64,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 2rem 4rem;
-                gap: 2rem;
+                padding: 0 4rem;
+                gap: 4rem;
             }
 
             /* Welcome section styles */
@@ -68,17 +74,10 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 2rem;
-                max-width: 50%;
-            }
-
-            .brand-container {
-                text-align: center;
-                position: relative;
             }
 
             .brand-name {
-                font-size: 4rem;
+                font-size: 4.5rem;
                 color: #00f7ff;
                 text-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
                 margin: 0;
@@ -88,271 +87,121 @@
             .login-section {
                 flex: 1;
                 max-width: 400px;
-                margin-top: 2rem;
                 background: rgba(0, 0, 0, 0.3);
                 border-radius: 15px;
-                -webkit-backdrop-filter: blur(10px);
-                backdrop-filter: blur(10px);
                 padding: 2rem;
-                box-shadow: 0 8px 32px rgba(0, 247, 255, 0.1);
-                align-self: flex-start;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+
+            .profile-icon {
+                width: 80px;
+                height: 80px;
+                background: #00f7ff;
+                border-radius: 50%;
+                margin: 0 auto 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group label {
+                display: block;
+                color: #888;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 0.8rem;
+                background: rgba(255, 255, 255, 0.1);
+                border: none;
+                border-radius: 8px;
+                color: #fff;
+                font-size: 1rem;
+            }
+
+            .form-group input:focus {
+                outline: none;
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+            .form-options {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .remember-me {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #888;
+            }
+
+            .login-button {
+                width: 100%;
+                padding: 1rem;
+                background: #00f7ff;
+                border: none;
+                border-radius: 8px;
+                color: #000;
+                font-size: 1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .login-button:hover {
+                background: #00d8ff;
+                transform: translateY(-2px);
+            }
+
+            .signup-link {
+                text-align: center;
+                margin-top: 1.5rem;
+                color: #888;
+            }
+
+            .signup-link a {
+                color: #00f7ff;
+                text-decoration: none;
             }
 
             /* Responsive design */
             @media (max-width: 1024px) {
                 .content-wrapper {
                     flex-direction: column;
-                    align-items: center;
                     padding: 2rem;
+                    gap: 2rem;
                 }
 
-                .welcome-section {
-                    max-width: 100%;
-                    padding: 1rem;
+                .brand-name {
+                    font-size: 3.5rem;
                 }
 
                 .login-section {
-                    margin-top: 1rem;
-                    max-width: 500px;
                     width: 100%;
                 }
             }
 
             @media (max-width: 768px) {
-                .container {
-                    padding-top: 60px;
-                }
-
-                nav {
-                    padding: 0.8rem 1rem;
-                }
-
                 .nav-links {
                     gap: 1rem;
-                }
-
-                .content-wrapper {
-                    padding: 1rem;
-                }
-
-                .welcome-section {
-                    padding: 0.5rem;
-                }
-
-                .login-section {
-                    padding: 1.5rem;
                 }
 
                 .brand-name {
                     font-size: 2.5rem;
                 }
-            }
 
-            /* Smooth scrolling */
-            html {
-                scroll-behavior: smooth;
-                scroll-padding: 2rem;
-            }
-
-            /* Enhanced hover animations */
-            .nav-link {
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .nav-link::after {
-                content: '';
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                width: 0;
-                height: 2px;
-                background: #00f7ff;
-                transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .nav-link:hover::after {
-                width: 100%;
-            }
-
-            .nav-link:hover {
-                color: #00f7ff;
-                text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
-            }
-
-            .brand {
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .brand:hover {
-                text-shadow: 0 0 15px rgba(0, 247, 255, 0.8);
-                transform: scale(1.05);
-            }
-
-            /* Updated Login Form Styles */
-            .login-section {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem;
-                max-width: 450px;
-                width: 100%;
-            }
-
-            .profile-icon {
-                width: 100px;
-                height: 100px;
-                background: rgba(0, 247, 255, 0.1);
-                border: 2px solid rgba(0, 247, 255, 0.3);
-                border-radius: 50%;
-                margin-bottom: 2.5rem;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-            }
-
-            .profile-icon::before {
-                content: '';
-                position: absolute;
-                width: 50px;
-                height: 50px;
-                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f7ff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>') center/contain no-repeat;
-                opacity: 0.6;
-            }
-
-            .login-form {
-                background: rgba(0, 0, 0, 0.4);
-                -webkit-backdrop-filter: blur(10px);
-                backdrop-filter: blur(10px);
-                padding: 2.5rem;
-                border-radius: 16px;
-                width: 100%;
-                border: 1px solid rgba(0, 247, 255, 0.1);
-                box-shadow: 0 4px 30px rgba(0, 247, 255, 0.1);
-            }
-
-            .form-group {
-                margin-bottom: 1.8rem;
-            }
-
-            .form-group label {
-                display: block;
-                margin-bottom: 0.8rem;
-                color: rgba(255, 255, 255, 0.8);
-                font-size: 0.95rem;
-                font-weight: 500;
-                letter-spacing: 0.5px;
-            }
-
-            .form-group input {
-                width: 100%;
-                padding: 1rem 1.2rem;
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(0, 247, 255, 0.2);
-                border-radius: 8px;
-                color: #fff;
-                font-size: 1rem;
-                outline: none;
-            }
-
-            .form-options {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-                margin: 1.8rem 0;
-                font-size: 0.9rem;
-                color: rgba(255, 255, 255, 0.8);
-            }
-
-            .show-password, .remember-me {
-                display: flex;
-                align-items: center;
-                gap: 0.8rem;
-                padding: 0.5rem;
-                background: rgba(255, 255, 255, 0.03);
-                border-radius: 6px;
-                transition: all 0.3s ease;
-            }
-
-            .show-password:hover, .remember-me:hover {
-                background: rgba(255, 255, 255, 0.05);
-            }
-
-            .show-password input[type="checkbox"],
-            .remember-me input[type="checkbox"] {
-                appearance: none;
-                -webkit-appearance: none;
-                width: 18px;
-                height: 18px;
-                border: 1px solid rgba(0, 247, 255, 0.3);
-                border-radius: 4px;
-                background: rgba(255, 255, 255, 0.05);
-                cursor: pointer;
-                position: relative;
-                transition: all 0.3s ease;
-            }
-
-            .show-password input[type="checkbox"]:checked,
-            .remember-me input[type="checkbox"]:checked {
-                background: rgba(0, 247, 255, 0.2);
-                border-color: rgba(0, 247, 255, 0.5);
-            }
-
-            .show-password input[type="checkbox"]:checked::before,
-            .remember-me input[type="checkbox"]:checked::before {
-                content: '✓';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                color: #00f7ff;
-                font-size: 12px;
-            }
-
-            .show-password label,
-            .remember-me label {
-                cursor: pointer;
-                -webkit-user-select: none;
-                user-select: none;
-            }
-
-            .login-button {
-                width: 100%;
-                padding: 1.1rem;
-                margin-top: 0.5rem;
-                background: linear-gradient(135deg, rgba(0, 247, 255, 0.2), rgba(0, 247, 255, 0.1));
-                border: none;
-                border-radius: 8px;
-                color: #fff;
-                font-size: 1.1rem;
-                font-weight: 600;
-                letter-spacing: 1px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-            }
-
-            /* Mobile responsiveness */
-            @media (max-width: 768px) {
-                .login-section {
+                .content-wrapper {
                     padding: 1rem;
-                    max-width: 100%;
-                }
-
-                .login-form {
-                    padding: 1.5rem;
-                }
-
-                .form-options {
-                    grid-template-columns: 1fr;
-                    gap: 0.8rem;
-                }
-
-                .show-password, .remember-me {
-                    width: 100%;
-                    justify-content: flex-start;
                 }
             }
         </style>
@@ -376,19 +225,19 @@
             <div class="content-wrapper">
                 <!-- Left side with brand name -->
                 <div class="welcome-section">
-                    <div class="brand-container">
-                        <!-- Brand particle canvas -->
-                        <canvas id="brandParticles" class="particle-canvas"></canvas>
-                        <h1 class="brand-name">CareerConnect</h1>
-                    </div>
+                    <h1 class="brand-name">CareerConnect</h1>
                 </div>
 
                 <!-- Right side with login -->
                 <div class="login-section">
-                    <div class="profile-icon"></div>
+                    <div class="profile-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000" width="40" height="40">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
                     <form class="login-form" id="loginForm">
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Username</label>
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
@@ -396,17 +245,12 @@
                             <input type="password" id="password" name="password" required>
                         </div>
                         <div class="form-options">
-                            <div class="show-password">
-                                <input type="checkbox" id="showPassword">
-                                <label for="showPassword">Show Password</label>
-                            </div>
                             <div class="remember-me">
                                 <input type="checkbox" id="rememberMe">
-                                <label for="rememberMe">Remember Me</label>
+                                <label for="rememberMe">Remember me</label>
                             </div>
                         </div>
-                        <button type="submit" class="login-button">Login</button>
-                        <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
+                        <button type="submit" class="login-button">Sign In</button>
                     </form>
                 </div>
             </div>
