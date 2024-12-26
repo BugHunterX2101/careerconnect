@@ -161,6 +161,8 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .modal.active {
@@ -174,6 +176,33 @@
             width: 90%;
             max-width: 500px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: auto;
+        }
+
+        .modal-content form {
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 247, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 247, 255, 0.5);
         }
 
         .modal-close {
@@ -650,7 +679,92 @@
             'Mahidol University', 'University of the Philippines',
             'University of Indonesia', 'Institut Teknologi Bandung',
             'Universitas Gadjah Mada', 'Vietnam National University',
-            'Hanoi University of Science and Technology'
+            'Hanoi University of Science and Technology',
+
+            // COMEDK Colleges in Karnataka
+            'R.V. College of Engineering, Bangalore',
+            'B.M.S. College of Engineering, Bangalore',
+            'M.S. Ramaiah Institute of Technology, Bangalore',
+            'PES University, Bangalore',
+            'Dayananda Sagar College of Engineering, Bangalore',
+            'JSS Academy of Technical Education, Bangalore',
+            'Nitte Meenakshi Institute of Technology, Bangalore',
+            'Sir M. Visvesvaraya Institute of Technology, Bangalore',
+            'B.N.M. Institute of Technology, Bangalore',
+            'K.S. Institute of Technology, Bangalore',
+            'New Horizon College of Engineering, Bangalore',
+            'Cambridge Institute of Technology, Bangalore',
+            'East Point College of Engineering and Technology, Bangalore',
+            'Global Academy of Technology, Bangalore',
+            'Don Bosco Institute of Technology, Bangalore',
+            'AMC Engineering College, Bangalore',
+            'ACS College of Engineering, Bangalore',
+            'Bangalore Institute of Technology, Bangalore',
+            'Sri Venkateshwara College of Engineering, Bangalore',
+            'Acharya Institute of Technology, Bangalore',
+            'Alliance University (School of Engineering), Bangalore',
+            'CMR Institute of Technology, Bangalore',
+            'Reva University, Bangalore',
+            'RNS Institute of Technology, Bangalore',
+            'Atria Institute of Technology, Bangalore',
+            'HKBK College of Engineering, Bangalore',
+            'Impact College of Engineering and Applied Sciences, Bangalore',
+            'Jyothy Institute of Technology, Bangalore',
+            'KNS Institute of Technology, Bangalore',
+            'MVJ College of Engineering, Bangalore',
+            'Nagarjuna College of Engineering & Technology, Bangalore',
+            'Rajiv Gandhi Institute of Technology, Bangalore',
+            'Sapthagiri College of Engineering, Bangalore',
+            'SEA College of Engineering and Technology, Bangalore',
+            'Sri Krishna Institute of Technology, Bangalore',
+            'Sri Revana Siddeshwara Institute of Technology, Bangalore',
+            'The Oxford College of Engineering, Bangalore',
+            'Vemana Institute of Technology, Bangalore',
+            'Vidya Vikas Institute of Engineering & Technology, Mysore',
+            'Sri Jayachamarajendra College of Engineering, Mysore',
+            'The National Institute of Engineering, Mysore',
+            'Malnad College of Engineering, Hassan',
+            'P.E.S. College of Engineering, Mandya',
+            'Siddaganga Institute of Technology, Tumkur',
+            'Sri Siddhartha Institute of Technology, Tumkur',
+            'Manipal Institute of Technology, Manipal',
+            'KLE Technological University (formerly BVBCET), Hubli',
+            'Basaveshwar Engineering College, Bagalkot',
+            'KLS Gogte Institute of Technology, Belgaum',
+            'SDM College of Engineering and Technology, Dharwad',
+            'Bapuji Institute of Engineering & Technology, Davangere',
+            'GM Institute of Technology, Davangere',
+            'NMAM Institute of Technology, Nitte',
+            'Canara Engineering College, Mangalore',
+            'P A College of Engineering, Mangalore',
+            'St Joseph Engineering College, Mangalore',
+            'Mangalore Institute of Technology & Engineering, Mangalore',
+            'Shri Madhwa Vadiraja Institute of Technology & Management, Udupi',
+            'Tontadarya College of Engineering, Gadag',
+            'Angadi Institute of Technology and Management, Belgaum',
+            'Jain College of Engineering, Belgaum',
+            'Maratha Mandal Engineering College, Belgaum',
+            'Hirasugar Institute of Technology, Belgaum',
+            'SG Balekundri Institute of Technology, Belgaum',
+            'Ballari Institute of Technology & Management, Bellary',
+            'REVA Institute of Technology & Management, Bangalore',
+            'Bangalore College of Engineering & Technology, Bangalore',
+            'City Engineering College, Bangalore',
+            'Dr. Ambedkar Institute of Technology, Bangalore',
+            'East West Institute of Technology, Bangalore',
+            'M S Engineering College, Bangalore',
+            'Nadgir Institute of Engineering & Technology, Bangalore',
+            'Rajarajeshwari College of Engineering, Bangalore',
+            'SJB Institute of Technology, Bangalore',
+            'Sri Venkateshwara College of Engineering, Bangalore',
+            'Vivekananda Institute of Technology, Bangalore',
+            'GSSS Institute of Engineering & Technology for Women, Mysore',
+            'Mysore College of Engineering & Management, Mysore',
+            'Proudadevaraya Institute of Technology, Hospet',
+            'Rural Engineering College, Hulkoti',
+            'Shetty Institute of Technology, Gulbarga',
+            'STJ Institute of Technology, Ranebennur',
+            'Veerappa Nisty Engineering College, Shorapur',
 
             // ... (This list continues with many more universities)
         ];
