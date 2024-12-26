@@ -1,0 +1,126 @@
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 2rem 0;
+    border-right: 1px solid rgba(0, 247, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    color: #00f7ff;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-item {
+    margin-bottom: 0.5rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    color: #888;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #00f7ff;
+    background: rgba(0, 247, 255, 0.1);
+}
+
+.nav-link svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 1rem;
+}
+
+/* Main content styles */
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.page-title {
+    color: #00f7ff;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* Content sections */
+.content-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* User profile section */
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    margin-top: auto;
+    background: rgba(0, 247, 255, 0.05);
+}
+
+.profile-info {
+    margin-left: 1rem;
+}
+
+.profile-name {
+    color: #fff;
+    font-size: 1rem;
+}
+
+.profile-role {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .nav-link {
+        padding: 0.8rem 1rem;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+} 

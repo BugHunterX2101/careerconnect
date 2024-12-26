@@ -3,162 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Dashboard - CareerConnect</title>
     <style>
+        /* Global styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            background: #0a0a0a;
+            background-color: #000;
             color: #fff;
             min-height: 100vh;
-        }
-
-        .dashboard-container {
             display: flex;
-            min-height: 100vh;
         }
 
-        /* Sidebar Styles */
+        /* Sidebar styles */
         .sidebar {
             width: 250px;
-            background: rgba(0, 247, 255, 0.05);
-            border-right: 1px solid rgba(0, 247, 255, 0.1);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 2rem 0;
+            border-right: 1px solid rgba(0, 247, 255, 0.1);
             display: flex;
             flex-direction: column;
         }
 
         .brand {
-            padding: 0 1.5rem;
-            margin-bottom: 2rem;
-            font-size: 1.5rem;
             color: #00f7ff;
-            text-decoration: none;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
         }
 
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding: 0 1rem;
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
         }
 
         .nav-link {
-            padding: 0.8rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            padding: 1rem 2rem;
+            color: #888;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
 
         .nav-link:hover, .nav-link.active {
-            background: rgba(0, 247, 255, 0.1);
             color: #00f7ff;
+            background: rgba(0, 247, 255, 0.1);
         }
 
-        .nav-link i {
-            font-size: 1.2rem;
-            opacity: 0.8;
+        .nav-link svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
         }
 
-        /* Main Content Styles */
+        /* Main content styles */
         .main-content {
             flex: 1;
             padding: 2rem;
             overflow-y: auto;
         }
 
-        .content-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Header Styles */
-        .content-header {
+        .page-title {
+            color: #00f7ff;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+            font-size: 2rem;
         }
 
-        .content-header h2 {
-            font-size: 1.8rem;
-            color: #00f7ff;
-            margin-bottom: 0.5rem;
+        /* Content sections */
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .content-header p {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* User Profile Section */
+        /* User profile section */
         .user-profile {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
             margin-top: auto;
-            padding: 1rem;
-            border-top: 1px solid rgba(0, 247, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(0, 247, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: #00f7ff;
+            background: rgba(0, 247, 255, 0.05);
         }
 
         .profile-info {
-            flex: 1;
+            margin-left: 1rem;
         }
 
         .profile-name {
-            font-weight: 600;
             color: #fff;
+            font-size: 1rem;
         }
 
-        .profile-email {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
+        .profile-role {
+            color: #888;
+            font-size: 0.8rem;
         }
 
-        .logout-btn {
-            padding: 0.5rem;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            color: #00f7ff;
-        }
-
-        /* Responsive Design */
+        /* Responsive design */
         @media (max-width: 768px) {
-            .dashboard-container {
+            body {
                 flex-direction: column;
             }
 
@@ -167,194 +125,94 @@
                 padding: 1rem;
             }
 
-            .nav-links {
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 0.5rem;
-            }
-
             .nav-link {
-                white-space: nowrap;
+                padding: 0.8rem 1rem;
             }
 
             .main-content {
                 padding: 1rem;
             }
         }
-
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 247, 255, 0.3);
-            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.1);
-        }
-
-        .stat-card i {
-            font-size: 2rem;
-            color: #00f7ff;
-            margin-bottom: 1rem;
-        }
-
-        .stat-card h3 {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #00f7ff;
-            margin-bottom: 1rem;
-        }
-
-        .stat-link {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(0, 247, 255, 0.1);
-            border: 1px solid rgba(0, 247, 255, 0.2);
-            border-radius: 20px;
-            color: #00f7ff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .stat-link:hover {
-            background: rgba(0, 247, 255, 0.2);
-            border-color: rgba(0, 247, 255, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-stats {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <a href="dashboard.html" class="brand">CareerConnect</a>
-            <nav class="nav-links">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h1 class="brand">CareerConnect</h1>
+        <ul class="nav-menu">
+            <li class="nav-item">
                 <a href="./dashboard.html" class="nav-link active">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                    Dashboard
                 </a>
-                <a href="./profile.html" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
+            </li>
+            <li class="nav-item">
                 <a href="./jobs.html" class="nav-link">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Jobs</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                    </svg>
+                    Jobs
                 </a>
+            </li>
+            <li class="nav-item">
                 <a href="./applications.html" class="nav-link">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Applications</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    Applications
                 </a>
+            </li>
+            <li class="nav-item">
                 <a href="./messages.html" class="nav-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>Messages</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    Messages
                 </a>
+            </li>
+            <li class="nav-item">
                 <a href="./settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                    Settings
                 </a>
-            </nav>
-            <div class="user-profile">
-                <div class="profile-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-info">
-                    <div class="profile-name" id="profileName">Loading...</div>
-                    <div class="profile-email" id="profileEmail">Loading...</div>
-                </div>
-                <button class="logout-btn" id="logoutBtn" aria-label="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+            </li>
+        </ul>
+        <div class="user-profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00f7ff" width="32" height="32">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <div class="profile-info">
+                <div class="profile-name" id="userName">Loading...</div>
+                <div class="profile-role" id="userRole">Loading...</div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="content-header">
-                <h2>Welcome to CareerConnect</h2>
-                <p>Your journey to success starts here</p>
-            </div>
-            <div class="dashboard-stats">
-                <div class="stat-card">
-                    <i class="fas fa-briefcase"></i>
-                    <h3>Available Jobs</h3>
-                    <p class="stat-number">150+</p>
-                    <a href="./jobs.html" class="stat-link">Browse Jobs</a>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-file-alt"></i>
-                    <h3>Your Applications</h3>
-                    <p class="stat-number">0</p>
-                    <a href="./applications.html" class="stat-link">View Applications</a>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-envelope"></i>
-                    <h3>Messages</h3>
-                    <p class="stat-number">0</p>
-                    <a href="./messages.html" class="stat-link">Check Messages</a>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-star"></i>
-                    <h3>Profile Views</h3>
-                    <p class="stat-number">0</p>
-                    <a href="./profile.html" class="stat-link">Update Profile</a>
-                </div>
-            </div>
-        </main>
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Dashboard</h1>
+        <div class="content-section">
+            <h2>Welcome back, <span id="welcomeName">User</span>!</h2>
+            <p>Here's your overview for today.</p>
+        </div>
     </div>
 
     <script>
-        // Check if user is authenticated
+        // Load user data from localStorage
         window.addEventListener('load', () => {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            if (!token) {
-                // Redirect to login if not authenticated
-                window.location.href = '/index.html';
-                return;
+            const userData = JSON.parse(localStorage.getItem('user'));
+            if (userData) {
+                document.getElementById('userName').textContent = userData.username;
+                document.getElementById('userRole').textContent = userData.role;
+                document.getElementById('welcomeName').textContent = userData.username;
+            } else {
+                // Redirect to login if no user data
+                window.location.href = './index.html';
             }
-
-            // Update profile section with user info
-            const profileName = document.querySelector('.profile-name');
-            const profileEmail = document.querySelector('.profile-email');
-            const profileAvatar = document.querySelector('.profile-avatar');
-            
-            if (profileName) profileName.textContent = user.username || 'User';
-            if (profileEmail) profileEmail.textContent = user.email || '';
-            if (profileAvatar) profileAvatar.textContent = (user.username || 'U')[0].toUpperCase();
-
-            // Handle logout
-            document.querySelector('.logout-btn')?.addEventListener('click', () => {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-            });
         });
     </script>
 </body>

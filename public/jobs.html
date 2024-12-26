@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Jobs - CareerConnect</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Jobs specific styles */
+        .search-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+        }
+
+        .search-input {
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-button {
+            padding: 0.8rem 1.5rem;
+            background: #00f7ff;
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: #00d8ff;
+            transform: translateY(-2px);
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .job-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .job-title {
+            color: #00f7ff;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .company-name {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .job-details {
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .job-tag {
+            background: rgba(0, 247, 255, 0.1);
+            color: #00f7ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .apply-button {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 8px;
+            color: #00f7ff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .apply-button:hover {
+            background: rgba(0, 247, 255, 0.2);
+            border-color: rgba(0, 247, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar (same as dashboard.html) -->
+    <div class="sidebar">
+        <!-- ... sidebar content ... -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Jobs</h1>
+        
+        <!-- Search Section -->
+        <div class="search-section">
+            <form class="search-form" id="searchForm">
+                <input type="text" class="search-input" placeholder="Search for jobs, companies, or keywords...">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+
+        <!-- Jobs Grid -->
+        <div class="jobs-grid" id="jobsGrid">
+            <!-- Job cards will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample job data (replace with actual API call)
+        const jobs = [
+            {
+                title: 'Senior Software Engineer',
+                company: 'Tech Corp',
+                location: 'New York, NY',
+                type: 'Full-time',
+                salary: '$120k - $150k',
+                tags: ['JavaScript', 'React', 'Node.js']
+            },
+            {
+                title: 'UX Designer',
+                company: 'Design Studio',
+                location: 'San Francisco, CA',
+                type: 'Full-time',
+                salary: '$90k - $120k',
+                tags: ['UI/UX', 'Figma', 'User Research']
+            },
+            // Add more sample jobs...
+        ];
+
+        // Function to create job cards
+        function createJobCard(job) {
+            return `
+                <div class="job-card">
+                    <h3 class="job-title">${job.title}</h3>
+                    <div class="company-name">${job.company}</div>
+                    <div class="job-details">
+                        <div>${job.location}</div>
+                        <div>${job.type} • ${job.salary}</div>
+                    </div>
+                    <div class="job-tags">
+                        ${job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('')}
+                    </div>
+                    <button class="apply-button">Apply Now</button>
+                </div>
+            `;
+        }
+
+        // Populate jobs grid
+        function displayJobs(jobsToDisplay = jobs) {
+            const jobsGrid = document.getElementById('jobsGrid');
+            jobsGrid.innerHTML = jobsToDisplay.map(job => createJobCard(job)).join('');
+        }
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            // Check authentication
+            const userData = JSON.parse(localStorage.getItem('user'));
+            if (!userData) {
+                window.location.href = './index.html';
+                return;
+            }
+
+            // Display jobs
+            displayJobs();
+
+            // Handle search
+            document.getElementById('searchForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const searchTerm = e.target.querySelector('input').value.toLowerCase();
+                const filteredJobs = jobs.filter(job => 
+                    job.title.toLowerCase().includes(searchTerm) ||
+                    job.company.toLowerCase().includes(searchTerm) ||
+                    job.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                );
+                displayJobs(filteredJobs);
+            });
+        });
+    </script>
+</body>
+</html> 
