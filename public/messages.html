@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Messages - CareerConnect</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .messages-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1rem;
+            height: calc(100vh - 120px);
+        }
+
+        .conversations-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .conversation-item:hover,
+        .conversation-item.active {
+            background: rgba(0, 247, 255, 0.1);
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .conversation-name {
+            color: #00f7ff;
+            font-weight: bold;
+        }
+
+        .conversation-time {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .conversation-preview {
+            color: #888;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-area {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .message.received {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+        }
+
+        .message.sent {
+            background: rgba(0, 247, 255, 0.1);
+            align-self: flex-end;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 247, 255, 0.1);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .send-button {
+            padding: 0.8rem 1.5rem;
+            background: #00f7ff;
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            background: #00d8ff;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .messages-container {
+                grid-template-columns: 1fr;
+            }
+
+            .conversations-list {
+                display: none;
+            }
+
+            .conversations-list.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h1 class="brand">CareerConnect</h1>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="./dashboard.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./jobs.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                    </svg>
+                    Jobs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./applications.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    Applications
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./messages.html" class="nav-link active">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    Messages
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./settings.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                    Settings
+                </a>
+            </li>
+        </ul>
+        <div class="user-profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00f7ff" width="32" height="32">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <div class="profile-info">
+                <div class="profile-name" id="userName">Loading...</div>
+                <div class="profile-role" id="userRole">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Messages</h1>
+        <div class="messages-container">
+            <div class="conversations-list" id="conversationsList">
+                <!-- Conversations will be dynamically added here -->
+            </div>
+            <div class="chat-area">
+                <div class="chat-header">
+                    <h2 id="currentChat">Select a conversation</h2>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" class="message-input" placeholder="Type your message..." id="messageInput">
+                    <button class="send-button" id="sendButton">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample conversations data (replace with actual API call)
+        const conversations = [
+            {
+                id: 1,
+                name: 'Tech Corp HR',
+                lastMessage: 'Thank you for your interest in the position.',
+                time: '10:30 AM',
+                messages: [
+                    {
+                        text: 'Hello! We received your application for the Senior Software Engineer position.',
+                        time: '10:25 AM',
+                        type: 'received'
+                    },
+                    {
+                        text: 'Thank you for your interest in the position.',
+                        time: '10:30 AM',
+                        type: 'received'
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: 'StartUp Inc Recruiter',
+                lastMessage: 'When are you available for an interview?',
+                time: '9:15 AM',
+                messages: [
+                    {
+                        text: 'Hi! We were impressed by your profile.',
+                        time: '9:10 AM',
+                        type: 'received'
+                    },
+                    {
+                        text: 'When are you available for an interview?',
+                        time: '9:15 AM',
+                        type: 'received'
+                    }
+                ]
+            }
+        ];
+
+        let currentConversation = null;
+
+        // Function to create conversation items
+        function createConversationItem(conversation) {
+            return `
+                <div class="conversation-item ${currentConversation?.id === conversation.id ? 'active' : ''}" 
+                     onclick="selectConversation(${conversation.id})">
+                    <div class="conversation-header">
+                        <div class="conversation-name">${conversation.name}</div>
+                        <div class="conversation-time">${conversation.time}</div>
+                    </div>
+                    <div class="conversation-preview">${conversation.lastMessage}</div>
+                </div>
+            `;
+        }
+
+        // Function to create message bubbles
+        function createMessageBubble(message) {
+            return `
+                <div class="message ${message.type}">
+                    <div class="message-text">${message.text}</div>
+                    <div class="message-time">${message.time}</div>
+                </div>
+            `;
+        }
+
+        // Function to select a conversation
+        function selectConversation(id) {
+            currentConversation = conversations.find(conv => conv.id === id);
+            document.getElementById('currentChat').textContent = currentConversation.name;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = currentConversation.messages.map(msg => createMessageBubble(msg)).join('');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Update conversation list to show active state
+            displayConversations();
+        }
+
+        // Function to send a message
+        function sendMessage() {
+            if (!currentConversation) return;
+
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const newMessage = {
+                    text: message,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    type: 'sent'
+                };
+
+                currentConversation.messages.push(newMessage);
+                currentConversation.lastMessage = message;
+                currentConversation.time = newMessage.time;
+
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML += createMessageBubble(newMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                displayConversations();
+                input.value = '';
+            }
+        }
+
+        // Function to display conversations
+        function displayConversations() {
+            const conversationsList = document.getElementById('conversationsList');
+            conversationsList.innerHTML = conversations.map(conv => createConversationItem(conv)).join('');
+        }
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            // Check authentication
+            const userData = JSON.parse(localStorage.getItem('user'));
+            if (!userData) {
+                window.location.href = './index.html';
+                return;
+            }
+
+            // Update user profile
+            document.getElementById('userName').textContent = userData.username;
+            document.getElementById('userRole').textContent = userData.role;
+
+            // Display conversations
+            displayConversations();
+
+            // Add event listeners
+            document.getElementById('sendButton').addEventListener('click', sendMessage);
+            document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        });
+    </script>
+</body>
+</html> 
