@@ -238,6 +238,43 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Dropdown styles */
+        .dropdown-list {
+            position: absolute;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 0 0 8px 8px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-item {
+            padding: 0.8rem;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(0, 247, 255, 0.1);
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .experience-level {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -385,6 +422,339 @@
             }
         };
 
+        // Predefined options
+        const universities = [
+            // Top US Universities
+            'Massachusetts Institute of Technology',
+            'Stanford University',
+            'Harvard University',
+            'California Institute of Technology',
+            'Princeton University',
+            'Yale University',
+            'Columbia University',
+            'University of Chicago',
+            'University of Pennsylvania',
+            'Johns Hopkins University',
+            
+            // Top International Universities
+            'University of Oxford',
+            'University of Cambridge',
+            'ETH Zurich',
+            'National University of Singapore',
+            'Tsinghua University',
+            'University of Toronto',
+            'Imperial College London',
+            'University College London',
+            'University of Melbourne',
+            'Technical University of Munich',
+            
+            // Other Notable Universities
+            'Carnegie Mellon University',
+            'University of California, Berkeley',
+            'Georgia Institute of Technology',
+            'University of Michigan',
+            'University of Illinois Urbana-Champaign',
+            'Purdue University',
+            'University of Washington',
+            'University of Texas at Austin',
+            'University of Wisconsin-Madison',
+            'Boston University'
+        ];
+
+        const degrees = [
+            // Bachelor's Degrees
+            'Bachelor of Science (BS)',
+            'Bachelor of Arts (BA)',
+            'Bachelor of Engineering (BE)',
+            'Bachelor of Technology (BTech)',
+            'Bachelor of Business Administration (BBA)',
+            'Bachelor of Computer Applications (BCA)',
+            'Bachelor of Fine Arts (BFA)',
+            'Bachelor of Architecture (BArch)',
+            
+            // Master's Degrees
+            'Master of Science (MS)',
+            'Master of Arts (MA)',
+            'Master of Engineering (ME)',
+            'Master of Technology (MTech)',
+            'Master of Business Administration (MBA)',
+            'Master of Computer Applications (MCA)',
+            'Master of Fine Arts (MFA)',
+            'Master of Architecture (MArch)',
+            'Master of Public Health (MPH)',
+            'Master of Social Work (MSW)',
+            
+            // Doctoral Degrees
+            'Doctor of Philosophy (PhD)',
+            'Doctor of Science (DSc)',
+            'Doctor of Engineering (DEng)',
+            'Doctor of Business Administration (DBA)',
+            
+            // Professional Degrees
+            'Associate Degree',
+            'Diploma',
+            'Professional Certification',
+            'Vocational Training Certificate'
+        ];
+
+        const fields = [
+            // Computer Science & IT
+            'Computer Science',
+            'Software Engineering',
+            'Information Technology',
+            'Data Science',
+            'Artificial Intelligence',
+            'Machine Learning',
+            'Cybersecurity',
+            'Cloud Computing',
+            'Web Development',
+            'Mobile App Development',
+            
+            // Engineering
+            'Electrical Engineering',
+            'Mechanical Engineering',
+            'Civil Engineering',
+            'Chemical Engineering',
+            'Aerospace Engineering',
+            'Biomedical Engineering',
+            'Industrial Engineering',
+            'Robotics Engineering',
+            'Environmental Engineering',
+            
+            // Business & Management
+            'Business Administration',
+            'Finance',
+            'Marketing',
+            'Economics',
+            'International Business',
+            'Project Management',
+            'Human Resource Management',
+            'Supply Chain Management',
+            
+            // Science & Mathematics
+            'Mathematics',
+            'Physics',
+            'Chemistry',
+            'Biology',
+            'Statistics',
+            'Biotechnology',
+            'Environmental Science',
+            
+            // Other Fields
+            'Digital Marketing',
+            'User Experience Design',
+            'Product Management',
+            'Data Analytics',
+            'Business Intelligence'
+        ];
+
+        const companies = [
+            // Tech Giants
+            'Google',
+            'Microsoft',
+            'Apple',
+            'Amazon',
+            'Meta',
+            'Netflix',
+            'IBM',
+            'Intel',
+            'Oracle',
+            'Salesforce',
+            
+            // Enterprise Software
+            'SAP',
+            'Adobe',
+            'VMware',
+            'Intuit',
+            'ServiceNow',
+            'Workday',
+            'Atlassian',
+            'Zoom',
+            'Slack',
+            
+            // Tech Startups & Scale-ups
+            'Stripe',
+            'Snowflake',
+            'Databricks',
+            'Palantir',
+            'Uber',
+            'Airbnb',
+            'DoorDash',
+            'Coinbase',
+            'Robinhood',
+            
+            // Consulting & Services
+            'Accenture',
+            'Deloitte',
+            'PwC',
+            'EY',
+            'KPMG',
+            'McKinsey',
+            'Boston Consulting Group',
+            'Capgemini',
+            'Infosys',
+            'Wipro',
+            
+            // Other Tech Companies
+            'Twitter',
+            'LinkedIn',
+            'PayPal',
+            'Square',
+            'Twilio',
+            'Unity',
+            'Roblox',
+            'Spotify',
+            'Tesla',
+            'SpaceX'
+        ];
+
+        const positions = [
+            // Software Development
+            'Software Engineer',
+            'Full Stack Developer',
+            'Frontend Developer',
+            'Backend Developer',
+            'Mobile Developer',
+            'DevOps Engineer',
+            'Site Reliability Engineer',
+            'Cloud Engineer',
+            'Security Engineer',
+            'Quality Assurance Engineer',
+            
+            // Data & AI
+            'Data Scientist',
+            'Machine Learning Engineer',
+            'AI Research Scientist',
+            'Data Engineer',
+            'Business Intelligence Analyst',
+            'Data Analyst',
+            'Big Data Engineer',
+            
+            // Product & Design
+            'Product Manager',
+            'Product Owner',
+            'UI/UX Designer',
+            'User Experience Researcher',
+            'Product Designer',
+            'Visual Designer',
+            'Interaction Designer',
+            
+            // Management & Leadership
+            'Engineering Manager',
+            'Technical Lead',
+            'Project Manager',
+            'Scrum Master',
+            'CTO',
+            'VP of Engineering',
+            'Director of Engineering',
+            'Technical Program Manager',
+            
+            // Specialized Roles
+            'Blockchain Developer',
+            'AR/VR Developer',
+            'Game Developer',
+            'Embedded Systems Engineer',
+            'Systems Architect',
+            'Network Engineer',
+            'Database Administrator',
+            'Technical Consultant',
+            'Solutions Architect',
+            'Enterprise Architect'
+        ];
+
+        const skills = [
+            // Programming Languages
+            'JavaScript',
+            'Python',
+            'Java',
+            'C++',
+            'C#',
+            'Ruby',
+            'Go',
+            'Swift',
+            'Kotlin',
+            'PHP',
+            'Rust',
+            'TypeScript',
+            
+            // Web Technologies
+            'HTML5',
+            'CSS3',
+            'React',
+            'Angular',
+            'Vue.js',
+            'Node.js',
+            'Express.js',
+            'Django',
+            'Flask',
+            'Spring Boot',
+            'ASP.NET',
+            
+            // Databases
+            'SQL',
+            'MySQL',
+            'PostgreSQL',
+            'MongoDB',
+            'Redis',
+            'Cassandra',
+            'Oracle',
+            'Microsoft SQL Server',
+            
+            // Cloud & DevOps
+            'AWS',
+            'Azure',
+            'Google Cloud',
+            'Docker',
+            'Kubernetes',
+            'Jenkins',
+            'Git',
+            'Terraform',
+            'Ansible',
+            
+            // AI & Data Science
+            'Machine Learning',
+            'Deep Learning',
+            'TensorFlow',
+            'PyTorch',
+            'Scikit-learn',
+            'Natural Language Processing',
+            'Computer Vision',
+            'Data Analysis',
+            'R',
+            'Pandas',
+            'NumPy',
+            
+            // Mobile Development
+            'iOS Development',
+            'Android Development',
+            'React Native',
+            'Flutter',
+            'Xamarin',
+            
+            // Other Skills
+            'Agile Methodologies',
+            'Scrum',
+            'RESTful APIs',
+            'GraphQL',
+            'Microservices',
+            'System Design',
+            'UI/UX Design',
+            'Figma',
+            'Adobe XD',
+            'Sketch'
+        ];
+
+        const experienceLevels = [
+            'Entry Level (0-2 years)',
+            'Junior (2-4 years)',
+            'Mid-Level (4-6 years)',
+            'Senior (6-10 years)',
+            'Lead (10-15 years)',
+            'Principal (15+ years)',
+            'Distinguished Engineer',
+            'Fellow'
+        ];
+
         // Initialize page
         window.addEventListener('load', () => {
             // Check authentication
@@ -406,6 +776,52 @@
             }
         });
 
+        // Dropdown functionality
+        function createDropdown(inputId, options) {
+            const input = document.getElementById(inputId);
+            const dropdownId = inputId + 'Dropdown';
+            
+            // Create dropdown if it doesn't exist
+            if (!document.getElementById(dropdownId)) {
+                const dropdown = document.createElement('div');
+                dropdown.id = dropdownId;
+                dropdown.className = 'dropdown-list';
+                input.parentNode.appendChild(dropdown);
+            }
+
+            const dropdown = document.getElementById(dropdownId);
+            
+            input.addEventListener('input', () => {
+                const value = input.value.toLowerCase();
+                const filtered = options.filter(option => 
+                    option.toLowerCase().includes(value)
+                );
+
+                if (filtered.length && value) {
+                    dropdown.innerHTML = filtered
+                        .map(option => `<div class="dropdown-item">${option}</div>`)
+                        .join('');
+                    dropdown.style.display = 'block';
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            dropdown.addEventListener('click', (e) => {
+                if (e.target.className === 'dropdown-item') {
+                    input.value = e.target.textContent;
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (e.target !== input) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
         // Modal functions
         function openModal(type, subtype = '') {
             const modal = document.getElementById('formModal');
@@ -419,15 +835,15 @@
                         <form id="educationForm" onsubmit="saveEducation(event)">
                             <div class="form-group">
                                 <label for="school">School/University</label>
-                                <input type="text" id="school" class="form-input" required>
+                                <input type="text" id="school" class="form-input" required placeholder="Start typing to see suggestions">
                             </div>
                             <div class="form-group">
                                 <label for="degree">Degree</label>
-                                <input type="text" id="degree" class="form-input" required>
+                                <input type="text" id="degree" class="form-input" required placeholder="Start typing to see suggestions">
                             </div>
                             <div class="form-group">
                                 <label for="field">Field of Study</label>
-                                <input type="text" id="field" class="form-input" required>
+                                <input type="text" id="field" class="form-input" required placeholder="Start typing to see suggestions">
                             </div>
                             <div class="form-group">
                                 <label for="eduStartDate">Start Date</label>
@@ -440,6 +856,12 @@
                             <button type="submit" class="save-button">Save Education</button>
                         </form>
                     `;
+                    // Initialize dropdowns for education fields
+                    setTimeout(() => {
+                        createDropdown('school', universities);
+                        createDropdown('degree', degrees);
+                        createDropdown('field', fields);
+                    }, 0);
                     break;
 
                 case 'experience':
@@ -448,11 +870,20 @@
                         <form id="experienceForm" onsubmit="saveExperience(event)">
                             <div class="form-group">
                                 <label for="company">Company</label>
-                                <input type="text" id="company" class="form-input" required>
+                                <input type="text" id="company" class="form-input" required placeholder="Start typing to see suggestions">
                             </div>
                             <div class="form-group">
                                 <label for="position">Position</label>
-                                <input type="text" id="position" class="form-input" required>
+                                <input type="text" id="position" class="form-input" required placeholder="Start typing to see suggestions">
+                            </div>
+                            <div class="form-group">
+                                <label for="experienceLevel">Experience Level</label>
+                                <select id="experienceLevel" class="experience-level" required>
+                                    <option value="">Select Experience Level</option>
+                                    ${experienceLevels.map(level => 
+                                        `<option value="${level}">${level}</option>`
+                                    ).join('')}
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="expStartDate">Start Date</label>
@@ -469,6 +900,11 @@
                             <button type="submit" class="save-button">Save Experience</button>
                         </form>
                     `;
+                    // Initialize dropdowns for experience fields
+                    setTimeout(() => {
+                        createDropdown('company', companies);
+                        createDropdown('position', positions);
+                    }, 0);
                     break;
 
                 case 'skill':
@@ -477,11 +913,15 @@
                         <form id="skillForm" onsubmit="saveSkill(event)">
                             <div class="form-group">
                                 <label for="skill">Skill Name</label>
-                                <input type="text" id="skill" class="form-input" required>
+                                <input type="text" id="skill" class="form-input" required placeholder="Start typing to see suggestions">
                             </div>
                             <button type="submit" class="save-button">Add Skill</button>
                         </form>
                     `;
+                    // Initialize dropdown for skills
+                    setTimeout(() => {
+                        createDropdown('skill', skills);
+                    }, 0);
                     break;
 
                 case 'social':
@@ -525,6 +965,7 @@
             const experience = {
                 company: document.getElementById('company').value,
                 position: document.getElementById('position').value,
+                experienceLevel: document.getElementById('experienceLevel').value,
                 startDate: document.getElementById('expStartDate').value,
                 endDate: document.getElementById('expEndDate').value || 'Present',
                 description: document.getElementById('description').value
