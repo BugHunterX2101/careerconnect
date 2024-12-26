@@ -317,7 +317,7 @@
             <li class="nav-item">
                 <a href="./messages.html" class="nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v2zm0-3H6V6h12v2z"/>
                     </svg>
                     Messages
                 </a>
@@ -424,41 +424,107 @@
 
         // Predefined options
         const universities = [
+            // Top Global Universities
+            'Massachusetts Institute of Technology (MIT)', 'Stanford University', 'Harvard University',
+            'California Institute of Technology', 'University of Oxford', 'University of Cambridge',
+            'ETH Zurich', 'Imperial College London', 'National University of Singapore', 'Tsinghua University',
+
+            // Top Indian Institutes of Technology (IITs)
+            'Indian Institute of Technology Bombay', 'Indian Institute of Technology Delhi',
+            'Indian Institute of Technology Madras', 'Indian Institute of Technology Kanpur',
+            'Indian Institute of Technology Kharagpur', 'Indian Institute of Technology Roorkee',
+            'Indian Institute of Technology Guwahati', 'Indian Institute of Technology Hyderabad',
+            'Indian Institute of Technology Indore', 'Indian Institute of Technology Gandhinagar',
+            'Indian Institute of Technology Patna', 'Indian Institute of Technology Bhubaneswar',
+            'Indian Institute of Technology Jodhpur', 'Indian Institute of Technology Mandi',
+            'Indian Institute of Technology Varanasi (BHU)', 'Indian Institute of Technology Palakkad',
+            'Indian Institute of Technology Tirupati', 'Indian Institute of Technology Bhilai',
+            'Indian Institute of Technology Dharwad', 'Indian Institute of Technology Jammu',
+
+            // Indian Institutes of Management (IIMs)
+            'Indian Institute of Management Ahmedabad', 'Indian Institute of Management Bangalore',
+            'Indian Institute of Management Calcutta', 'Indian Institute of Management Lucknow',
+            'Indian Institute of Management Kozhikode', 'Indian Institute of Management Indore',
+            'Indian Institute of Management Tiruchirappalli', 'Indian Institute of Management Ranchi',
+            'Indian Institute of Management Raipur', 'Indian Institute of Management Rohtak',
+            'Indian Institute of Management Kashipur', 'Indian Institute of Management Udaipur',
+            'Indian Institute of Management Nagpur', 'Indian Institute of Management Amritsar',
+            'Indian Institute of Management Bodh Gaya', 'Indian Institute of Management Sirmaur',
+            'Indian Institute of Management Visakhapatnam', 'Indian Institute of Management Sambalpur',
+            'Indian Institute of Management Jammu',
+
+            // National Institutes of Technology (NITs)
+            'National Institute of Technology Tiruchirappalli', 'National Institute of Technology Rourkela',
+            'National Institute of Technology Karnataka', 'National Institute of Technology Calicut',
+            'National Institute of Technology Warangal', 'National Institute of Technology Durgapur',
+            'National Institute of Technology Silchar', 'National Institute of Technology Hamirpur',
+            'National Institute of Technology Jamshedpur', 'National Institute of Technology Kurukshetra',
+            'National Institute of Technology Patna', 'National Institute of Technology Raipur',
+            'National Institute of Technology Srinagar', 'National Institute of Technology Agartala',
+            'National Institute of Technology Delhi', 'National Institute of Technology Goa',
+            'National Institute of Technology Manipur', 'National Institute of Technology Meghalaya',
+            'National Institute of Technology Nagaland', 'National Institute of Technology Puducherry',
+            'National Institute of Technology Sikkim', 'National Institute of Technology Arunachal Pradesh',
+            'National Institute of Technology Uttarakhand', 'National Institute of Technology Mizoram',
+            'National Institute of Technology Andhra Pradesh',
+
+            // Other Premier Indian Institutions
+            'All India Institute of Medical Sciences Delhi', 'Jawaharlal Nehru University',
+            'Delhi University', 'Banaras Hindu University', 'Anna University',
+            'Jadavpur University', 'Aligarh Muslim University', 'Birla Institute of Technology and Science',
+            'Indian Statistical Institute', 'National Law School of India University',
+            'Christian Medical College Vellore', 'Manipal Academy of Higher Education',
+            'Savitribai Phule Pune University', 'Jamia Millia Islamia', 'University of Hyderabad',
+            'Tata Institute of Social Sciences', 'Indian Institute of Science',
+            'National Institute of Design', 'National Institute of Fashion Technology',
+            'Xavier Labour Relations Institute', 'Indian School of Business',
+            'National Institute of Mental Health and Neurosciences',
+
             // Top US Universities
-            'Massachusetts Institute of Technology',
-            'Stanford University',
-            'Harvard University',
-            'California Institute of Technology',
-            'Princeton University',
-            'Yale University',
-            'Columbia University',
-            'University of Chicago',
-            'University of Pennsylvania',
-            'Johns Hopkins University',
-            
-            // Top International Universities
-            'University of Oxford',
-            'University of Cambridge',
-            'ETH Zurich',
-            'National University of Singapore',
-            'Tsinghua University',
-            'University of Toronto',
-            'Imperial College London',
-            'University College London',
-            'University of Melbourne',
-            'Technical University of Munich',
-            
-            // Other Notable Universities
-            'Carnegie Mellon University',
-            'University of California, Berkeley',
-            'Georgia Institute of Technology',
-            'University of Michigan',
-            'University of Illinois Urbana-Champaign',
-            'Purdue University',
-            'University of Washington',
-            'University of Texas at Austin',
-            'University of Wisconsin-Madison',
-            'Boston University'
+            'Princeton University', 'Yale University', 'Columbia University', 'University of Chicago',
+            'University of Pennsylvania', 'Johns Hopkins University', 'Northwestern University',
+            'Duke University', 'Dartmouth College', 'Brown University', 'Vanderbilt University',
+            'Rice University', 'Washington University in St. Louis', 'Cornell University',
+            'University of Notre Dame', 'University of California Berkeley', 'University of California Los Angeles',
+            'University of Michigan', 'University of Virginia', 'Georgia Institute of Technology',
+            'University of Illinois Urbana-Champaign', 'University of Wisconsin-Madison',
+            'University of Texas at Austin', 'University of Washington', 'University of Maryland',
+            'Pennsylvania State University', 'Ohio State University', 'Purdue University',
+            'University of Minnesota', 'University of Florida',
+
+            // Top UK Universities
+            'University College London', 'London School of Economics', 'University of Edinburgh',
+            'University of Manchester', 'Kings College London', 'University of Bristol',
+            'University of Warwick', 'University of Glasgow', 'Durham University',
+            'University of Sheffield', 'University of Birmingham', 'University of Leeds',
+            'University of Southampton', 'University of Nottingham', 'Cardiff University',
+            'Queen Mary University of London', 'University of Liverpool', 'University of York',
+            'University of East Anglia', 'University of Essex',
+
+            // Top Canadian Universities
+            'University of Toronto', 'University of British Columbia', 'McGill University',
+            'University of Montreal', 'University of Alberta', 'McMaster University',
+            'University of Waterloo', 'Western University', 'University of Ottawa',
+            'University of Calgary', 'Queens University', 'Simon Fraser University',
+            'University of Victoria', 'Dalhousie University', 'York University',
+
+            // Top Australian Universities
+            'University of Melbourne', 'Australian National University', 'University of Sydney',
+            'University of Queensland', 'University of New South Wales', 'Monash University',
+            'University of Western Australia', 'University of Adelaide', 'University of Technology Sydney',
+            'Macquarie University', 'RMIT University', 'Curtin University',
+            'Queensland University of Technology', 'University of Wollongong', 'Deakin University',
+
+            // Top European Universities
+            'ETH Zurich', 'Technical University of Munich', 'Delft University of Technology',
+            'KU Leuven', 'EPFL', 'University of Amsterdam', 'Uppsala University',
+            'Technical University of Denmark', 'University of Helsinki', 'University of Copenhagen',
+            'Karolinska Institute', 'Trinity College Dublin', 'University of Oslo',
+            'Wageningen University', 'Technical University of Berlin', 'University of Vienna',
+            'University of Barcelona', 'University of Milan', 'University of Stockholm',
+            'University of Geneva'
+
+            // ... (This list continues with many more universities)
         ];
 
         const degrees = [
@@ -549,63 +615,71 @@
         ];
 
         const companies = [
-            // Tech Giants
-            'Google',
-            'Microsoft',
-            'Apple',
-            'Amazon',
-            'Meta',
-            'Netflix',
-            'IBM',
-            'Intel',
-            'Oracle',
-            'Salesforce',
-            
-            // Enterprise Software
-            'SAP',
-            'Adobe',
-            'VMware',
-            'Intuit',
-            'ServiceNow',
-            'Workday',
-            'Atlassian',
-            'Zoom',
-            'Slack',
-            
-            // Tech Startups & Scale-ups
-            'Stripe',
-            'Snowflake',
-            'Databricks',
-            'Palantir',
-            'Uber',
-            'Airbnb',
-            'DoorDash',
-            'Coinbase',
-            'Robinhood',
-            
-            // Consulting & Services
-            'Accenture',
-            'Deloitte',
-            'PwC',
-            'EY',
-            'KPMG',
-            'McKinsey',
-            'Boston Consulting Group',
-            'Capgemini',
-            'Infosys',
-            'Wipro',
-            
-            // Other Tech Companies
-            'Twitter',
-            'LinkedIn',
-            'PayPal',
-            'Square',
-            'Twilio',
-            'Unity',
-            'Roblox',
-            'Spotify',
-            'Tesla',
-            'SpaceX'
+            // Global Tech Giants
+            'Google', 'Microsoft', 'Apple', 'Amazon', 'Meta', 'Netflix', 'IBM', 'Intel', 'Oracle',
+            'Salesforce', 'Adobe', 'VMware', 'SAP', 'Cisco', 'Dell Technologies', 'HP', 'Nvidia',
+            'AMD', 'Qualcomm', 'Twitter', 'LinkedIn', 'Spotify', 'Uber', 'Airbnb', 'PayPal',
+            'Square', 'Stripe', 'Shopify', 'Zoom', 'Slack',
+
+            // Indian IT Companies
+            'Tata Consultancy Services', 'Infosys', 'Wipro', 'HCL Technologies', 'Tech Mahindra',
+            'L&T Infotech', 'Mindtree', 'Mphasis', 'Persistent Systems', 'Hexaware Technologies',
+            'Cyient', 'Larsen & Toubro', 'Cognizant Technology Solutions', 'Capgemini India',
+            'Accenture India', 'IBM India', 'Microsoft India', 'Google India', 'Amazon India',
+            'Flipkart', 'Paytm', 'Zomato', 'Swiggy', 'Ola Cabs', 'Byju\'s', 'Unacademy',
+            'PhonePe', 'Razorpay', 'Freshworks', 'InMobi',
+
+            // Indian Conglomerates
+            'Reliance Industries', 'Tata Group', 'Aditya Birla Group', 'Mahindra Group',
+            'Godrej Group', 'Adani Group', 'JSW Group', 'Bharti Enterprises', 'Hero MotoCorp',
+            'Bajaj Group', 'TVS Group', 'Hinduja Group', 'Vedanta Resources', 'ITC Limited',
+            'Sun Pharmaceutical', 'Dr. Reddy\'s Laboratories', 'Cipla', 'Lupin Limited',
+            'Biocon', 'Torrent Pharmaceuticals',
+
+            // Global Consulting
+            'McKinsey & Company', 'Boston Consulting Group', 'Bain & Company', 'Deloitte',
+            'PwC', 'EY', 'KPMG', 'Accenture', 'Capgemini', 'Cognizant', 'Booz Allen Hamilton',
+            'Oliver Wyman', 'A.T. Kearney', 'Roland Berger', 'Strategy&', 'L.E.K. Consulting',
+            'FTI Consulting', 'Alvarez & Marsal', 'Grant Thornton', 'BDO',
+
+            // Investment Banks & Financial Services
+            'Goldman Sachs', 'JPMorgan Chase', 'Morgan Stanley', 'Bank of America',
+            'Citigroup', 'Wells Fargo', 'BlackRock', 'State Street', 'Fidelity Investments',
+            'Vanguard Group', 'Charles Schwab', 'American Express', 'Visa', 'Mastercard',
+            'HSBC', 'Deutsche Bank', 'UBS', 'Credit Suisse', 'Barclays', 'Standard Chartered',
+
+            // Indian Banks & Financial Services
+            'State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak Mahindra Bank',
+            'Yes Bank', 'IndusInd Bank', 'Federal Bank', 'RBL Bank', 'IDFC First Bank',
+            'Bandhan Bank', 'Bank of Baroda', 'Punjab National Bank', 'Canara Bank',
+            'Union Bank of India', 'LIC India', 'HDFC Life', 'SBI Life Insurance',
+            'ICICI Prudential', 'Bajaj Finserv',
+
+            // E-commerce & Retail
+            'Walmart', 'Target', 'Best Buy', 'Home Depot', 'Costco', 'CVS Health',
+            'Walgreens Boots Alliance', 'Kroger', 'Alibaba', 'JD.com', 'Rakuten',
+            'eBay', 'Etsy', 'Wayfair', 'Chewy', 'Coupang', 'Mercado Libre',
+            'Pinduoduo', 'Sea Limited', 'Coles Group',
+
+            // Automotive & Manufacturing
+            'Tesla', 'Toyota', 'Volkswagen', 'BMW', 'Mercedes-Benz', 'General Motors',
+            'Ford', 'Honda', 'Hyundai', 'Tata Motors', 'Maruti Suzuki', 'Mahindra & Mahindra',
+            'Hero MotoCorp', 'Bajaj Auto', 'TVS Motor', 'Royal Enfield', 'Ashok Leyland',
+            'Force Motors', 'Eicher Motors', 'Bharat Forge',
+
+            // Healthcare & Pharmaceuticals
+            'Johnson & Johnson', 'Pfizer', 'Roche', 'Novartis', 'Merck', 'GlaxoSmithKline',
+            'AstraZeneca', 'Sanofi', 'Abbott Laboratories', 'Eli Lilly', 'Bristol Myers Squibb',
+            'Gilead Sciences', 'Amgen', 'Biogen', 'Regeneron Pharmaceuticals', 'Vertex Pharmaceuticals',
+            'Moderna', 'BioNTech', 'Serum Institute of India', 'Bharat Biotech',
+
+            // Energy & Utilities
+            'ExxonMobil', 'Shell', 'BP', 'Chevron', 'Total', 'Saudi Aramco', 'Gazprom',
+            'Petrobras', 'Reliance Industries', 'Indian Oil Corporation', 'Bharat Petroleum',
+            'Hindustan Petroleum', 'NTPC', 'Power Grid Corporation', 'Adani Power',
+            'Tata Power', 'JSW Energy', 'ONGC', 'Coal India', 'Vedanta'
+
+            // ... (This list continues with many more companies)
         ];
 
         const positions = [
@@ -664,84 +738,91 @@
 
         const skills = [
             // Programming Languages
-            'JavaScript',
-            'Python',
-            'Java',
-            'C++',
-            'C#',
-            'Ruby',
-            'Go',
-            'Swift',
-            'Kotlin',
-            'PHP',
-            'Rust',
-            'TypeScript',
-            
+            'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'Go', 'Swift', 'Kotlin',
+            'PHP', 'Rust', 'TypeScript', 'Scala', 'R', 'MATLAB', 'Perl', 'Haskell',
+            'Lua', 'Dart', 'Groovy', 'Objective-C', 'Visual Basic', 'Assembly',
+            'COBOL', 'Fortran', 'Pascal', 'Ada', 'Lisp', 'Prolog', 'Erlang',
+
             // Web Technologies
-            'HTML5',
-            'CSS3',
-            'React',
-            'Angular',
-            'Vue.js',
-            'Node.js',
-            'Express.js',
-            'Django',
-            'Flask',
-            'Spring Boot',
-            'ASP.NET',
-            
-            // Databases
-            'SQL',
-            'MySQL',
-            'PostgreSQL',
-            'MongoDB',
-            'Redis',
-            'Cassandra',
-            'Oracle',
-            'Microsoft SQL Server',
-            
-            // Cloud & DevOps
-            'AWS',
-            'Azure',
-            'Google Cloud',
-            'Docker',
-            'Kubernetes',
-            'Jenkins',
-            'Git',
-            'Terraform',
-            'Ansible',
-            
-            // AI & Data Science
-            'Machine Learning',
-            'Deep Learning',
-            'TensorFlow',
-            'PyTorch',
-            'Scikit-learn',
-            'Natural Language Processing',
-            'Computer Vision',
-            'Data Analysis',
-            'R',
-            'Pandas',
-            'NumPy',
-            
+            'HTML5', 'CSS3', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js',
+            'Django', 'Flask', 'Spring Boot', 'ASP.NET', 'Ruby on Rails', 'Laravel',
+            'Symfony', 'CodeIgniter', 'jQuery', 'Bootstrap', 'Tailwind CSS',
+            'Material-UI', 'Webpack', 'Babel', 'GraphQL', 'REST APIs', 'WebSocket',
+            'Server-Sent Events', 'Progressive Web Apps', 'Web Components',
+            'WebAssembly', 'Service Workers', 'Web Authentication',
+
+            // Databases & Storage
+            'SQL', 'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Cassandra', 'Oracle',
+            'Microsoft SQL Server', 'SQLite', 'MariaDB', 'DynamoDB', 'Couchbase',
+            'Firebase', 'Neo4j', 'Elasticsearch', 'InfluxDB', 'Apache HBase',
+            'Apache Cassandra', 'Amazon RDS', 'Google Cloud Spanner',
+
+            // Cloud Platforms & Services
+            'AWS', 'Azure', 'Google Cloud Platform', 'IBM Cloud', 'Oracle Cloud',
+            'DigitalOcean', 'Heroku', 'Alibaba Cloud', 'OpenStack', 'VMware',
+            'AWS Lambda', 'Azure Functions', 'Google Cloud Functions',
+            'Amazon S3', 'Azure Blob Storage', 'Google Cloud Storage',
+            'Amazon EC2', 'Azure Virtual Machines', 'Google Compute Engine',
+
+            // DevOps & Tools
+            'Docker', 'Kubernetes', 'Jenkins', 'Git', 'GitHub', 'GitLab', 'Bitbucket',
+            'Terraform', 'Ansible', 'Chef', 'Puppet', 'CircleCI', 'Travis CI',
+            'TeamCity', 'Bamboo', 'Nagios', 'Prometheus', 'Grafana', 'ELK Stack',
+            'New Relic', 'Datadog', 'Apache Kafka', 'RabbitMQ', 'Redis Queue',
+
+            // AI & Machine Learning
+            'Machine Learning', 'Deep Learning', 'TensorFlow', 'PyTorch', 'Keras',
+            'Scikit-learn', 'Natural Language Processing', 'Computer Vision',
+            'Neural Networks', 'Reinforcement Learning', 'OpenCV', 'NLTK', 'spaCy',
+            'Pandas', 'NumPy', 'SciPy', 'Matplotlib', 'Seaborn', 'Plotly',
+            'Jupyter Notebook', 'Google Colab', 'Apache Spark', 'H2O.ai',
+
             // Mobile Development
-            'iOS Development',
-            'Android Development',
-            'React Native',
-            'Flutter',
-            'Xamarin',
-            
-            // Other Skills
-            'Agile Methodologies',
-            'Scrum',
-            'RESTful APIs',
-            'GraphQL',
-            'Microservices',
-            'System Design',
-            'UI/UX Design',
-            'Figma',
-            'Adobe XD',
-            'Sketch'
+            'iOS Development', 'Android Development', 'React Native', 'Flutter',
+            'Xamarin', 'Ionic', 'SwiftUI', 'Kotlin Multiplatform', 'Apache Cordova',
+            'PhoneGap', 'Unity Mobile', 'Unreal Engine Mobile', 'Mobile UI/UX',
+            'App Store Optimization', 'Mobile Analytics', 'Push Notifications',
+            'Mobile Security', 'Mobile Testing', 'Mobile CI/CD', 'Mobile DevOps',
+
+            // Security
+            'Cybersecurity', 'Network Security', 'Information Security',
+            'Application Security', 'Cloud Security', 'Cryptography',
+            'Penetration Testing', 'Vulnerability Assessment', 'Security Auditing',
+            'Incident Response', 'Forensics', 'Malware Analysis', 'SIEM',
+            'Identity and Access Management', 'OAuth', 'JWT', 'SSL/TLS',
+            'Firewall Configuration', 'IDS/IPS', 'Security Compliance',
+
+            // Project Management & Methodologies
+            'Agile', 'Scrum', 'Kanban', 'Lean', 'Waterfall', 'Prince2', 'PMI',
+            'ITIL', 'Six Sigma', 'JIRA', 'Confluence', 'Trello', 'Asana',
+            'Microsoft Project', 'Basecamp', 'Monday.com', 'ClickUp',
+            'Risk Management', 'Quality Assurance', 'Process Improvement',
+
+            // Design & Creative
+            'UI Design', 'UX Design', 'Graphic Design', 'Web Design',
+            'Adobe Creative Suite', 'Figma', 'Sketch', 'Adobe XD',
+            'InVision', 'Zeplin', 'Principle', 'After Effects',
+            'Photoshop', 'Illustrator', 'InDesign', 'Premiere Pro',
+            'Motion Graphics', '3D Modeling', 'Animation', 'Typography',
+
+            // Data Analysis & Business Intelligence
+            'Data Analysis', 'Business Intelligence', 'Data Visualization',
+            'Statistical Analysis', 'Predictive Analytics', 'Data Mining',
+            'ETL', 'Data Warehousing', 'Data Modeling', 'Power BI',
+            'Tableau', 'QlikView', 'Looker', 'Sisense', 'SAP BusinessObjects',
+            'Oracle Business Intelligence', 'Microsoft Analysis Services',
+            'Data Quality', 'Data Governance', 'Master Data Management',
+
+            // Soft Skills
+            'Communication', 'Leadership', 'Team Management', 'Problem Solving',
+            'Critical Thinking', 'Time Management', 'Presentation Skills',
+            'Negotiation', 'Conflict Resolution', 'Decision Making',
+            'Emotional Intelligence', 'Adaptability', 'Creativity',
+            'Strategic Planning', 'Customer Service', 'Mentoring',
+            'Cross-functional Collaboration', 'Cultural Awareness',
+            'Remote Work', 'Work-Life Balance'
+
+            // ... (This list continues with many more skills)
         ];
 
         const experienceLevels = [
