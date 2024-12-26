@@ -131,6 +131,7 @@
                 background: rgba(255, 255, 255, 0.15);
             }
 
+            /* Form options styles */
             .form-options {
                 display: flex;
                 justify-content: space-between;
@@ -138,11 +139,47 @@
                 margin-bottom: 1.5rem;
             }
 
-            .remember-me {
+            .remember-me, .show-password {
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
                 color: #888;
+            }
+
+            .remember-me input[type="checkbox"],
+            .show-password input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+                accent-color: #00f7ff;
+                cursor: pointer;
+            }
+
+            /* Particles canvas styles */
+            .particle-canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            .welcome-section {
+                position: relative;
+            }
+
+            .brand-container {
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Update form options layout */
+            .form-options {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
             }
 
             .login-button {
@@ -225,7 +262,10 @@
             <div class="content-wrapper">
                 <!-- Left side with brand name -->
                 <div class="welcome-section">
-                    <h1 class="brand-name">CareerConnect</h1>
+                    <canvas id="brandParticles" class="particle-canvas"></canvas>
+                    <div class="brand-container">
+                        <h1 class="brand-name">CareerConnect</h1>
+                    </div>
                 </div>
 
                 <!-- Right side with login -->
@@ -248,6 +288,10 @@
                             <div class="remember-me">
                                 <input type="checkbox" id="rememberMe">
                                 <label for="rememberMe">Remember me</label>
+                            </div>
+                            <div class="show-password">
+                                <input type="checkbox" id="showPassword">
+                                <label for="showPassword">Show Password</label>
                             </div>
                         </div>
                         <button type="submit" class="login-button">Sign In</button>
@@ -327,6 +371,78 @@
                     document.getElementById('rememberMe').checked = true;
                 }
             });
+
+            // Particles animation
+            function initParticles() {
+                const canvas = document.getElementById('brandParticles');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas size
+                function resizeCanvas() {
+                    const welcomeSection = document.querySelector('.welcome-section');
+                    canvas.width = welcomeSection.offsetWidth;
+                    canvas.height = welcomeSection.offsetHeight;
+                }
+                
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                // Particle settings
+                const particles = [];
+                const particleCount = 50;
+                
+                class Particle {
+                    constructor() {
+                        this.reset();
+                    }
+                    
+                    reset() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.vx = (Math.random() - 0.5) * 0.5;
+                        this.vy = (Math.random() - 0.5) * 0.5;
+                        this.size = Math.random() * 2;
+                        this.alpha = Math.random() * 0.5 + 0.2;
+                    }
+                    
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        
+                        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                    }
+                    
+                    draw() {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(0, 247, 255, ${this.alpha})`;
+                        ctx.fill();
+                    }
+                }
+                
+                // Create particles
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+                
+                // Animation loop
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    particles.forEach(particle => {
+                        particle.update();
+                        particle.draw();
+                    });
+                    
+                    requestAnimationFrame(animate);
+                }
+                
+                animate();
+            }
+
+            // Initialize particles when the page loads
+            window.addEventListener('load', initParticles);
         </script>
     </body>
 </html> 
