@@ -1,214 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <title>Profile - CareerConnect</title>
-    <link rel="stylesheet" href="dashboard.css">
-    <style>
-        .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .profile-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1.5rem;
-        }
-
-        .profile-section h2 {
-            color: #00f7ff;
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .add-button {
-            background: rgba(0, 247, 255, 0.1);
-            border: 1px solid rgba(0, 247, 255, 0.2);
-            border-radius: 5px;
-            color: #00f7ff;
-            padding: 0.3rem 0.8rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .add-button:hover {
-            background: rgba(0, 247, 255, 0.2);
-        }
-
-        .item-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        .item-card:last-child {
-            margin-bottom: 0;
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.5rem;
-        }
-
-        .item-title {
-            color: #fff;
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-
-        .item-subtitle {
-            color: #00f7ff;
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .item-date {
-            color: #888;
-            font-size: 0.8rem;
-        }
-
-        .item-description {
-            color: #888;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        .item-actions {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-button {
-            background: none;
-            border: none;
-            color: #888;
-            cursor: pointer;
-            padding: 0.2rem;
-            transition: color 0.3s ease;
-        }
-
-        .action-button:hover {
-            color: #00f7ff;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .skill-tag {
-            background: rgba(0, 247, 255, 0.1);
-            color: #00f7ff;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
-
-        .social-links {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            color: #fff;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: rgba(0, 247, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .social-link svg {
-            width: 24px;
-            height: 24px;
-            fill: #00f7ff;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-            margin: auto;
-        }
-
-        .modal-content form {
-            max-height: calc(90vh - 100px);
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 247, 255, 0.3);
-            border-radius: 4px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 247, 255, 0.5);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
             background: none;
             border: none;
             color: #888;
@@ -304,6 +93,123 @@
             color: #fff;
             width: 100%;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            margin: 20px auto;
+        }
+
+        .modal-content form {
+            max-height: calc(85vh - 100px);
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 247, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 247, 255, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00f7ff;
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #00f7ff;
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .save-button:hover {
+            background: #00d8ff;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+                margin: 10px auto;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-input {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -373,7 +279,10 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <h1 class="page-title">My Profile</h1>
+        <div class="header-actions">
+            <h1 class="page-title">My Profile</h1>
+            <button class="update-profile-btn" onclick="updateProfile()">Update Profile</button>
+        </div>
         <div class="profile-grid">
             <!-- Education Section -->
             <div class="profile-section">
@@ -437,6 +346,60 @@
                 <!-- Modal content will be dynamically added here -->
             </div>
         </div>
+    </div>
+
+    <style>
+        /* Add these styles at the end of your existing styles */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .update-profile-btn {
+            background: #00f7ff;
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .update-profile-btn:hover {
+            background: #00d8ff;
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <div id="successMessage" class="success-message">
+        Profile updated successfully!
     </div>
 
     <script>
@@ -746,26 +709,6 @@
             'Maratha Mandal Engineering College, Belgaum',
             'Hirasugar Institute of Technology, Belgaum',
             'SG Balekundri Institute of Technology, Belgaum',
-            'Ballari Institute of Technology & Management, Bellary',
-            'REVA Institute of Technology & Management, Bangalore',
-            'Bangalore College of Engineering & Technology, Bangalore',
-            'City Engineering College, Bangalore',
-            'Dr. Ambedkar Institute of Technology, Bangalore',
-            'East West Institute of Technology, Bangalore',
-            'M S Engineering College, Bangalore',
-            'Nadgir Institute of Engineering & Technology, Bangalore',
-            'Rajarajeshwari College of Engineering, Bangalore',
-            'SJB Institute of Technology, Bangalore',
-            'Sri Venkateshwara College of Engineering, Bangalore',
-            'Vivekananda Institute of Technology, Bangalore',
-            'GSSS Institute of Engineering & Technology for Women, Mysore',
-            'Mysore College of Engineering & Management, Mysore',
-            'Proudadevaraya Institute of Technology, Hospet',
-            'Rural Engineering College, Hulkoti',
-            'Shetty Institute of Technology, Gulbarga',
-            'STJ Institute of Technology, Ranebennur',
-            'Veerappa Nisty Engineering College, Shorapur',
-
             // ... (This list continues with many more universities)
         ];
 
@@ -1224,7 +1167,7 @@
         ];
 
         // Initialize page
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             // Check authentication
             const userData = JSON.parse(localStorage.getItem('user'));
             if (!userData) {
@@ -1232,15 +1175,35 @@
                 return;
             }
 
-            // Update user profile
+            // Update user profile display
             document.getElementById('userName').textContent = userData.username;
             document.getElementById('userRole').textContent = userData.role;
 
-            // Load profile data
-            const savedProfileData = localStorage.getItem('profileData');
-            if (savedProfileData) {
-                profileData = JSON.parse(savedProfileData);
-                renderProfile();
+            // Load profile data from API
+            try {
+                const response = await fetch('/api/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${userData.token}`
+                    }
+                });
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                } else if (response.status === 404) {
+                    // Create empty profile if none exists
+                    profileData = {
+                        education: [],
+                        experience: [],
+                        skills: [],
+                        social: {
+                            linkedin: '',
+                            github: ''
+                        }
+                    };
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Failed to load profile data');
             }
         });
 
@@ -1414,7 +1377,7 @@
         }
 
         // Save functions
-        function saveEducation(event) {
+        async function saveEducation(event) {
             event.preventDefault();
             const education = {
                 school: document.getElementById('school').value,
@@ -1423,12 +1386,32 @@
                 startDate: document.getElementById('eduStartDate').value,
                 endDate: document.getElementById('eduEndDate').value || 'Present'
             };
-            profileData.education.push(education);
-            saveAndRender();
-            closeModal();
+
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch('/api/profile/education', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userData.token}`
+                    },
+                    body: JSON.stringify(education)
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                    closeModal();
+                } else {
+                    throw new Error('Failed to save education');
+                }
+            } catch (error) {
+                console.error('Error saving education:', error);
+                alert('Failed to save education data');
+            }
         }
 
-        function saveExperience(event) {
+        async function saveExperience(event) {
             event.preventDefault();
             const experience = {
                 company: document.getElementById('company').value,
@@ -1438,43 +1421,165 @@
                 endDate: document.getElementById('expEndDate').value || 'Present',
                 description: document.getElementById('description').value
             };
-            profileData.experience.push(experience);
-            saveAndRender();
-            closeModal();
+
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch('/api/profile/experience', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userData.token}`
+                    },
+                    body: JSON.stringify(experience)
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                    closeModal();
+                } else {
+                    throw new Error('Failed to save experience');
+                }
+            } catch (error) {
+                console.error('Error saving experience:', error);
+                alert('Failed to save experience data');
+            }
         }
 
-        function saveSkill(event) {
+        async function saveSkill(event) {
             event.preventDefault();
             const skill = document.getElementById('skill').value;
             if (!profileData.skills.includes(skill)) {
-                profileData.skills.push(skill);
-                saveAndRender();
+                try {
+                    const userData = JSON.parse(localStorage.getItem('user'));
+                    const response = await fetch('/api/profile/skills', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${userData.token}`
+                        },
+                        body: JSON.stringify({
+                            skills: [...profileData.skills, skill]
+                        })
+                    });
+
+                    if (response.ok) {
+                        profileData = await response.json();
+                        renderProfile();
+                        closeModal();
+                    } else {
+                        throw new Error('Failed to save skill');
+                    }
+                } catch (error) {
+                    console.error('Error saving skill:', error);
+                    alert('Failed to save skill data');
+                }
             }
             closeModal();
         }
 
-        function saveSocialLink(event, platform) {
+        async function saveSocialLink(event, platform) {
             event.preventDefault();
             const url = document.getElementById('socialUrl').value;
-            profileData.social[platform] = url;
-            saveAndRender();
-            closeModal();
+            
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch('/api/profile/social', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userData.token}`
+                    },
+                    body: JSON.stringify({
+                        ...profileData.social,
+                        [platform]: url
+                    })
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                    closeModal();
+                } else {
+                    throw new Error('Failed to save social link');
+                }
+            } catch (error) {
+                console.error('Error saving social link:', error);
+                alert('Failed to save social link');
+            }
         }
 
         // Delete functions
-        function deleteEducation(index) {
-            profileData.education.splice(index, 1);
-            saveAndRender();
+        async function deleteEducation(index) {
+            try {
+                const eduId = profileData.education[index]._id;
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch(`/api/profile/education/${eduId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${userData.token}`
+                    }
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                } else {
+                    throw new Error('Failed to delete education');
+                }
+            } catch (error) {
+                console.error('Error deleting education:', error);
+                alert('Failed to delete education');
+            }
         }
 
-        function deleteExperience(index) {
-            profileData.experience.splice(index, 1);
-            saveAndRender();
+        async function deleteExperience(index) {
+            try {
+                const expId = profileData.experience[index]._id;
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch(`/api/profile/experience/${expId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${userData.token}`
+                    }
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                } else {
+                    throw new Error('Failed to delete experience');
+                }
+            } catch (error) {
+                console.error('Error deleting experience:', error);
+                alert('Failed to delete experience');
+            }
         }
 
-        function deleteSkill(skill) {
-            profileData.skills = profileData.skills.filter(s => s !== skill);
-            saveAndRender();
+        async function deleteSkill(skill) {
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch('/api/profile/skills', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userData.token}`
+                    },
+                    body: JSON.stringify({
+                        skills: profileData.skills.filter(s => s !== skill)
+                    })
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderProfile();
+                } else {
+                    throw new Error('Failed to delete skill');
+                }
+            } catch (error) {
+                console.error('Error deleting skill:', error);
+                alert('Failed to delete skill');
+            }
         }
 
         // Render functions
@@ -1537,9 +1642,129 @@
             }
         }
 
-        function saveAndRender() {
-            localStorage.setItem('profileData', JSON.stringify(profileData));
-            renderProfile();
+        async function updateProfile() {
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                if (!userData || !userData.token) {
+                    window.location.href = './index.html';
+                    return;
+                }
+
+                // Gather all profile data
+                const profileData = {
+                    education: Array.from(document.getElementById('educationList').children).map(edu => ({
+                        school: edu.querySelector('.item-title').textContent,
+                        degree: edu.querySelector('.item-subtitle').textContent.split(' in ')[0],
+                        field: edu.querySelector('.item-subtitle').textContent.split(' in ')[1],
+                        startDate: edu.querySelector('.item-date').textContent.split(' - ')[0],
+                        endDate: edu.querySelector('.item-date').textContent.split(' - ')[1]
+                    })),
+                    experience: Array.from(document.getElementById('experienceList').children).map(exp => ({
+                        company: exp.querySelector('.item-subtitle').textContent,
+                        position: exp.querySelector('.item-title').textContent,
+                        startDate: exp.querySelector('.item-date').textContent.split(' - ')[0],
+                        endDate: exp.querySelector('.item-date').textContent.split(' - ')[1],
+                        description: exp.querySelector('.item-description')?.textContent || ''
+                    })),
+                    skills: Array.from(document.getElementById('skillsList').children).map(skill => 
+                        skill.textContent.trim().replace('×', '')
+                    ),
+                    social: {
+                        linkedin: document.getElementById('linkedinUrl').textContent === 'Add LinkedIn Profile' ? '' : document.getElementById('linkedinUrl').textContent,
+                        github: document.getElementById('githubUrl').textContent === 'Add GitHub Profile' ? '' : document.getElementById('githubUrl').textContent
+                    }
+                };
+
+                // Send update request to server
+                const response = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userData.token}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update profile');
+                }
+
+                // Show success message
+                const successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+
+                // Refresh profile data
+                const updatedProfile = await response.json();
+                profileData = updatedProfile;
+                renderProfile();
+
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            }
+        }
+
+        // Modify your existing renderProfile function to handle null/undefined values
+        function renderProfile() {
+            // Render education
+            const educationList = document.getElementById('educationList');
+            educationList.innerHTML = (profileData.education || []).map((edu, index) => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${edu.school || ''}</div>
+                            <div class="item-subtitle">${edu.degree || ''} in ${edu.field || ''}</div>
+                            <div class="item-date">${edu.startDate || ''} - ${edu.endDate || 'Present'}</div>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-button" onclick="deleteEducation(${index})">×</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render experience
+            const experienceList = document.getElementById('experienceList');
+            experienceList.innerHTML = (profileData.experience || []).map((exp, index) => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${exp.position || ''}</div>
+                            <div class="item-subtitle">${exp.company || ''}</div>
+                            <div class="item-date">${exp.startDate || ''} - ${exp.endDate || 'Present'}</div>
+                        </div>
+                    </div>
+                    <div class="item-description">${exp.description || ''}</div>
+                    <div class="item-actions">
+                        <button class="action-button" onclick="deleteExperience(${index})">×</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render skills
+            const skillsList = document.getElementById('skillsList');
+            skillsList.innerHTML = (profileData.skills || []).map(skill => `
+                <div class="skill-tag">
+                    ${skill}
+                    <button class="action-button" onclick="deleteSkill('${skill}')">×</button>
+                </div>
+            `).join('');
+
+            // Update social links
+            const linkedinUrl = document.getElementById('linkedinUrl');
+            const githubUrl = document.getElementById('githubUrl');
+            linkedinUrl.textContent = profileData.social?.linkedin || 'Add LinkedIn Profile';
+            githubUrl.textContent = profileData.social?.github || 'Add GitHub Profile';
+
+            if (profileData.social?.linkedin) {
+                document.getElementById('linkedinLink').href = profileData.social.linkedin;
+            }
+            if (profileData.social?.github) {
+                document.getElementById('githubLink').href = profileData.social.github;
+            }
         }
     </script>
 </body>
