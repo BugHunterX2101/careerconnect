@@ -3,14 +3,15 @@ const api = {
     // Use the current domain in production, localhost in development
     BASE_URL: window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
         ? 'http://localhost:3000'
-        : window.location.protocol + '//' + window.location.hostname,
+        : 'https://careerconnect-server-7af1.vercel.app',
     
     getHeaders() {
         const token = localStorage.getItem('token');
         const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Origin': window.location.origin
         };
         return headers;
     },
