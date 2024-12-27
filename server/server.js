@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+const { corsMiddleware, additionalHeaders } = require('./middleware/cors');
 const config = require('./config');
 
 const app = express();
@@ -8,24 +8,9 @@ const app = express();
 // Set strict query for Mongoose
 mongoose.set('strictQuery', true);
 
-// CORS configuration - Allow all origins in development
-app.use(cors({
-    origin: true, // Allow all origins
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-}));
-
-// Additional CORS headers for all responses
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    next();
-});
+// Apply CORS middleware
+app.use(corsMiddleware);
+app.use(additionalHeaders);
 
 // Body parser middleware
 app.use(express.json());
@@ -35,30 +20,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
     console.log('Headers:', req.headers);
+    if (req.method !== 'GET') {
+        console.log('Body:', req.body);
+    }
     next();
 });
 
-// Simplified auth middleware
-const authMiddleware = (req, res, next) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
-        // Token exists, proceed with the request
-        next();
-    } catch (error) {
-        console.error('Auth Error:', error);
-        return res.status(401).json({ message: 'Authentication failed' });
-    }
-};
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/profile', require('./routes/profile'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({ 
         status: 'OK',
         timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV || 'development'
+        env: process.env.NODE_ENV || 'development',
+        mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
     });
 });
 
@@ -70,25 +48,41 @@ app.get('/api/test', (req, res) => {
     });
 });
 
-// Connect to MongoDB
-mongoose.connect(config.mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB Connected'))
-.catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
+// Error handling for JSON parsing
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Invalid JSON payload'
+        });
+    }
+    next(err);
 });
-
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/profile', authMiddleware, require('./routes/profile'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err);
+    
+    // Handle mongoose validation errors
+    if (err.name === 'ValidationError') {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Validation Error',
+            errors: Object.values(err.errors).map(e => e.message)
+        });
+    }
+
+    // Handle mongoose duplicate key errors
+    if (err.code === 11000) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Duplicate field value entered'
+        });
+    }
+
+    // Handle other errors
     res.status(err.status || 500).json({
+        status: 'error',
         message: err.message || 'Internal server error',
         path: req.path,
         method: req.method,
@@ -99,16 +93,30 @@ app.use((err, req, res, next) => {
 // Handle 404 errors
 app.use((req, res) => {
     res.status(404).json({
+        status: 'error',
         message: `Route ${req.method} ${req.path} not found`,
         timestamp: new Date().toISOString()
     });
 });
 
+// Connect to MongoDB
+mongoose.connect(config.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('MongoDB Connected');
+    // Start server if not in Vercel environment
+    if (process.env.NODE_ENV !== 'production') {
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    }
+})
+.catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+});
+
 // Export for Vercel
 module.exports = app;
 
-// Start server if not in Vercel environment
-if (process.env.NODE_ENV !== 'production') {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-} 

@@ -3,57 +3,120 @@ const api = {
     BASE_URL: 'https://careerconnect-server-7af1-jonwailh3-vedit-agrawals-projects.vercel.app',
     
     getHeaders() {
+        const token = localStorage.getItem('token');
         return {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : '',
             'Origin': window.location.origin
         };
     },
 
-    async register(userData) {
+    async makeRequest(url, options = {}) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
         try {
-            console.log('Registering user:', userData);
-            const response = await fetch(`${this.BASE_URL}/api/auth/register`, {
-                method: 'POST',
+            const response = await fetch(url, {
+                ...options,
                 headers: this.getHeaders(),
-                body: JSON.stringify(userData)
+                mode: 'cors',
+                credentials: 'include',
+                signal: controller.signal
             });
 
-            const data = await response.json();
-            console.log('Registration response:', data);
+            clearTimeout(timeoutId);
+
+            let data;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                throw new Error('Invalid response format');
+            }
+
+            console.log(`API Response (${url}):`, data);
 
             if (!response.ok) {
-                throw new Error(data.message || 'Registration failed');
+                throw new Error(data.message || `Request failed with status ${response.status}`);
             }
 
             return data;
         } catch (error) {
-            console.error('Registration error:', error);
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out');
+            }
+            console.error('API Request Error:', error);
             throw error;
         }
     },
 
+    async register(userData) {
+        console.log('Registering user:', { ...userData, password: '[REDACTED]' });
+        return this.makeRequest(`${this.BASE_URL}/api/auth/register`, {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    },
+
     async login(credentials) {
-        try {
-            console.log('Logging in user:', credentials);
-            const response = await fetch(`${this.BASE_URL}/api/auth/login`, {
-                method: 'POST',
-                headers: this.getHeaders(),
-                body: JSON.stringify(credentials)
-            });
+        console.log('Logging in user:', credentials.email);
+        return this.makeRequest(`${this.BASE_URL}/api/auth/login`, {
+            method: 'POST',
+            body: JSON.stringify(credentials)
+        });
+    },
 
-            const data = await response.json();
-            console.log('Login response:', data);
+    async getProfile() {
+        return this.makeRequest(`${this.BASE_URL}/api/profile`);
+    },
 
-            if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
-            }
+    async updateProfile(profileData) {
+        return this.makeRequest(`${this.BASE_URL}/api/profile`, {
+            method: 'PUT',
+            body: JSON.stringify(profileData)
+        });
+    },
 
-            return data;
-        } catch (error) {
-            console.error('Login error:', error);
-            throw error;
+    async addEducation(educationData) {
+        return this.makeRequest(`${this.BASE_URL}/api/profile/education`, {
+            method: 'POST',
+            body: JSON.stringify(educationData)
+        });
+    },
+
+    async addExperience(experienceData) {
+        return this.makeRequest(`${this.BASE_URL}/api/profile/experience`, {
+            method: 'POST',
+            body: JSON.stringify(experienceData)
+        });
+    },
+
+    async addSkill(skillData) {
+        return this.makeRequest(`${this.BASE_URL}/api/profile/skills`, {
+            method: 'POST',
+            body: JSON.stringify(skillData)
+        });
+    },
+
+    // Helper methods
+    isAuthenticated() {
+        return !!localStorage.getItem('token');
+    },
+
+    logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login.html';
+    },
+
+    handleError(error) {
+        console.error('API Error:', error);
+        if (error.message.includes('401') || error.message.includes('unauthorized')) {
+            this.logout();
+            return;
         }
+        throw error;
     }
 };
 
