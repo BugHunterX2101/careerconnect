@@ -1,11 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const { corsMiddleware, additionalHeaders, debugCors } = require('./middleware/cors');
 const config = require('./config');
 const rateLimit = require('express-rate-limit');
 
 // Initialize express app
 const app = express();
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Set strict query for Mongoose
 mongoose.set('strictQuery', true);
@@ -37,6 +41,11 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profile', require('./routes/profile'));
+
+// Serve index.html for all other routes in production
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
 
 // Health check endpoint with detailed status
 app.get('/health', (req, res) => {
