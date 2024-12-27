@@ -754,105 +754,308 @@
             'Massachusetts Institute of Technology (MIT)', 'Stanford University', 'Harvard University',
             'California Institute of Technology', 'University of Oxford', 'University of Cambridge',
             'ETH Zurich', 'Imperial College London', 'National University of Singapore', 'Tsinghua University',
+            'University of California Berkeley', 'Princeton University', 'Yale University', 'Columbia University',
+            'University of Chicago', 'Cornell University', 'University of Pennsylvania', 'Johns Hopkins University',
 
             // Top Indian Institutes of Technology (IITs)
             'Indian Institute of Technology Bombay', 'Indian Institute of Technology Delhi',
             'Indian Institute of Technology Madras', 'Indian Institute of Technology Kanpur',
             'Indian Institute of Technology Kharagpur', 'Indian Institute of Technology Roorkee',
-            'Indian Institute of Technology Guwahati', 'Indian Institute of Technology Hyderabad'
+            'Indian Institute of Technology Guwahati', 'Indian Institute of Technology Hyderabad',
+            'Indian Institute of Technology Indore', 'Indian Institute of Technology Gandhinagar',
+            'Indian Institute of Technology Patna', 'Indian Institute of Technology Bhubaneswar',
+            'Indian Institute of Technology Jodhpur', 'Indian Institute of Technology Mandi',
+
+            // Indian Institutes of Management (IIMs)
+            'Indian Institute of Management Ahmedabad', 'Indian Institute of Management Bangalore',
+            'Indian Institute of Management Calcutta', 'Indian Institute of Management Lucknow',
+            'Indian Institute of Management Indore', 'Indian Institute of Management Kozhikode',
+            'Indian Institute of Management Trichy', 'Indian Institute of Management Ranchi',
+
+            // National Institutes of Technology (NITs)
+            'National Institute of Technology Tiruchirappalli', 'National Institute of Technology Surathkal',
+            'National Institute of Technology Warangal', 'National Institute of Technology Calicut',
+            'National Institute of Technology Rourkela', 'National Institute of Technology Durgapur',
+            'National Institute of Technology Silchar', 'National Institute of Technology Hamirpur',
+
+            // COMEDK Colleges
+            'R.V. College of Engineering, Bangalore', 'B.M.S. College of Engineering, Bangalore',
+            'M.S. Ramaiah Institute of Technology, Bangalore', 'PES University, Bangalore',
+            'Siddaganga Institute of Technology, Tumkur', 'Sri Jayachamarajendra College of Engineering, Mysore',
+            'Nitte Meenakshi Institute of Technology, Bangalore', 'BNM Institute of Technology, Bangalore',
+            'Dayananda Sagar College of Engineering, Bangalore', 'JSS Academy of Technical Education, Bangalore',
+            'New Horizon College of Engineering, Bangalore', 'CMR Institute of Technology, Bangalore',
+            'East Point College of Engineering and Technology, Bangalore', 'Global Academy of Technology, Bangalore',
+            'K.S. Institute of Technology, Bangalore', 'Cambridge Institute of Technology, Bangalore',
+            'Don Bosco Institute of Technology, Bangalore', 'HKBK College of Engineering, Bangalore',
+            'Impact College of Engineering and Applied Sciences, Bangalore', 'Jyothy Institute of Technology, Bangalore',
+
+            // Other Premier Indian Institutes
+            'All India Institute of Medical Sciences (AIIMS)', 'Birla Institute of Technology and Science (BITS)',
+            'Jawaharlal Nehru University (JNU)', 'Delhi University', 'Anna University',
+            'Vellore Institute of Technology (VIT)', 'Manipal Institute of Technology',
+            'SRM Institute of Science and Technology', 'Amrita Vishwa Vidyapeetham',
+            'Tata Institute of Social Sciences (TISS)', 'National Law School of India University (NLSIU)',
+            'Xavier School of Management (XLRI)', 'Indian Statistical Institute (ISI)',
+            'National Institute of Design (NID)', 'National Institute of Fashion Technology (NIFT)',
+            'Film and Television Institute of India (FTII)', 'National Institute of Mental Health and Neurosciences (NIMHANS)',
+
+            // Top European Universities
+            'University College London', 'Technical University of Munich', 'Delft University of Technology',
+            'KU Leuven', 'École Polytechnique Fédérale de Lausanne', 'University of Amsterdam',
+            'Technical University of Berlin', 'University of Copenhagen', 'University of Helsinki',
+            'Trinity College Dublin', 'University of Oslo', 'Stockholm University',
+
+            // Top Asian Universities
+            'University of Tokyo', 'Peking University', 'Seoul National University',
+            'Nanyang Technological University', 'Hong Kong University of Science and Technology',
+            'Kyoto University', 'Shanghai Jiao Tong University', 'Korea Advanced Institute of Science & Technology',
+            'Chinese University of Hong Kong', 'University of Hong Kong'
         ];
 
         const degrees = [
-            'Bachelor of Technology (B.Tech)',
-            'Bachelor of Engineering (B.E.)',
-            'Master of Technology (M.Tech)',
-            'Master of Engineering (M.E.)',
-            'Bachelor of Science (B.Sc)',
-            'Master of Science (M.Sc)',
-            'Bachelor of Arts (B.A.)',
-            'Master of Arts (M.A.)',
+            // Engineering Degrees
+            'Bachelor of Technology (B.Tech)', 'Bachelor of Engineering (B.E.)',
+            'Master of Technology (M.Tech)', 'Master of Engineering (M.E.)',
+            'Bachelor of Architecture (B.Arch)', 'Master of Architecture (M.Arch)',
+            'Bachelor of Science in Engineering (B.Sc.Eng.)', 'Master of Science in Engineering (M.Sc.Eng.)',
+            'Doctor of Philosophy in Engineering (Ph.D.)',
+
+            // Science Degrees
+            'Bachelor of Science (B.Sc)', 'Master of Science (M.Sc)',
+            'Bachelor of Computer Applications (BCA)', 'Master of Computer Applications (MCA)',
+            'Bachelor of Science in Information Technology (B.Sc IT)',
+            'Master of Science in Information Technology (M.Sc IT)',
+            'Bachelor of Science in Computer Science (B.Sc CS)',
+            'Master of Science in Computer Science (M.Sc CS)',
+            'Bachelor of Science in Data Science (B.Sc DS)',
+            'Master of Science in Data Science (M.Sc DS)',
+            'Bachelor of Science in Artificial Intelligence (B.Sc AI)',
+            'Master of Science in Artificial Intelligence (M.Sc AI)',
+
+            // Business & Management Degrees
             'Bachelor of Business Administration (BBA)',
             'Master of Business Administration (MBA)',
-            'Doctor of Philosophy (Ph.D.)'
+            'Bachelor of Commerce (B.Com)',
+            'Master of Commerce (M.Com)',
+            'Bachelor of Economics (B.Econ)',
+            'Master of Economics (M.Econ)',
+            'Bachelor of Financial Engineering',
+            'Master of Financial Engineering',
+            'Bachelor of Business Management (BBM)',
+            'Master of Business Management (MBM)',
+            'Doctor of Business Administration (DBA)',
+
+            // Arts & Humanities Degrees
+            'Bachelor of Arts (B.A.)', 'Master of Arts (M.A.)',
+            'Bachelor of Fine Arts (BFA)', 'Master of Fine Arts (MFA)',
+            'Bachelor of Design (B.Des)', 'Master of Design (M.Des)',
+            'Bachelor of Visual Arts', 'Master of Visual Arts',
+            'Bachelor of Performing Arts', 'Master of Performing Arts',
+
+            // Medical & Healthcare Degrees
+            'Bachelor of Medicine, Bachelor of Surgery (MBBS)',
+            'Bachelor of Dental Surgery (BDS)',
+            'Bachelor of Pharmacy (B.Pharm)',
+            'Master of Pharmacy (M.Pharm)',
+            'Bachelor of Physiotherapy (BPT)',
+            'Master of Physiotherapy (MPT)',
+            'Bachelor of Nursing (B.Sc Nursing)',
+            'Master of Nursing (M.Sc Nursing)',
+
+            // Law Degrees
+            'Bachelor of Laws (LLB)',
+            'Master of Laws (LLM)',
+            'Bachelor of Legal Science (BLS)',
+            'Master of Legal Science (MLS)',
+
+            // Research Degrees
+            'Master of Philosophy (M.Phil)',
+            'Doctor of Philosophy (Ph.D.)',
+            'Doctor of Science (D.Sc)',
+            'Doctor of Letters (D.Litt)'
         ];
 
         const fields = [
-            'Computer Science',
-            'Information Technology',
-            'Electronics Engineering',
-            'Mechanical Engineering',
-            'Civil Engineering',
-            'Electrical Engineering',
-            'Chemical Engineering',
-            'Aerospace Engineering',
-            'Business Administration',
-            'Data Science',
-            'Artificial Intelligence',
-            'Machine Learning'
+            // Computer Science & IT
+            'Computer Science', 'Information Technology', 'Software Engineering',
+            'Artificial Intelligence', 'Machine Learning', 'Data Science',
+            'Cloud Computing', 'Cybersecurity', 'Network Engineering',
+            'Web Development', 'Mobile App Development', 'Game Development',
+            'Blockchain Technology', 'Internet of Things (IoT)', 'Quantum Computing',
+            'Robotics', 'Computer Vision', 'Natural Language Processing',
+
+            // Engineering Fields
+            'Mechanical Engineering', 'Electrical Engineering', 'Electronics Engineering',
+            'Civil Engineering', 'Chemical Engineering', 'Aerospace Engineering',
+            'Biomedical Engineering', 'Environmental Engineering', 'Industrial Engineering',
+            'Materials Science', 'Nanotechnology', 'Automotive Engineering',
+            'Marine Engineering', 'Petroleum Engineering', 'Mining Engineering',
+            'Agricultural Engineering', 'Textile Engineering', 'Food Technology',
+
+            // Science Fields
+            'Physics', 'Chemistry', 'Biology', 'Mathematics',
+            'Statistics', 'Environmental Science', 'Astronomy',
+            'Geology', 'Biotechnology', 'Microbiology',
+            'Biochemistry', 'Genetics', 'Neuroscience',
+            'Ecology', 'Zoology', 'Botany',
+
+            // Business & Management
+            'Business Administration', 'Finance', 'Marketing',
+            'Human Resource Management', 'Operations Management',
+            'International Business', 'Entrepreneurship',
+            'Supply Chain Management', 'Project Management',
+            'Business Analytics', 'Digital Marketing',
+            'Financial Technology', 'Investment Banking',
+
+            // Arts & Design
+            'Graphic Design', 'Industrial Design', 'Fashion Design',
+            'Interior Design', 'Animation', 'Film Production',
+            'Photography', 'Fine Arts', 'Music',
+            'Theatre Arts', 'Dance', 'Creative Writing',
+
+            // Healthcare & Medicine
+            'Medicine', 'Dentistry', 'Pharmacy',
+            'Nursing', 'Public Health', 'Healthcare Management',
+            'Physiotherapy', 'Occupational Therapy', 'Veterinary Science',
+            'Medical Laboratory Technology', 'Radiology',
+            'Speech Therapy', 'Mental Health',
+
+            // Social Sciences
+            'Psychology', 'Sociology', 'Economics',
+            'Political Science', 'International Relations',
+            'Anthropology', 'Geography', 'History',
+            'Philosophy', 'Education', 'Social Work',
+            'Journalism', 'Mass Communication',
+
+            // Law & Legal Studies
+            'Criminal Law', 'Corporate Law', 'International Law',
+            'Constitutional Law', 'Intellectual Property Law',
+            'Human Rights Law', 'Environmental Law',
+            'Cyber Law', 'Maritime Law'
         ];
 
         const companies = [
-            'Google',
-            'Microsoft',
-            'Amazon',
-            'Apple',
-            'Meta',
-            'Netflix',
-            'Adobe',
-            'IBM',
-            'Intel',
-            'Oracle',
-            'Salesforce',
-            'Twitter',
-            'Uber',
-            'Airbnb',
-            'Tesla'
-        ];
+            // Tech Giants
+            'Google', 'Microsoft', 'Apple', 'Amazon', 'Meta', 'Netflix', 'Adobe',
+            'IBM', 'Intel', 'Oracle', 'Salesforce', 'Twitter', 'Uber', 'Airbnb',
+            'Tesla', 'SpaceX', 'LinkedIn', 'PayPal', 'NVIDIA', 'AMD', 'Cisco',
+            'Dell', 'HP', 'VMware', 'Zoom', 'Slack', 'Spotify', 'Pinterest',
 
-        const positions = [
-            'Software Engineer',
-            'Senior Software Engineer',
-            'Full Stack Developer',
-            'Frontend Developer',
-            'Backend Developer',
-            'DevOps Engineer',
-            'Data Scientist',
-            'Machine Learning Engineer',
-            'Product Manager',
-            'Project Manager',
-            'Technical Lead',
-            'Engineering Manager',
-            'CTO',
-            'CEO'
+            // Indian Tech Companies
+            'Infosys', 'Tata Consultancy Services', 'Wipro', 'HCL Technologies',
+            'Tech Mahindra', 'Cognizant', 'Mindtree', 'L&T Infotech',
+            'Mphasis', 'Persistent Systems', 'Larsen & Toubro', 'Hexaware',
+            'Cyient', 'Zensar Technologies', 'NIIT Technologies',
+
+            // Indian Startups
+            'Flipkart', 'Swiggy', 'Zomato', 'Paytm', 'Ola', 'BYJU\'S',
+            'PhonePe', 'Razorpay', 'CRED', 'Zerodha', 'Unacademy',
+            'Meesho', 'Dunzo', 'Urban Company', 'Lenskart',
+
+            // Global Consulting
+            'Accenture', 'Deloitte', 'PwC', 'EY', 'KPMG', 'McKinsey',
+            'Boston Consulting Group', 'Bain & Company', 'Capgemini',
+            'DXC Technology', 'Gartner', 'SAP', 'Booz Allen Hamilton',
+
+            // Financial Services
+            'JPMorgan Chase', 'Goldman Sachs', 'Morgan Stanley', 'Citigroup',
+            'Bank of America', 'Wells Fargo', 'American Express',
+            'Mastercard', 'Visa', 'Bloomberg', 'BlackRock', 'UBS',
+
+            // E-commerce & Retail
+            'Walmart', 'Target', 'Best Buy', 'eBay', 'Shopify', 'Instacart',
+            'DoorDash', 'Etsy', 'Wayfair', 'Chewy', 'BigBasket', 'Myntra',
+
+            // Automotive & Manufacturing
+            'Ford', 'General Motors', 'Toyota', 'Honda', 'BMW', 'Mercedes-Benz',
+            'Volkswagen', 'Tata Motors', 'Mahindra & Mahindra', 'Hero MotoCorp',
+            'Maruti Suzuki', 'Hyundai', 'Bosch', 'Siemens',
+
+            // Telecom & Media
+            'AT&T', 'Verizon', 'T-Mobile', 'Comcast', 'Disney', 'Sony',
+            'Warner Bros.', 'Airtel', 'Jio', 'Vodafone', 'Discovery',
+            'Fox Corporation', 'ViacomCBS', 'NBCUniversal',
+
+            // Healthcare & Pharma
+            'Johnson & Johnson', 'Pfizer', 'Moderna', 'AstraZeneca',
+            'GlaxoSmithKline', 'Novartis', 'Roche', 'Abbott', 'Cipla',
+            'Sun Pharma', 'Dr. Reddy\'s Laboratories', 'Biocon',
+
+            // Energy & Utilities
+            'ExxonMobil', 'Shell', 'BP', 'Chevron', 'Total',
+            'Indian Oil Corporation', 'ONGC', 'Reliance Industries',
+            'Adani Group', 'NTPC', 'Power Grid Corporation'
         ];
 
         const skills = [
             // Programming Languages
-            'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'PHP', 'Swift', 'Go', 'Rust',
+            'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'PHP', 'Swift',
+            'Go', 'Rust', 'TypeScript', 'Kotlin', 'Scala', 'R', 'MATLAB',
+            'Perl', 'Haskell', 'Lua', 'Dart', 'Groovy', 'Assembly',
+            'Visual Basic', 'Objective-C', 'Shell Scripting', 'PowerShell',
+
             // Web Technologies
-            'HTML', 'CSS', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Django', 'Flask',
+            'HTML', 'CSS', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js',
+            'Django', 'Flask', 'Spring Boot', 'ASP.NET', 'Ruby on Rails',
+            'Laravel', 'jQuery', 'Bootstrap', 'Tailwind CSS', 'Material UI',
+            'Redux', 'GraphQL', 'REST API', 'WebSocket', 'Server-Sent Events',
+            'Progressive Web Apps', 'Web Components', 'Web Assembly',
+
+            // Mobile Development
+            'Android Development', 'iOS Development', 'React Native',
+            'Flutter', 'Xamarin', 'Ionic', 'PhoneGap', 'Mobile UI/UX',
+            'App Store Optimization', 'Mobile Security', 'Push Notifications',
+
             // Databases
             'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch',
-            // Cloud & DevOps
-            'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes', 'Jenkins', 'Git',
-            // AI & ML
-            'TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV', 'Natural Language Processing',
-            // Mobile Development
-            'Android', 'iOS', 'React Native', 'Flutter', 'Kotlin',
-            // Other Skills
-            'Agile', 'Scrum', 'Project Management', 'Team Leadership', 'Problem Solving'
-        ];
+            'Oracle', 'SQL Server', 'SQLite', 'Cassandra', 'DynamoDB',
+            'Firebase', 'Neo4j', 'MariaDB', 'CouchDB', 'InfluxDB',
 
-        const experienceLevels = [
-            'Intern',
-            'Entry Level',
-            'Junior',
-            'Mid Level',
-            'Senior',
-            'Lead',
-            'Manager',
-            'Director',
-            'Executive'
+            // Cloud & DevOps
+            'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes',
+            'Jenkins', 'Git', 'Terraform', 'Ansible', 'Chef', 'Puppet',
+            'CircleCI', 'Travis CI', 'GitHub Actions', 'Bitbucket',
+            'Cloud Architecture', 'Microservices', 'Service Mesh',
+
+            // AI & ML
+            'TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV',
+            'Natural Language Processing', 'Computer Vision',
+            'Deep Learning', 'Neural Networks', 'Reinforcement Learning',
+            'Machine Learning Algorithms', 'Data Mining', 'Pattern Recognition',
+
+            // Data Science & Analytics
+            'Data Analysis', 'Data Visualization', 'Statistical Analysis',
+            'Big Data', 'Hadoop', 'Spark', 'Power BI', 'Tableau',
+            'Data Warehousing', 'ETL', 'Data Modeling', 'Business Intelligence',
+            'Predictive Analytics', 'A/B Testing', 'Data Mining',
+
+            // Security
+            'Cybersecurity', 'Network Security', 'Ethical Hacking',
+            'Penetration Testing', 'Security Auditing', 'Cryptography',
+            'Vulnerability Assessment', 'Security Protocols', 'Firewall Management',
+
+            // Project Management
+            'Agile', 'Scrum', 'Kanban', 'JIRA', 'Trello', 'MS Project',
+            'Risk Management', 'Quality Assurance', 'Requirements Analysis',
+            'Technical Documentation', 'Team Leadership',
+
+            // Design
+            'UI Design', 'UX Design', 'Graphic Design', 'Adobe Photoshop',
+            'Adobe Illustrator', 'Figma', 'Sketch', 'InVision', 'Zeplin',
+            'Wireframing', 'Prototyping', 'Design Systems',
+
+            // Soft Skills
+            'Problem Solving', 'Critical Thinking', 'Communication',
+            'Team Collaboration', 'Time Management', 'Leadership',
+            'Presentation Skills', 'Negotiation', 'Conflict Resolution',
+            'Adaptability', 'Creativity', 'Emotional Intelligence',
+
+            // Business Skills
+            'Strategic Planning', 'Business Analysis', 'Product Management',
+            'Market Research', 'Digital Marketing', 'SEO', 'Content Strategy',
+            'Social Media Marketing', 'Email Marketing', 'Growth Hacking',
+            'Customer Relationship Management', 'Sales'
         ];
 
         // Initialize profile data
