@@ -501,6 +501,159 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 247, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f7ff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 247, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f7ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* Confirmation Dialog */
+        .confirm-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            z-index: 2000;
+            display: none;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .confirm-dialog.active {
+            display: block;
+        }
+
+        .confirm-dialog h3 {
+            color: #00f7ff;
+            margin-bottom: 1rem;
+        }
+
+        .confirm-dialog p {
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .confirm-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: bold;
+        }
+
+        .confirm-btn.confirm {
+            background: #00f7ff;
+            color: #000;
+        }
+
+        .confirm-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Edit buttons */
+        .edit-btn {
+            background: none;
+            border: none;
+            color: #00f7ff;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Error styles */
+        .error-message {
+            color: #ff3333;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-input.error {
+            border-color: #ff3333;
+        }
+
+        /* URL validation styles */
+        .url-validation {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .url-validation .status-icon {
+            width: 16px;
+            height: 16px;
+            display: none;
+        }
+
+        .url-validation.valid .status-icon.valid {
+            display: block;
+            color: #00ff00;
+        }
+
+        .url-validation.invalid .status-icon.invalid {
+            display: block;
+            color: #ff3333;
+        }
     </style>
 </head>
 <body>
@@ -745,6 +898,21 @@
     <!-- Success Message -->
     <div class="success-message" id="successMessage">
         Profile updated successfully!
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div class="confirm-dialog" id="confirmDialog">
+        <h3>Confirm Action</h3>
+        <p id="confirmMessage">Are you sure you want to proceed?</p>
+        <div class="confirm-buttons">
+            <button class="confirm-btn cancel" onclick="closeConfirmDialog()">Cancel</button>
+            <button class="confirm-btn confirm" id="confirmAction">Confirm</button>
+        </div>
     </div>
 
     <script>
@@ -1153,6 +1321,9 @@
         // Function to submit education
         async function submitEducation(event) {
             event.preventDefault();
+            if (!validateForm('educationForm')) return;
+
+            showLoading();
             const education = {
                 school: document.getElementById('school').value,
                 degree: document.getElementById('degree').value,
@@ -1178,17 +1349,23 @@
                     showSuccessMessage('Education added successfully!');
                     document.getElementById('educationForm').reset();
                 } else {
-                    showErrorMessage('Failed to add education. Please try again.');
+                    const error = await response.json();
+                    showErrorMessage(error.message || 'Failed to add education');
                 }
             } catch (error) {
                 console.error('Error adding education:', error);
-                showErrorMessage('Failed to add education. Please try again.');
+                showErrorMessage('Network error. Please try again.');
+            } finally {
+                hideLoading();
             }
         }
 
         // Function to submit experience
         async function submitExperience(event) {
             event.preventDefault();
+            if (!validateForm('experienceForm')) return;
+
+            showLoading();
             const experience = {
                 company: document.getElementById('company').value,
                 position: document.getElementById('position').value,
@@ -1215,24 +1392,29 @@
                     showSuccessMessage('Experience added successfully!');
                     document.getElementById('experienceForm').reset();
                 } else {
-                    showErrorMessage('Failed to add experience. Please try again.');
+                    const error = await response.json();
+                    showErrorMessage(error.message || 'Failed to add experience');
                 }
             } catch (error) {
                 console.error('Error adding experience:', error);
-                showErrorMessage('Failed to add experience. Please try again.');
+                showErrorMessage('Network error. Please try again.');
+            } finally {
+                hideLoading();
             }
         }
 
         // Function to submit skill
         async function submitSkill(event) {
             event.preventDefault();
-            const skill = document.getElementById('skillName').value;
+            if (!validateForm('skillForm')) return;
 
+            const skill = document.getElementById('skillName').value;
             if (profileData.skills.includes(skill)) {
                 showErrorMessage('Skill already exists!');
                 return;
             }
 
+            showLoading();
             try {
                 const response = await fetch('/api/profile/skills', {
                     method: 'POST',
@@ -1250,11 +1432,14 @@
                     showSuccessMessage('Skill added successfully!');
                     document.getElementById('skillForm').reset();
                 } else {
-                    showErrorMessage('Failed to add skill. Please try again.');
+                    const error = await response.json();
+                    showErrorMessage(error.message || 'Failed to add skill');
                 }
             } catch (error) {
                 console.error('Error adding skill:', error);
-                showErrorMessage('Failed to add skill. Please try again.');
+                showErrorMessage('Network error. Please try again.');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -1320,29 +1505,41 @@
 
         // Function to remove skill
         async function removeSkill(skill) {
-            try {
-                const response = await fetch(`/api/profile/skills/${encodeURIComponent(skill)}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+            showConfirmDialog(`Are you sure you want to remove "${skill}" from your skills?`, async () => {
+                showLoading();
+                try {
+                    const response = await fetch(`/api/profile/skills/${encodeURIComponent(skill)}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
 
-                if (response.ok) {
-                    profileData.skills = profileData.skills.filter(s => s !== skill);
-                    renderSkills();
-                    showSuccessMessage('Skill removed successfully!');
-                } else {
-                    showErrorMessage('Failed to remove skill. Please try again.');
+                    if (response.ok) {
+                        profileData.skills = profileData.skills.filter(s => s !== skill);
+                        renderSkills();
+                        showSuccessMessage('Skill removed successfully!');
+                    } else {
+                        const error = await response.json();
+                        showErrorMessage(error.message || 'Failed to remove skill');
+                    }
+                } catch (error) {
+                    console.error('Error removing skill:', error);
+                    showErrorMessage('Network error. Please try again.');
+                } finally {
+                    hideLoading();
                 }
-            } catch (error) {
-                console.error('Error removing skill:', error);
-                showErrorMessage('Failed to remove skill. Please try again.');
-            }
+            });
         }
 
         // Function to update social links
         async function updateSocialLinks(type, url) {
+            if (!isValidUrl(url)) {
+                showErrorMessage(`Please enter a valid ${type} URL`);
+                return;
+            }
+
+            showLoading();
             try {
                 const response = await fetch('/api/profile/social', {
                     method: 'PUT',
@@ -1357,41 +1554,52 @@
 
                 if (response.ok) {
                     profileData.social[type] = url;
+                    document.getElementById(`${type}Link`).href = url;
                     showSuccessMessage(`${type} URL updated successfully!`);
                 } else {
-                    showErrorMessage(`Failed to update ${type} URL. Please try again.`);
+                    const error = await response.json();
+                    showErrorMessage(error.message || `Failed to update ${type} URL`);
                 }
             } catch (error) {
                 console.error('Error updating social link:', error);
-                showErrorMessage(`Failed to update ${type} URL. Please try again.`);
+                showErrorMessage('Network error. Please try again.');
+            } finally {
+                hideLoading();
             }
         }
 
         // Function to update profile
         async function updateProfile() {
-            try {
-                const response = await fetch('/api/profile', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify(profileData)
-                });
+            showConfirmDialog('Are you sure you want to update your profile?', async () => {
+                showLoading();
+                try {
+                    const response = await fetch('/api/profile', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(profileData)
+                    });
 
-                if (response.ok) {
-                    showSuccessMessage('Profile updated successfully!');
-                } else {
-                    showErrorMessage('Failed to update profile. Please try again.');
+                    if (response.ok) {
+                        showSuccessMessage('Profile updated successfully!');
+                    } else {
+                        const error = await response.json();
+                        showErrorMessage(error.message || 'Failed to update profile');
+                    }
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    showErrorMessage('Network error. Please try again.');
+                } finally {
+                    hideLoading();
                 }
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                showErrorMessage('Failed to update profile. Please try again.');
-            }
+            });
         }
 
         // Function to load profile data
         async function loadProfileData() {
+            showLoading();
             try {
                 const response = await fetch('/api/profile', {
                     headers: {
@@ -1424,6 +1632,8 @@
             } catch (error) {
                 console.error('Error loading profile:', error);
                 showErrorMessage('Failed to load profile data. Please try again.');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -1458,17 +1668,85 @@
             }
         });
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadProfileData();
-            
-            // Initialize dropdowns
-            createDropdown('school', universities);
-            createDropdown('degree', degrees);
-            createDropdown('field', fields);
-            createDropdown('company', companies);
-            createDropdown('position', positions);
-            createDropdown('skillName', skills);
+        // Loading state management
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // Confirmation dialog
+        function showConfirmDialog(message, onConfirm) {
+            const dialog = document.getElementById('confirmDialog');
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmAction').onclick = () => {
+                onConfirm();
+                closeConfirmDialog();
+            };
+            dialog.classList.add('active');
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById('confirmDialog').classList.remove('active');
+        }
+
+        // URL validation
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        // Form validation
+        function validateForm(formId) {
+            const form = document.getElementById(formId);
+            const inputs = form.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const errorDiv = input.parentElement.querySelector('.error-message');
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    if (errorDiv) {
+                        errorDiv.textContent = 'This field is required';
+                        errorDiv.style.display = 'block';
+                    }
+                    isValid = false;
+                } else {
+                    input.classList.remove('error');
+                    if (errorDiv) {
+                        errorDiv.style.display = 'none';
+                    }
+                }
+            });
+
+            return isValid;
+        }
+
+        // Initialize the page with enhanced error handling
+        document.addEventListener('DOMContentLoaded', async function() {
+            showLoading();
+            try {
+                await loadProfileData();
+                
+                // Initialize dropdowns
+                createDropdown('school', universities);
+                createDropdown('degree', degrees);
+                createDropdown('field', fields);
+                createDropdown('company', companies);
+                createDropdown('position', positions);
+                createDropdown('skillName', skills);
+            } catch (error) {
+                console.error('Error initializing page:', error);
+                showErrorMessage('Failed to load profile data. Please refresh the page.');
+            } finally {
+                hideLoading();
+            }
         });
     </script>
 </body>
