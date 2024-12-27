@@ -259,6 +259,7 @@
             }
         }
     </style>
+    <script src="/js/config.js"></script>
 </head>
 <body>
     <!-- Sidebar -->
@@ -302,7 +303,7 @@
     <div class="main-content">
         <div class="header-actions">
             <h1 class="page-title">My Profile</h1>
-            <button class="update-profile-btn" onclick="updateProfile()">Update Profile</button>
+            <button class="add-button" onclick="updateSocialLinks(event)">Update Profile</button>
         </div>
 
         <!-- Education Section -->
@@ -456,11 +457,14 @@
     </div>
 
     <script>
-        // Get auth token from localStorage
+        // Get auth token and redirect if not logged in
         const token = localStorage.getItem('token');
         if (!token) {
             window.location.href = '/login.html';
         }
+
+        // API Base URL - update based on your server configuration
+        const API_BASE_URL = 'https://careerconnect-server-7yxzk4ldi-vedit-agrawals-projects.vercel.app';
 
         // API headers with auth token
         const headers = {
@@ -486,24 +490,38 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // Fetch user profile
+        // Fetch user profile with proper error handling
         async function fetchProfile() {
             showLoading();
             try {
-                const response = await fetch('/api/profile', {
+                console.log('Fetching profile...');
+                console.log('API URL:', `${API_BASE_URL}/api/profile`);
+                console.log('Headers:', headers);
+
+                const response = await fetch(`${API_BASE_URL}/api/profile`, {
                     method: 'GET',
-                    headers
+                    headers,
+                    mode: 'cors'
                 });
                 
+                console.log('Response status:', response.status);
+                const data = await response.text();
+                console.log('Response data:', data);
+
                 if (!response.ok) {
-                    throw new Error('Failed to fetch profile');
+                    if (response.status === 401) {
+                        localStorage.removeItem('token');
+                        window.location.href = '/login.html';
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                const profile = await response.json();
+                const profile = JSON.parse(data);
                 displayProfile(profile);
             } catch (error) {
                 console.error('Error:', error);
-                showError('Failed to load profile');
+                showError('Failed to load profile. Please check your connection and try again.');
             } finally {
                 hideLoading();
             }
@@ -592,7 +610,7 @@
             return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
         }
 
-        // Add education
+        // Add education with proper error handling
         async function addEducation(event) {
             event.preventDefault();
             showLoading();
@@ -604,22 +622,31 @@
                 school: formData.get('school'),
                 degree: formData.get('degree'),
                 field: formData.get('field'),
-                startDate: new Date(formData.get('startDate')).toISOString(),
-                endDate: formData.get('endDate') ? new Date(formData.get('endDate')).toISOString() : null
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate') || null
             };
 
             try {
-                const response = await fetch('/api/profile/education', {
+                console.log('Adding education...');
+                console.log('API URL:', `${API_BASE_URL}/api/profile/education`);
+                console.log('Data:', education);
+
+                const response = await fetch(`${API_BASE_URL}/api/profile/education`, {
                     method: 'POST',
                     headers,
+                    mode: 'cors',
                     body: JSON.stringify(education)
                 });
+
+                console.log('Response status:', response.status);
+                const data = await response.text();
+                console.log('Response data:', data);
 
                 if (!response.ok) {
                     throw new Error('Failed to add education');
                 }
 
-                const profile = await response.json();
+                const profile = JSON.parse(data);
                 displayProfile(profile);
                 closeModal('educationModal');
                 form.reset();
@@ -645,14 +672,15 @@
                 position: formData.get('position'),
                 level: formData.get('level'),
                 description: formData.get('description'),
-                startDate: new Date(formData.get('startDate')).toISOString(),
-                endDate: formData.get('endDate') ? new Date(formData.get('endDate')).toISOString() : null
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate') || null
             };
 
             try {
-                const response = await fetch('/api/profile/experience', {
+                const response = await fetch(`${API_BASE_URL}/api/profile/experience`, {
                     method: 'POST',
                     headers,
+                    credentials: 'include',
                     body: JSON.stringify(experience)
                 });
 
@@ -683,9 +711,10 @@
             const skill = formData.get('skill');
 
             try {
-                const response = await fetch('/api/profile/skills', {
+                const response = await fetch(`${API_BASE_URL}/api/profile/skills`, {
                     method: 'POST',
                     headers,
+                    credentials: 'include',
                     body: JSON.stringify({ skill })
                 });
 
@@ -710,9 +739,10 @@
         async function removeSkill(skill) {
             showLoading();
             try {
-                const response = await fetch(`/api/profile/skills/${encodeURIComponent(skill)}`, {
+                const response = await fetch(`${API_BASE_URL}/api/profile/skills/${encodeURIComponent(skill)}`, {
                     method: 'DELETE',
-                    headers
+                    headers,
+                    credentials: 'include'
                 });
 
                 if (!response.ok) {
@@ -739,9 +769,10 @@
             const github = document.getElementById('githubUrl').value;
 
             try {
-                const response = await fetch('/api/profile/social', {
+                const response = await fetch(`${API_BASE_URL}/api/profile/social`, {
                     method: 'PUT',
                     headers,
+                    credentials: 'include',
                     body: JSON.stringify({ linkedin, github })
                 });
 
@@ -781,7 +812,12 @@
         }
 
         // Initialize profile on page load
-        document.addEventListener('DOMContentLoaded', fetchProfile);
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProfile().catch(error => {
+                console.error('Failed to initialize profile:', error);
+                showError('Failed to initialize profile. Please refresh the page.');
+            });
+        });
     </script>
 </body>
 </html> 
