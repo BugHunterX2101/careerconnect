@@ -5,8 +5,17 @@ const config = require('./config');
 
 const app = express();
 
+// CORS configuration
+const corsOptions = {
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Content-Length', 'X-Requested-With']
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Connect to MongoDB
@@ -29,5 +38,5 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Something broke!' });
 });
 
-const PORT = config.port;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
