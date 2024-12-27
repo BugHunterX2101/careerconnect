@@ -33,7 +33,8 @@ const api = {
                 ...options,
                 headers,
                 signal: controller.signal,
-                mode: 'cors'
+                mode: 'cors',
+                credentials: 'include'
             };
 
             console.log('Request options:', {
@@ -48,6 +49,7 @@ const api = {
             clearTimeout(timeoutId);
 
             console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
             let data;
             const text = await response.text();
@@ -62,6 +64,7 @@ const api = {
 
             if (!response.ok) {
                 if (response.status === 401) {
+                    console.log('Unauthorized request, clearing auth data');
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
                     window.location.href = '/login.html';
@@ -74,7 +77,8 @@ const api = {
         } catch (error) {
             console.error(`[${new Date().toISOString()}] Request failed:`, {
                 url,
-                error: error.message
+                error: error.message,
+                stack: error.stack
             });
 
             if (error.name === 'AbortError') {
@@ -83,6 +87,10 @@ const api = {
 
             if (!navigator.onLine) {
                 throw new Error('No internet connection. Please check your network and try again.');
+            }
+
+            if (error.message.includes('Failed to fetch')) {
+                throw new Error('Unable to connect to the server. Please try again later.');
             }
 
             throw error;

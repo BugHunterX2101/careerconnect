@@ -36,12 +36,14 @@ window.onclick = function(event) {
 function showLoading() {
     if (loadingOverlay) {
         loadingOverlay.style.display = 'flex';
+        document.body.style.cursor = 'wait';
     }
 }
 
 function hideLoading() {
     if (loadingOverlay) {
         loadingOverlay.style.display = 'none';
+        document.body.style.cursor = 'default';
     }
 }
 
@@ -52,6 +54,14 @@ function showMessage(message, isError = false) {
     messageDiv.textContent = message;
     document.body.appendChild(messageDiv);
 
+    // Remove any existing messages
+    const existingMessages = document.querySelectorAll('.message');
+    existingMessages.forEach(msg => {
+        if (msg !== messageDiv) {
+            msg.remove();
+        }
+    });
+
     setTimeout(() => {
         messageDiv.remove();
     }, 3000);
@@ -61,15 +71,19 @@ function showMessage(message, isError = false) {
 async function fetchProfile() {
     try {
         showLoading();
+        console.log('Fetching profile data...');
         const response = await api.getProfile();
+        
         if (response.status === 'success' && response.data) {
+            console.log('Profile data received:', response.data);
             populateProfile(response.data);
         } else {
+            console.error('Invalid profile response:', response);
             throw new Error('Invalid profile data received');
         }
     } catch (error) {
         console.error('Failed to fetch profile:', error);
-        showMessage('Failed to load profile data. Please try again.', true);
+        showMessage(error.message || 'Failed to load profile data. Please try again.', true);
     } finally {
         hideLoading();
     }
@@ -139,24 +153,37 @@ function populateProfile(profile) {
 async function handleEducationSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    const educationData = {
-        school: form.school.value,
-        degree: form.degree.value,
-        field: form.field.value,
-        startDate: form.startDate.value,
-        endDate: form.endDate.value || null
-    };
-
+    
     try {
+        const educationData = {
+            school: form.school.value.trim(),
+            degree: form.degree.value.trim(),
+            field: form.field.value.trim(),
+            startDate: form.startDate.value,
+            endDate: form.endDate.value || null
+        };
+
+        // Validate required fields
+        if (!educationData.school || !educationData.degree || !educationData.field || !educationData.startDate) {
+            throw new Error('Please fill in all required fields');
+        }
+
         showLoading();
-        await api.addEducation(educationData);
-        closeModal('educationModal');
-        form.reset();
-        await fetchProfile();
-        showMessage('Education added successfully');
+        console.log('Submitting education data:', educationData);
+        
+        const response = await api.addEducation(educationData);
+        
+        if (response.status === 'success') {
+            closeModal('educationModal');
+            form.reset();
+            await fetchProfile();
+            showMessage('Education added successfully');
+        } else {
+            throw new Error(response.message || 'Failed to add education');
+        }
     } catch (error) {
         console.error('Failed to add education:', error);
-        showMessage('Failed to add education', true);
+        showMessage(error.message || 'Failed to add education', true);
     } finally {
         hideLoading();
     }
@@ -259,16 +286,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         const educationForm = document.getElementById('educationForm');
         if (educationForm) {
             educationForm.addEventListener('submit', handleEducationSubmit);
+        } else {
+            console.warn('Education form not found');
         }
 
         const experienceForm = document.getElementById('experienceForm');
         if (experienceForm) {
             experienceForm.addEventListener('submit', handleExperienceSubmit);
+        } else {
+            console.warn('Experience form not found');
         }
 
         const skillForm = document.getElementById('skillForm');
         if (skillForm) {
             skillForm.addEventListener('submit', handleSkillSubmit);
+        } else {
+            console.warn('Skill form not found');
         }
 
         // Fetch initial profile data

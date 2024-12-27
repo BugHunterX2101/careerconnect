@@ -104,27 +104,50 @@ router.post('/education', auth, async (req, res) => {
 // Add experience
 router.post('/experience', auth, async (req, res) => {
     try {
+        console.log('Adding experience for user:', req.user.id);
+        console.log('Experience data received:', req.body);
+
         const profile = await Profile.findOne({ userId: req.user.id });
         
         if (!profile) {
-            return res.status(404).json({ message: 'Profile not found' });
+            console.log('Profile not found for user:', req.user.id);
+            return res.status(404).json({
+                status: 'error',
+                message: 'Profile not found'
+            });
         }
 
         const { company, position, description, startDate, endDate } = req.body;
         
+        if (!company || !position || !startDate) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Missing required fields'
+            });
+        }
+
         profile.experience.unshift({
             company,
             position,
-            description,
+            description: description || '',
             startDate: new Date(startDate),
             endDate: endDate ? new Date(endDate) : null
         });
 
         await profile.save();
-        res.json(profile);
+        console.log('Experience added successfully');
+        
+        res.json({
+            status: 'success',
+            data: profile
+        });
     } catch (error) {
         console.error('Error adding experience:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to add experience',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 
