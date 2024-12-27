@@ -6,10 +6,10 @@ const allowedOrigins = [
     'http://localhost:5000',
     'http://127.0.0.1:5500',
     'http://127.0.0.1:3000',
-    'https://careerconnect-7af1-4mybxmhm9-vedit-agrawals-projects.vercel.app',
     'https://careerconnect-7af1.vercel.app',
     'https://careerconnect-client-7af1.vercel.app',
-    'https://careerconnect-server-7af1.vercel.app'
+    'https://careerconnect-server-7af1.vercel.app',
+    'https://careerconnect-7af1-git-main-vedit-agrawals-projects.vercel.app'
 ];
 
 // Debug function

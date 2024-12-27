@@ -39,7 +39,8 @@ const api = {
                 ...options,
                 headers,
                 signal: controller.signal,
-                mode: 'cors'
+                mode: 'cors',
+                credentials: 'include'
             };
 
             console.log('Request options:', {

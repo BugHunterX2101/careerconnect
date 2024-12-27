@@ -6,10 +6,11 @@ const auth = require('../middleware/auth');
 // Get user profile
 router.get('/', auth, async (req, res) => {
     try {
+        console.log('Fetching profile for user:', req.user.id);
         let profile = await Profile.findOne({ userId: req.user.id });
         
         if (!profile) {
-            // Create a new profile if it doesn't exist
+            console.log('Creating new profile for user:', req.user.id);
             profile = new Profile({
                 userId: req.user.id,
                 education: [],
@@ -22,12 +23,20 @@ router.get('/', auth, async (req, res) => {
                 }
             });
             await profile.save();
+            console.log('New profile created successfully');
         }
         
-        res.json(profile);
+        res.json({
+            status: 'success',
+            data: profile
+        });
     } catch (error) {
-        console.error('Error fetching profile:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        console.error('Error in profile route:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to fetch profile',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 

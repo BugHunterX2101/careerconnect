@@ -61,11 +61,15 @@ function showMessage(message, isError = false) {
 async function fetchProfile() {
     try {
         showLoading();
-        const profile = await api.getProfile();
-        populateProfile(profile);
+        const response = await api.getProfile();
+        if (response.status === 'success' && response.data) {
+            populateProfile(response.data);
+        } else {
+            throw new Error('Invalid profile data received');
+        }
     } catch (error) {
         console.error('Failed to fetch profile:', error);
-        showMessage('Failed to load profile data', true);
+        showMessage('Failed to load profile data. Please try again.', true);
     } finally {
         hideLoading();
     }
@@ -78,51 +82,56 @@ function populateProfile(profile) {
         return;
     }
 
-    // Education
-    const educationContainer = document.getElementById('educationList');
-    if (educationContainer && profile.education) {
-        educationContainer.innerHTML = profile.education.map(edu => `
-            <div class="education-item">
-                <h3>${edu.school}</h3>
-                <p>${edu.degree} - ${edu.field}</p>
-                <p>${edu.startDate} - ${edu.endDate || 'Present'}</p>
-            </div>
-        `).join('');
-    }
+    try {
+        // Education
+        const educationContainer = document.getElementById('educationList');
+        if (educationContainer && profile.education) {
+            educationContainer.innerHTML = profile.education.map(edu => `
+                <div class="education-item">
+                    <h3>${edu.school}</h3>
+                    <p>${edu.degree} - ${edu.field}</p>
+                    <p>${new Date(edu.startDate).toLocaleDateString()} - ${edu.endDate ? new Date(edu.endDate).toLocaleDateString() : 'Present'}</p>
+                </div>
+            `).join('');
+        }
 
-    // Experience
-    const experienceContainer = document.getElementById('experienceList');
-    if (experienceContainer && profile.experience) {
-        experienceContainer.innerHTML = profile.experience.map(exp => `
-            <div class="experience-item">
-                <h3>${exp.company}</h3>
-                <p>${exp.position}</p>
-                <p>${exp.startDate} - ${exp.endDate || 'Present'}</p>
-                <p>${exp.description}</p>
-            </div>
-        `).join('');
-    }
+        // Experience
+        const experienceContainer = document.getElementById('experienceList');
+        if (experienceContainer && profile.experience) {
+            experienceContainer.innerHTML = profile.experience.map(exp => `
+                <div class="experience-item">
+                    <h3>${exp.company}</h3>
+                    <p>${exp.position}</p>
+                    <p>${new Date(exp.startDate).toLocaleDateString()} - ${exp.endDate ? new Date(exp.endDate).toLocaleDateString() : 'Present'}</p>
+                    <p>${exp.description}</p>
+                </div>
+            `).join('');
+        }
 
-    // Skills
-    const skillsContainer = document.getElementById('skillsList');
-    if (skillsContainer && profile.skills) {
-        skillsContainer.innerHTML = profile.skills.map(skill => `
-            <div class="skill-item">
-                <span>${skill.name}</span>
-                <span>${skill.level}</span>
-            </div>
-        `).join('');
-    }
+        // Skills
+        const skillsContainer = document.getElementById('skillsList');
+        if (skillsContainer && profile.skills) {
+            skillsContainer.innerHTML = profile.skills.map(skill => `
+                <div class="skill-item">
+                    <span>${skill.name}</span>
+                    <span class="skill-level">${skill.level}</span>
+                </div>
+            `).join('');
+        }
 
-    // Social Links
-    if (profile.socialLinks) {
-        const linkedinInput = document.getElementById('linkedinUrl');
-        const githubInput = document.getElementById('githubUrl');
-        const portfolioInput = document.getElementById('portfolioUrl');
+        // Social Links
+        if (profile.socialLinks) {
+            const linkedinInput = document.getElementById('linkedinUrl');
+            const githubInput = document.getElementById('githubUrl');
+            const portfolioInput = document.getElementById('portfolioUrl');
 
-        if (linkedinInput) linkedinInput.value = profile.socialLinks.linkedin || '';
-        if (githubInput) githubInput.value = profile.socialLinks.github || '';
-        if (portfolioInput) portfolioInput.value = profile.socialLinks.portfolio || '';
+            if (linkedinInput) linkedinInput.value = profile.socialLinks.linkedin || '';
+            if (githubInput) githubInput.value = profile.socialLinks.github || '';
+            if (portfolioInput) portfolioInput.value = profile.socialLinks.portfolio || '';
+        }
+    } catch (error) {
+        console.error('Error populating profile:', error);
+        showMessage('Error displaying profile data', true);
     }
 }
 
