@@ -14,6 +14,7 @@ const corsOptions = {
         'http://localhost:3000',
         'http://localhost:5000',
         'http://127.0.0.1:5500',
+        'https://careerconnect-7af1-purckqozd-vedit-agrawals-projects.vercel.app',
         'https://careerconnect-client.vercel.app',
         'https://careerconnect.vercel.app'
     ],
@@ -23,9 +24,15 @@ const corsOptions = {
     exposedHeaders: ['Content-Length', 'X-Requested-With']
 };
 
-// Middleware
+// Apply CORS before any routes
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+});
 
 // Health check endpoint for Vercel
 app.get('/health', (req, res) => {
@@ -48,8 +55,29 @@ app.use('/api/profile', require('./routes/profile'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Something broke!' });
+    console.error('Error:', err);
+    console.error('Stack:', err.stack);
+    res.status(err.status || 500).json({
+        message: err.message || 'Something broke!',
+        path: req.path,
+        method: req.method
+    });
+});
+
+// Handle 404 errors
+app.use((req, res) => {
+    console.log('404 Not Found:', req.method, req.path);
+    res.status(404).json({
+        message: `Route ${req.method} ${req.path} not found`,
+        availableRoutes: [
+            '/api/auth/login',
+            '/api/auth/register',
+            '/api/profile',
+            '/api/profile/education',
+            '/api/profile/experience',
+            '/api/profile/skills'
+        ]
+    });
 });
 
 // Export for Vercel
