@@ -11,27 +11,31 @@ const educationSchema = new mongoose.Schema({
 const experienceSchema = new mongoose.Schema({
     company: { type: String, required: true },
     position: { type: String, required: true },
-    experienceLevel: { type: String, required: true },
+    level: { type: String, required: true },
+    description: { type: String },
     startDate: { type: Date, required: true },
-    endDate: { type: Date },
-    description: { type: String }
+    endDate: { type: Date }
 });
 
 const socialSchema = new mongoose.Schema({
-    linkedin: { type: String },
-    github: { type: String }
+    linkedin: { type: String, default: '' },
+    github: { type: String, default: '' }
 });
 
 const profileSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        unique: true
     },
     education: [educationSchema],
     experience: [experienceSchema],
     skills: [{ type: String }],
-    social: socialSchema,
+    social: {
+        type: socialSchema,
+        default: () => ({})
+    },
     createdAt: {
         type: Date,
         default: Date.now
