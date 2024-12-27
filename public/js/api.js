@@ -1,6 +1,9 @@
 // API Configuration
 const api = {
-    BASE_URL: 'https://careerconnect-server-7af1-jonwailh3-vedit-agrawals-projects.vercel.app',
+    // Use the current domain in production, localhost in development
+    BASE_URL: window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000'
+        : 'https://careerconnect-server-7af1-4phdqp9m-vedit-agrawals-projects.vercel.app',
     
     getHeaders() {
         const token = localStorage.getItem('token');
@@ -14,28 +17,35 @@ const api = {
 
     async makeRequest(url, options = {}) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
 
         try {
+            console.log('Making request to:', url);
+            console.log('Request options:', {
+                ...options,
+                headers: this.getHeaders(),
+                body: options.body ? JSON.parse(options.body) : undefined
+            });
+
             const response = await fetch(url, {
                 ...options,
                 headers: this.getHeaders(),
                 mode: 'cors',
-                credentials: 'include',
                 signal: controller.signal
             });
 
             clearTimeout(timeoutId);
 
             let data;
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
+            try {
                 data = await response.json();
-            } else {
-                throw new Error('Invalid response format');
+            } catch (e) {
+                console.error('Failed to parse JSON response:', e);
+                throw new Error('Invalid response format from server');
             }
 
-            console.log(`API Response (${url}):`, data);
+            console.log('Response status:', response.status);
+            console.log('Response data:', data);
 
             if (!response.ok) {
                 throw new Error(data.message || `Request failed with status ${response.status}`);
@@ -44,27 +54,57 @@ const api = {
             return data;
         } catch (error) {
             if (error.name === 'AbortError') {
-                throw new Error('Request timed out');
+                throw new Error('Request timed out. Please try again.');
             }
-            console.error('API Request Error:', error);
+            console.error('Request failed:', error);
             throw error;
+        } finally {
+            clearTimeout(timeoutId);
         }
     },
 
     async register(userData) {
         console.log('Registering user:', { ...userData, password: '[REDACTED]' });
-        return this.makeRequest(`${this.BASE_URL}/api/auth/register`, {
-            method: 'POST',
-            body: JSON.stringify(userData)
-        });
+        try {
+            const data = await this.makeRequest(`${this.BASE_URL}/api/auth/register`, {
+                method: 'POST',
+                body: JSON.stringify(userData)
+            });
+            
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                }
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('Registration failed:', error);
+            throw new Error(error.message || 'Registration failed. Please try again.');
+        }
     },
 
     async login(credentials) {
         console.log('Logging in user:', credentials.email);
-        return this.makeRequest(`${this.BASE_URL}/api/auth/login`, {
-            method: 'POST',
-            body: JSON.stringify(credentials)
-        });
+        try {
+            const data = await this.makeRequest(`${this.BASE_URL}/api/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify(credentials)
+            });
+            
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                }
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('Login failed:', error);
+            throw new Error(error.message || 'Login failed. Please try again.');
+        }
     },
 
     async getProfile() {

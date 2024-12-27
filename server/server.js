@@ -1,12 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { corsMiddleware, additionalHeaders } = require('./middleware/cors');
+const { corsMiddleware, additionalHeaders, debugCors } = require('./middleware/cors');
 const config = require('./config');
 
 const app = express();
 
 // Set strict query for Mongoose
 mongoose.set('strictQuery', true);
+
+// Debug middleware
+app.use(debugCors);
 
 // Apply CORS middleware
 app.use(corsMiddleware);
@@ -51,9 +54,11 @@ app.get('/api/test', (req, res) => {
 // Error handling for JSON parsing
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.error('JSON Parsing Error:', err);
         return res.status(400).json({
             status: 'error',
-            message: 'Invalid JSON payload'
+            message: 'Invalid JSON payload',
+            details: err.message
         });
     }
     next(err);
@@ -76,7 +81,17 @@ app.use((err, req, res, next) => {
     if (err.code === 11000) {
         return res.status(400).json({
             status: 'error',
-            message: 'Duplicate field value entered'
+            message: 'Duplicate field value entered',
+            field: Object.keys(err.keyPattern)[0]
+        });
+    }
+
+    // Handle CORS errors
+    if (err.message.includes('Not allowed by CORS')) {
+        return res.status(403).json({
+            status: 'error',
+            message: 'CORS Error: Origin not allowed',
+            origin: req.headers.origin
         });
     }
 
