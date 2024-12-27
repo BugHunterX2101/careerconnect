@@ -9,25 +9,22 @@ const app = express();
 mongoose.set('strictQuery', true);
 
 // CORS configuration
-const corsOptions = {
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:5000',
-        'http://127.0.0.1:5500',
-        'https://careerconnect-7af1-qc1do9dsa-vedit-agrawals-projects.vercel.app',
-        'https://careerconnect-client.vercel.app',
-        'https://careerconnect.vercel.app',
-        'https://careerconnect-server-qc1do9dsa-vedit-agrawals-projects.vercel.app'
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    exposedHeaders: ['Content-Length', 'X-Requested-With']
-};
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    res.header('Access-Control-Allow-Origin', origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 
-// Apply CORS before any routes
-app.use(cors(corsOptions));
+// Body parser middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -36,54 +33,58 @@ app.use((req, res, next) => {
     next();
 });
 
-// Auth middleware
+// Simplified auth middleware
 const authMiddleware = (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token || !token.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'No token provided' });
-    }
     try {
-        // Add your token verification logic here
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'No token provided' });
+        }
+        // Token exists, proceed with the request
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Invalid token' });
+        console.error('Auth Error:', error);
+        return res.status(401).json({ message: 'Authentication failed' });
     }
 };
 
-// Health check endpoint for Vercel
+// Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({ 
         status: 'OK',
         timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV
+        env: process.env.NODE_ENV || 'development'
     });
 });
 
 // Test endpoint
 app.get('/api/test', (req, res) => {
-    res.status(200).json({ message: 'API is working' });
+    res.status(200).json({ 
+        message: 'API is working',
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Connect to MongoDB
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
+    useUnifiedTopology: true
 })
 .then(() => console.log('MongoDB Connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+.catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+});
 
-// Routes with auth middleware
+// Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profile', authMiddleware, require('./routes/profile'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err);
-    console.error('Stack:', err.stack);
     res.status(err.status || 500).json({
-        message: err.message || 'Something broke!',
+        message: err.message || 'Internal server error',
         path: req.path,
         method: req.method,
         timestamp: new Date().toISOString()
@@ -92,20 +93,9 @@ app.use((err, req, res, next) => {
 
 // Handle 404 errors
 app.use((req, res) => {
-    console.log('404 Not Found:', req.method, req.path);
     res.status(404).json({
         message: `Route ${req.method} ${req.path} not found`,
-        timestamp: new Date().toISOString(),
-        availableRoutes: [
-            '/api/auth/login',
-            '/api/auth/register',
-            '/api/profile',
-            '/api/profile/education',
-            '/api/profile/experience',
-            '/api/profile/skills',
-            '/health',
-            '/api/test'
-        ]
+        timestamp: new Date().toISOString()
     });
 });
 

@@ -258,6 +258,39 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Header styles */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .page-title {
+            color: #00f7ff;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .update-profile-btn {
+            background: #00f7ff;
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .update-profile-btn:hover {
+            background: #00d8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 247, 255, 0.4);
+        }
     </style>
     <script src="/js/config.js"></script>
 </head>
@@ -303,7 +336,7 @@
     <div class="main-content">
         <div class="header-actions">
             <h1 class="page-title">My Profile</h1>
-            <button class="add-button" onclick="updateSocialLinks(event)">Update Profile</button>
+            <button class="update-profile-btn" onclick="updateSocialLinks(event)">Update Profile</button>
         </div>
 
         <!-- Education Section -->
@@ -464,7 +497,7 @@
         }
 
         // API Base URL - update based on your server configuration
-        const API_BASE_URL = 'https://careerconnect-server-7yxzk4ldi-vedit-agrawals-projects.vercel.app';
+        const API_BASE_URL = 'https://careerconnect-server-975zxi3gi-vedit-agrawals-projects.vercel.app';
 
         // API headers with auth token
         const headers = {
