@@ -3,7 +3,7 @@ const api = {
     // Use the current domain in production, localhost in development
     BASE_URL: window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
         ? 'http://localhost:3000'
-        : 'https://careerconnect-7af1-fr5bp60o2-vedit-agrawals-projects.vercel.app',
+        : window.location.protocol + '//' + window.location.hostname,
     
     getHeaders() {
         const token = localStorage.getItem('token');
@@ -11,8 +11,7 @@ const api = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': token ? `Bearer ${token}` : '',
-            'Origin': window.location.origin,
-            'X-Requested-With': 'XMLHttpRequest'
+            'Origin': window.location.origin
         };
         console.log('Request headers:', headers);
         return headers;
@@ -33,8 +32,7 @@ const api = {
                 ...options,
                 headers: this.getHeaders(),
                 signal: controller.signal,
-                mode: 'cors',
-                credentials: 'include'
+                mode: 'cors'
             };
 
             console.log('Final fetch options:', fetchOptions);
