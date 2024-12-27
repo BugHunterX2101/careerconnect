@@ -7,13 +7,24 @@ const api = {
     
     getHeaders() {
         const token = localStorage.getItem('token');
+        if (!token && window.location.pathname !== '/login.html' && window.location.pathname !== '/signup.html') {
+            window.location.href = '/login.html';
+            return null;
+        }
+
         const headers = {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Origin': window.location.origin
+            'Accept': 'application/json'
         };
-        console.log('Request headers:', headers);
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        console.log('Request headers:', {
+            ...headers,
+            Authorization: headers.Authorization ? '[PRESENT]' : '[MISSING]'
+        });
         return headers;
     },
 
@@ -23,19 +34,24 @@ const api = {
 
         try {
             console.log(`[${new Date().toISOString()}] Making request to:`, url);
-            console.log('Request options:', {
-                ...options,
-                headers: this.getHeaders()
-            });
+            
+            const headers = this.getHeaders();
+            if (!headers) return; // User was redirected to login
 
             const fetchOptions = {
                 ...options,
-                headers: this.getHeaders(),
+                headers,
                 signal: controller.signal,
-                mode: 'cors'
+                credentials: 'include'
             };
 
-            console.log('Final fetch options:', fetchOptions);
+            console.log('Request options:', {
+                ...fetchOptions,
+                headers: {
+                    ...fetchOptions.headers,
+                    Authorization: fetchOptions.headers.Authorization ? '[PRESENT]' : '[MISSING]'
+                }
+            });
 
             const response = await fetch(url, fetchOptions);
             clearTimeout(timeoutId);
@@ -54,9 +70,13 @@ const api = {
                 throw new Error(`Invalid response format from server: ${text}`);
             }
 
-            console.log('Parsed response data:', data);
-
             if (!response.ok) {
+                if (response.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login.html';
+                    return;
+                }
                 const error = new Error(data.message || `Request failed with status ${response.status}`);
                 error.status = response.status;
                 error.data = data;
@@ -75,7 +95,6 @@ const api = {
                 throw new Error('Request timed out. Please try again.');
             }
 
-            // Check for network errors
             if (!navigator.onLine) {
                 throw new Error('No internet connection. Please check your network and try again.');
             }
