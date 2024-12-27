@@ -6,6 +6,7 @@ const auth = require('../middleware/auth');
 // Get user profile
 router.get('/', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
@@ -20,6 +21,7 @@ router.get('/', auth, async (req, res) => {
 // Create or update profile
 router.post('/', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         let profile = await Profile.findOne({ userId: req.user.id });
         if (profile) {
             // Update existing profile
@@ -46,6 +48,7 @@ router.post('/', auth, async (req, res) => {
 // Add education
 router.post('/education', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
@@ -62,6 +65,7 @@ router.post('/education', auth, async (req, res) => {
 // Delete education
 router.delete('/education/:edu_id', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
@@ -80,6 +84,7 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
 // Add experience
 router.post('/experience', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
@@ -96,6 +101,7 @@ router.post('/experience', auth, async (req, res) => {
 // Delete experience
 router.delete('/experience/:exp_id', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
@@ -114,6 +120,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
 // Update skills
 router.put('/skills', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
@@ -130,6 +137,7 @@ router.put('/skills', auth, async (req, res) => {
 // Update social links
 router.put('/social', auth, async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const profile = await Profile.findOne({ userId: req.user.id });
         if (!profile) {
             return res.status(404).json({ message: 'Profile not found' });
