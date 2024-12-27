@@ -20,6 +20,52 @@
             display: flex;
         }
 
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-right: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .logo {
+            color: #00f7ff;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 247, 255, 0.1);
+            color: #00f7ff;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 250px;
+        }
+
         /* Profile sections */
         .profile-section {
             background: rgba(255, 255, 255, 0.05);
@@ -44,42 +90,6 @@
             align-items: center;
         }
 
-        /* Header Actions */
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1rem 0;
-        }
-
-        .page-title {
-            color: #00f7ff;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
-        }
-
-        .update-profile-btn {
-            background: #00f7ff;
-            color: #000;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-left: auto;
-        }
-
-        .update-profile-btn:hover {
-            background: #00d8ff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
-        }
-
         /* Add buttons */
         .add-button {
             background: rgba(0, 247, 255, 0.1);
@@ -89,7 +99,6 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
         }
 
         .add-button:hover {
@@ -97,123 +106,117 @@
             transform: translateY(-2px);
         }
 
-        /* Education and Experience items */
-        .education-item, .experience-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            margin: 2rem auto;
             border: 1px solid rgba(0, 247, 255, 0.1);
-            transition: all 0.3s ease;
         }
 
-        .education-item:hover, .experience-item:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .item-header {
+        .modal-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .item-title {
-            color: #00f7ff;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .item-subtitle {
-            color: #fff;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .item-date {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* Skills section */
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-
-        .skill-tag {
-            background: rgba(0, 247, 255, 0.1);
-            color: #00f7ff;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
         }
 
-        .skill-tag:hover {
-            background: rgba(0, 247, 255, 0.2);
-            transform: translateY(-2px);
+        .modal-title {
+            color: #00f7ff;
+            font-size: 1.5rem;
         }
 
-        .remove-skill {
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
             cursor: pointer;
-            opacity: 0.7;
             transition: all 0.3s ease;
         }
 
-        .remove-skill:hover {
-            opacity: 1;
+        .modal-close:hover {
+            color: #00f7ff;
             transform: rotate(90deg);
         }
 
-        /* Social Links */
-        .social-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        /* Form styles */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00f7ff;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 5px;
             color: #fff;
-            text-decoration: none;
             transition: all 0.3s ease;
         }
 
-        .social-link:hover {
-            background: rgba(0, 247, 255, 0.1);
+        .form-input:focus {
+            outline: none;
+            border-color: #00f7ff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .submit-btn {
+            background: #00f7ff;
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #00d8ff;
             transform: translateY(-2px);
         }
 
-        .social-link svg {
-            width: 24px;
-            height: 24px;
-            fill: #00f7ff;
-        }
-
-        /* Success message */
-        .success-message {
+        /* Messages */
+        .message {
             position: fixed;
             top: 20px;
             right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .success-message {
             background: rgba(0, 247, 255, 0.9);
             color: #000;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            z-index: 1000;
-            display: none;
-            animation: slideIn 0.3s ease-out;
-            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.9);
+            color: #fff;
         }
 
         @keyframes slideIn {
@@ -227,578 +230,123 @@
             }
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
-
-            .sidebar {
-                display: none;
-            }
-
-            .header-actions {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-
-            .profile-section {
-                padding: 1.5rem;
-            }
-
-            .social-links {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Sidebar styles */
-        .sidebar {
-            width: 250px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 2rem 0;
-            border-right: 1px solid rgba(0, 247, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            height: 100vh;
-            left: 0;
-            top: 0;
-        }
-
-        .brand {
-            color: #00f7ff;
-            font-size: 1.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 1rem 2rem;
-            color: #888;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: #00f7ff;
-            background: rgba(0, 247, 255, 0.1);
-        }
-
-        .nav-link svg {
-            width: 20px;
-            height: 20px;
-            margin-right: 1rem;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            padding: 1rem 2rem;
-            margin-top: auto;
-            background: rgba(0, 247, 255, 0.05);
-        }
-
-        .profile-info {
-            margin-left: 1rem;
-        }
-
-        .profile-name {
-            color: #fff;
-            font-size: 1rem;
-        }
-
-        .profile-role {
-            color: #888;
-            font-size: 0.8rem;
-        }
-
-        /* Main content adjustment */
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-            min-height: 100vh;
-        }
-
-        /* Grid Layout */
-        .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid rgba(0, 247, 255, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
-        }
-
-        .modal-title {
-            color: #00f7ff;
-            font-size: 1.5rem;
-            margin: 0;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            color: #00f7ff;
-            transform: rotate(90deg);
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            color: #00f7ff;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 247, 255, 0.2);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #00f7ff;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 10px rgba(0, 247, 255, 0.1);
-        }
-
-        .date-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #00f7ff;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-        }
-
-        .submit-btn:hover {
-            background: #00d8ff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
-        }
-
-        /* Card Styles */
-        .profile-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            height: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.1);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            .profile-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .modal-content {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
-
-            .date-inputs {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(0, 247, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #00f7ff;
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Loading Overlay */
+        /* Loading overlay */
         .loading-overlay {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            display: none;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
         }
 
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-overlay .spinner {
+        .spinner {
             width: 50px;
             height: 50px;
             border: 3px solid rgba(0, 247, 255, 0.3);
-            border-radius: 50%;
             border-top-color: #00f7ff;
-            animation: spin 1s ease-in-out infinite;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        /* Confirmation Dialog */
-        .confirm-dialog {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid rgba(0, 247, 255, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            z-index: 2000;
-            display: none;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .confirm-dialog.active {
-            display: block;
-        }
-
-        .confirm-dialog h3 {
-            color: #00f7ff;
-            margin-bottom: 1rem;
-        }
-
-        .confirm-dialog p {
-            color: #fff;
-            margin-bottom: 2rem;
-        }
-
-        .confirm-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .confirm-btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-weight: bold;
-        }
-
-        .confirm-btn.confirm {
-            background: #00f7ff;
-            color: #000;
-        }
-
-        .confirm-btn.cancel {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-
-        .confirm-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Edit buttons */
-        .edit-btn {
-            background: none;
-            border: none;
-            color: #00f7ff;
-            cursor: pointer;
-            padding: 5px;
-            margin-left: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .edit-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Error styles */
-        .error-message {
-            color: #ff3333;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        .form-input.error {
-            border-color: #ff3333;
-        }
-
-        /* URL validation styles */
-        .url-validation {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .url-validation .status-icon {
-            width: 16px;
-            height: 16px;
-            display: none;
-        }
-
-        .url-validation.valid .status-icon.valid {
-            display: block;
-            color: #00ff00;
-        }
-
-        .url-validation.invalid .status-icon.invalid {
-            display: block;
-            color: #ff3333;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <h1 class="brand">CareerConnect</h1>
-        <ul class="nav-menu">
+        <a href="/" class="logo">CareerConnect</a>
+        <ul class="nav-links">
             <li class="nav-item">
-                <a href="./dashboard.html" class="nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
-                    </svg>
-                    Dashboard
+                <a href="/dashboard.html" class="nav-link">
+                    <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="./profile.html" class="nav-link active">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                    Profile
+                <a href="/profile.html" class="nav-link active">
+                    <span>Profile</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="./jobs.html" class="nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
-                    </svg>
-                    Jobs
+                <a href="/jobs.html" class="nav-link">
+                    <span>Jobs</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="./applications.html" class="nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-                    </svg>
-                    Applications
+                <a href="/applications.html" class="nav-link">
+                    <span>Applications</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="./messages.html" class="nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v2zm0-3H6V6h12v2z"/>
-                    </svg>
-                    Messages
+                <a href="/messages.html" class="nav-link">
+                    <span>Messages</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="./settings.html" class="nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-                    </svg>
-                    Settings
+                <a href="/settings.html" class="nav-link">
+                    <span>Settings</span>
                 </a>
             </li>
         </ul>
-        <div class="user-profile">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00f7ff" width="32" height="32">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            <div class="profile-info">
-                <div class="profile-name" id="userName">Loading...</div>
-                <div class="profile-role" id="userRole">Loading...</div>
-            </div>
-        </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
         <div class="header-actions">
             <h1 class="page-title">My Profile</h1>
-            <button class="update-profile-btn" onclick="updateProfile()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="margin-right: 8px;">
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                </svg>
-                Update Profile
-            </button>
+            <button class="update-profile-btn" onclick="updateProfile()">Update Profile</button>
         </div>
 
-        <div class="profile-grid">
-            <!-- Education Section -->
-            <div class="profile-card">
-                <h2>
-                    Education
-                    <button class="add-button" onclick="openModal('education')">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="margin-right: 4px;">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                        </svg>
-                        Add Education
-                    </button>
-                </h2>
-                <div id="educationList">
-                    <!-- Education items will be dynamically added here -->
-                </div>
-            </div>
+        <!-- Education Section -->
+        <div class="profile-section">
+            <h2>
+                Education
+                <button class="add-button" onclick="openModal('educationModal')">+ Add Education</button>
+            </h2>
+            <div id="educationContainer"></div>
+        </div>
 
-            <!-- Work Experience Section -->
-            <div class="profile-card">
-                <h2>
-                    Work Experience
-                    <button class="add-button" onclick="openModal('experience')">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="margin-right: 4px;">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                        </svg>
-                        Add Experience
-                    </button>
-                </h2>
-                <div id="experienceList">
-                    <!-- Experience items will be dynamically added here -->
-                </div>
-            </div>
+        <!-- Experience Section -->
+        <div class="profile-section">
+            <h2>
+                Experience
+                <button class="add-button" onclick="openModal('experienceModal')">+ Add Experience</button>
+            </h2>
+            <div id="experienceContainer"></div>
+        </div>
 
-            <!-- Skills Section -->
-            <div class="profile-card">
-                <h2>
-                    Skills
-                    <button class="add-button" onclick="openModal('skill')">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="margin-right: 4px;">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                        </svg>
-                        Add Skill
-                    </button>
-                </h2>
-                <div class="skill-tags" id="skillsList">
-                    <!-- Skills will be dynamically added here -->
-                </div>
-            </div>
+        <!-- Skills Section -->
+        <div class="profile-section">
+            <h2>
+                Skills
+                <button class="add-button" onclick="openModal('skillModal')">+ Add Skill</button>
+            </h2>
+            <div id="skillsContainer" class="skill-tags"></div>
+        </div>
 
-            <!-- Social Links Section -->
-            <div class="profile-card">
-                <h2>Social Links</h2>
-                <div class="social-links">
-                    <a href="#" class="social-link" id="linkedinLink">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-                        </svg>
-                        LinkedIn
-                    </a>
-                    <a href="#" class="social-link" id="githubLink">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        GitHub
-                    </a>
-                </div>
+        <!-- Social Links Section -->
+        <div class="profile-section">
+            <h2>Social Links</h2>
+            <div class="social-links">
+                <form id="socialForm" onsubmit="updateSocialLinks(event)">
+                    <div class="form-group">
+                        <label for="linkedinUrl">LinkedIn URL</label>
+                        <input type="url" id="linkedinUrl" class="form-input" placeholder="https://linkedin.com/in/username">
+                    </div>
+                    <div class="form-group">
+                        <label for="githubUrl">GitHub URL</label>
+                        <input type="url" id="githubUrl" class="form-input" placeholder="https://github.com/username">
+                    </div>
+                    <button type="submit" class="submit-btn">Update Social Links</button>
+                </form>
             </div>
         </div>
     </div>
@@ -808,28 +356,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Add Education</h2>
-                <button class="modal-close" onclick="closeModal('education')">&times;</button>
+                <button class="modal-close" onclick="closeModal('educationModal')">&times;</button>
             </div>
-            <form id="educationForm" onsubmit="submitEducation(event)">
+            <form id="educationForm" onsubmit="addEducation(event)">
                 <div class="form-group">
                     <label for="school">School/University</label>
-                    <input type="text" id="school" class="form-input" required placeholder="Start typing to see suggestions">
+                    <input type="text" id="school" name="school" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label for="degree">Degree</label>
-                    <input type="text" id="degree" class="form-input" required placeholder="Start typing to see suggestions">
+                    <input type="text" id="degree" name="degree" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label for="field">Field of Study</label>
-                    <input type="text" id="field" class="form-input" required placeholder="Start typing to see suggestions">
+                    <input type="text" id="field" name="field" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label for="eduStartDate">Start Date</label>
-                    <input type="date" id="eduStartDate" class="form-input" required>
+                    <input type="date" id="eduStartDate" name="startDate" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label for="eduEndDate">End Date</label>
-                    <input type="date" id="eduEndDate" class="form-input">
+                    <input type="date" id="eduEndDate" name="endDate" class="form-input">
                 </div>
                 <button type="submit" class="submit-btn">Save Education</button>
             </form>
@@ -841,37 +389,40 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Add Experience</h2>
-                <button class="modal-close" onclick="closeModal('experience')">&times;</button>
+                <button class="modal-close" onclick="closeModal('experienceModal')">&times;</button>
             </div>
-            <form id="experienceForm" onsubmit="submitExperience(event)">
+            <form id="experienceForm" onsubmit="addExperience(event)">
                 <div class="form-group">
                     <label for="company">Company</label>
-                    <input type="text" id="company" class="form-input" required placeholder="Start typing to see suggestions">
+                    <input type="text" id="company" name="company" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label for="position">Position</label>
-                    <input type="text" id="position" class="form-input" required placeholder="Start typing to see suggestions">
+                    <input type="text" id="position" name="position" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="experienceLevel">Experience Level</label>
-                    <select id="experienceLevel" class="experience-level" required>
-                        <option value="">Select Experience Level</option>
-                        ${experienceLevels.map(level => 
-                            `<option value="${level}">${level}</option>`
-                        ).join('')}
+                    <label for="level">Experience Level</label>
+                    <select id="level" name="level" class="form-input" required>
+                        <option value="">Select Level</option>
+                        <option value="Intern">Intern</option>
+                        <option value="Entry Level">Entry Level</option>
+                        <option value="Mid Level">Mid Level</option>
+                        <option value="Senior">Senior</option>
+                        <option value="Lead">Lead</option>
+                        <option value="Manager">Manager</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="expStartDate">Start Date</label>
-                    <input type="date" id="expStartDate" class="form-input" required>
+                    <input type="date" id="expStartDate" name="startDate" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label for="expEndDate">End Date</label>
-                    <input type="date" id="expEndDate" class="form-input">
+                    <input type="date" id="expEndDate" name="endDate" class="form-input">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" class="form-input" rows="4"></textarea>
+                    <textarea id="description" name="description" class="form-input" rows="4"></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Save Experience</button>
             </form>
@@ -883,871 +434,354 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Add Skill</h2>
-                <button class="modal-close" onclick="closeModal('skill')">&times;</button>
+                <button class="modal-close" onclick="closeModal('skillModal')">&times;</button>
             </div>
-            <form id="skillForm" onsubmit="submitSkill(event)">
+            <form id="skillForm" onsubmit="addSkill(event)">
                 <div class="form-group">
-                    <label for="skillName">Skill Name</label>
-                    <input type="text" id="skillName" class="form-input" required placeholder="Start typing to see suggestions">
+                    <label for="skill">Skill Name</label>
+                    <input type="text" id="skill" name="skill" class="form-input" required>
                 </div>
                 <button type="submit" class="submit-btn">Add Skill</button>
             </form>
         </div>
     </div>
 
-    <!-- Success Message -->
-    <div class="success-message" id="successMessage">
-        Profile updated successfully!
-    </div>
+    <!-- Messages -->
+    <div id="successMessage" class="message success-message" style="display: none;"></div>
+    <div id="errorMessage" class="message error-message" style="display: none;"></div>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
     </div>
 
-    <!-- Confirmation Dialog -->
-    <div class="confirm-dialog" id="confirmDialog">
-        <h3>Confirm Action</h3>
-        <p id="confirmMessage">Are you sure you want to proceed?</p>
-        <div class="confirm-buttons">
-            <button class="confirm-btn cancel" onclick="closeConfirmDialog()">Cancel</button>
-            <button class="confirm-btn confirm" id="confirmAction">Confirm</button>
-        </div>
-    </div>
-
     <script>
-        // Predefined options
-        const universities = [
-            // Top Global Universities
-            'Massachusetts Institute of Technology (MIT)', 'Stanford University', 'Harvard University',
-            'California Institute of Technology', 'University of Oxford', 'University of Cambridge',
-            'ETH Zurich', 'Imperial College London', 'National University of Singapore', 'Tsinghua University',
-            'University of California Berkeley', 'Princeton University', 'Yale University', 'Columbia University',
-            'University of Chicago', 'Cornell University', 'University of Pennsylvania', 'Johns Hopkins University',
+        // Get auth token from localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login.html';
+        }
 
-            // Top Indian Institutes of Technology (IITs)
-            'Indian Institute of Technology Bombay', 'Indian Institute of Technology Delhi',
-            'Indian Institute of Technology Madras', 'Indian Institute of Technology Kanpur',
-            'Indian Institute of Technology Kharagpur', 'Indian Institute of Technology Roorkee',
-            'Indian Institute of Technology Guwahati', 'Indian Institute of Technology Hyderabad',
-            'Indian Institute of Technology Indore', 'Indian Institute of Technology Gandhinagar',
-            'Indian Institute of Technology Patna', 'Indian Institute of Technology Bhubaneswar',
-            'Indian Institute of Technology Jodhpur', 'Indian Institute of Technology Mandi',
-
-            // Indian Institutes of Management (IIMs)
-            'Indian Institute of Management Ahmedabad', 'Indian Institute of Management Bangalore',
-            'Indian Institute of Management Calcutta', 'Indian Institute of Management Lucknow',
-            'Indian Institute of Management Indore', 'Indian Institute of Management Kozhikode',
-            'Indian Institute of Management Trichy', 'Indian Institute of Management Ranchi',
-
-            // National Institutes of Technology (NITs)
-            'National Institute of Technology Tiruchirappalli', 'National Institute of Technology Surathkal',
-            'National Institute of Technology Warangal', 'National Institute of Technology Calicut',
-            'National Institute of Technology Rourkela', 'National Institute of Technology Durgapur',
-            'National Institute of Technology Silchar', 'National Institute of Technology Hamirpur',
-
-            // COMEDK Colleges
-            'R.V. College of Engineering, Bangalore', 'B.M.S. College of Engineering, Bangalore',
-            'M.S. Ramaiah Institute of Technology, Bangalore', 'PES University, Bangalore',
-            'Siddaganga Institute of Technology, Tumkur', 'Sri Jayachamarajendra College of Engineering, Mysore',
-            'Nitte Meenakshi Institute of Technology, Bangalore', 'BNM Institute of Technology, Bangalore',
-            'Dayananda Sagar College of Engineering, Bangalore', 'JSS Academy of Technical Education, Bangalore',
-            'New Horizon College of Engineering, Bangalore', 'CMR Institute of Technology, Bangalore',
-            'East Point College of Engineering and Technology, Bangalore', 'Global Academy of Technology, Bangalore',
-            'K.S. Institute of Technology, Bangalore', 'Cambridge Institute of Technology, Bangalore',
-            'Don Bosco Institute of Technology, Bangalore', 'HKBK College of Engineering, Bangalore',
-            'Impact College of Engineering and Applied Sciences, Bangalore', 'Jyothy Institute of Technology, Bangalore',
-
-            // Other Premier Indian Institutes
-            'All India Institute of Medical Sciences (AIIMS)', 'Birla Institute of Technology and Science (BITS)',
-            'Jawaharlal Nehru University (JNU)', 'Delhi University', 'Anna University',
-            'Vellore Institute of Technology (VIT)', 'Manipal Institute of Technology',
-            'SRM Institute of Science and Technology', 'Amrita Vishwa Vidyapeetham',
-            'Tata Institute of Social Sciences (TISS)', 'National Law School of India University (NLSIU)',
-            'Xavier School of Management (XLRI)', 'Indian Statistical Institute (ISI)',
-            'National Institute of Design (NID)', 'National Institute of Fashion Technology (NIFT)',
-            'Film and Television Institute of India (FTII)', 'National Institute of Mental Health and Neurosciences (NIMHANS)',
-
-            // Top European Universities
-            'University College London', 'Technical University of Munich', 'Delft University of Technology',
-            'KU Leuven', 'École Polytechnique Fédérale de Lausanne', 'University of Amsterdam',
-            'Technical University of Berlin', 'University of Copenhagen', 'University of Helsinki',
-            'Trinity College Dublin', 'University of Oslo', 'Stockholm University',
-
-            // Top Asian Universities
-            'University of Tokyo', 'Peking University', 'Seoul National University',
-            'Nanyang Technological University', 'Hong Kong University of Science and Technology',
-            'Kyoto University', 'Shanghai Jiao Tong University', 'Korea Advanced Institute of Science & Technology',
-            'Chinese University of Hong Kong', 'University of Hong Kong'
-        ];
-
-        const degrees = [
-            // Engineering Degrees
-            'Bachelor of Technology (B.Tech)', 'Bachelor of Engineering (B.E.)',
-            'Master of Technology (M.Tech)', 'Master of Engineering (M.E.)',
-            'Bachelor of Architecture (B.Arch)', 'Master of Architecture (M.Arch)',
-            'Bachelor of Science in Engineering (B.Sc.Eng.)', 'Master of Science in Engineering (M.Sc.Eng.)',
-            'Doctor of Philosophy in Engineering (Ph.D.)',
-
-            // Science Degrees
-            'Bachelor of Science (B.Sc)', 'Master of Science (M.Sc)',
-            'Bachelor of Computer Applications (BCA)', 'Master of Computer Applications (MCA)',
-            'Bachelor of Science in Information Technology (B.Sc IT)',
-            'Master of Science in Information Technology (M.Sc IT)',
-            'Bachelor of Science in Computer Science (B.Sc CS)',
-            'Master of Science in Computer Science (M.Sc CS)',
-            'Bachelor of Science in Data Science (B.Sc DS)',
-            'Master of Science in Data Science (M.Sc DS)',
-            'Bachelor of Science in Artificial Intelligence (B.Sc AI)',
-            'Master of Science in Artificial Intelligence (M.Sc AI)',
-
-            // Business & Management Degrees
-            'Bachelor of Business Administration (BBA)',
-            'Master of Business Administration (MBA)',
-            'Bachelor of Commerce (B.Com)',
-            'Master of Commerce (M.Com)',
-            'Bachelor of Economics (B.Econ)',
-            'Master of Economics (M.Econ)',
-            'Bachelor of Financial Engineering',
-            'Master of Financial Engineering',
-            'Bachelor of Business Management (BBM)',
-            'Master of Business Management (MBM)',
-            'Doctor of Business Administration (DBA)',
-
-            // Arts & Humanities Degrees
-            'Bachelor of Arts (B.A.)', 'Master of Arts (M.A.)',
-            'Bachelor of Fine Arts (BFA)', 'Master of Fine Arts (MFA)',
-            'Bachelor of Design (B.Des)', 'Master of Design (M.Des)',
-            'Bachelor of Visual Arts', 'Master of Visual Arts',
-            'Bachelor of Performing Arts', 'Master of Performing Arts',
-
-            // Medical & Healthcare Degrees
-            'Bachelor of Medicine, Bachelor of Surgery (MBBS)',
-            'Bachelor of Dental Surgery (BDS)',
-            'Bachelor of Pharmacy (B.Pharm)',
-            'Master of Pharmacy (M.Pharm)',
-            'Bachelor of Physiotherapy (BPT)',
-            'Master of Physiotherapy (MPT)',
-            'Bachelor of Nursing (B.Sc Nursing)',
-            'Master of Nursing (M.Sc Nursing)',
-
-            // Law Degrees
-            'Bachelor of Laws (LLB)',
-            'Master of Laws (LLM)',
-            'Bachelor of Legal Science (BLS)',
-            'Master of Legal Science (MLS)',
-
-            // Research Degrees
-            'Master of Philosophy (M.Phil)',
-            'Doctor of Philosophy (Ph.D.)',
-            'Doctor of Science (D.Sc)',
-            'Doctor of Letters (D.Litt)'
-        ];
-
-        const fields = [
-            // Computer Science & IT
-            'Computer Science', 'Information Technology', 'Software Engineering',
-            'Artificial Intelligence', 'Machine Learning', 'Data Science',
-            'Cloud Computing', 'Cybersecurity', 'Network Engineering',
-            'Web Development', 'Mobile App Development', 'Game Development',
-            'Blockchain Technology', 'Internet of Things (IoT)', 'Quantum Computing',
-            'Robotics', 'Computer Vision', 'Natural Language Processing',
-
-            // Engineering Fields
-            'Mechanical Engineering', 'Electrical Engineering', 'Electronics Engineering',
-            'Civil Engineering', 'Chemical Engineering', 'Aerospace Engineering',
-            'Biomedical Engineering', 'Environmental Engineering', 'Industrial Engineering',
-            'Materials Science', 'Nanotechnology', 'Automotive Engineering',
-            'Marine Engineering', 'Petroleum Engineering', 'Mining Engineering',
-            'Agricultural Engineering', 'Textile Engineering', 'Food Technology',
-
-            // Science Fields
-            'Physics', 'Chemistry', 'Biology', 'Mathematics',
-            'Statistics', 'Environmental Science', 'Astronomy',
-            'Geology', 'Biotechnology', 'Microbiology',
-            'Biochemistry', 'Genetics', 'Neuroscience',
-            'Ecology', 'Zoology', 'Botany',
-
-            // Business & Management
-            'Business Administration', 'Finance', 'Marketing',
-            'Human Resource Management', 'Operations Management',
-            'International Business', 'Entrepreneurship',
-            'Supply Chain Management', 'Project Management',
-            'Business Analytics', 'Digital Marketing',
-            'Financial Technology', 'Investment Banking',
-
-            // Arts & Design
-            'Graphic Design', 'Industrial Design', 'Fashion Design',
-            'Interior Design', 'Animation', 'Film Production',
-            'Photography', 'Fine Arts', 'Music',
-            'Theatre Arts', 'Dance', 'Creative Writing',
-
-            // Healthcare & Medicine
-            'Medicine', 'Dentistry', 'Pharmacy',
-            'Nursing', 'Public Health', 'Healthcare Management',
-            'Physiotherapy', 'Occupational Therapy', 'Veterinary Science',
-            'Medical Laboratory Technology', 'Radiology',
-            'Speech Therapy', 'Mental Health',
-
-            // Social Sciences
-            'Psychology', 'Sociology', 'Economics',
-            'Political Science', 'International Relations',
-            'Anthropology', 'Geography', 'History',
-            'Philosophy', 'Education', 'Social Work',
-            'Journalism', 'Mass Communication',
-
-            // Law & Legal Studies
-            'Criminal Law', 'Corporate Law', 'International Law',
-            'Constitutional Law', 'Intellectual Property Law',
-            'Human Rights Law', 'Environmental Law',
-            'Cyber Law', 'Maritime Law'
-        ];
-
-        const companies = [
-            // Tech Giants
-            'Google', 'Microsoft', 'Apple', 'Amazon', 'Meta', 'Netflix', 'Adobe',
-            'IBM', 'Intel', 'Oracle', 'Salesforce', 'Twitter', 'Uber', 'Airbnb',
-            'Tesla', 'SpaceX', 'LinkedIn', 'PayPal', 'NVIDIA', 'AMD', 'Cisco',
-            'Dell', 'HP', 'VMware', 'Zoom', 'Slack', 'Spotify', 'Pinterest',
-
-            // Indian Tech Companies
-            'Infosys', 'Tata Consultancy Services', 'Wipro', 'HCL Technologies',
-            'Tech Mahindra', 'Cognizant', 'Mindtree', 'L&T Infotech',
-            'Mphasis', 'Persistent Systems', 'Larsen & Toubro', 'Hexaware',
-            'Cyient', 'Zensar Technologies', 'NIIT Technologies',
-
-            // Indian Startups
-            'Flipkart', 'Swiggy', 'Zomato', 'Paytm', 'Ola', 'BYJU\'S',
-            'PhonePe', 'Razorpay', 'CRED', 'Zerodha', 'Unacademy',
-            'Meesho', 'Dunzo', 'Urban Company', 'Lenskart',
-
-            // Global Consulting
-            'Accenture', 'Deloitte', 'PwC', 'EY', 'KPMG', 'McKinsey',
-            'Boston Consulting Group', 'Bain & Company', 'Capgemini',
-            'DXC Technology', 'Gartner', 'SAP', 'Booz Allen Hamilton',
-
-            // Financial Services
-            'JPMorgan Chase', 'Goldman Sachs', 'Morgan Stanley', 'Citigroup',
-            'Bank of America', 'Wells Fargo', 'American Express',
-            'Mastercard', 'Visa', 'Bloomberg', 'BlackRock', 'UBS',
-
-            // E-commerce & Retail
-            'Walmart', 'Target', 'Best Buy', 'eBay', 'Shopify', 'Instacart',
-            'DoorDash', 'Etsy', 'Wayfair', 'Chewy', 'BigBasket', 'Myntra',
-
-            // Automotive & Manufacturing
-            'Ford', 'General Motors', 'Toyota', 'Honda', 'BMW', 'Mercedes-Benz',
-            'Volkswagen', 'Tata Motors', 'Mahindra & Mahindra', 'Hero MotoCorp',
-            'Maruti Suzuki', 'Hyundai', 'Bosch', 'Siemens',
-
-            // Telecom & Media
-            'AT&T', 'Verizon', 'T-Mobile', 'Comcast', 'Disney', 'Sony',
-            'Warner Bros.', 'Airtel', 'Jio', 'Vodafone', 'Discovery',
-            'Fox Corporation', 'ViacomCBS', 'NBCUniversal',
-
-            // Healthcare & Pharma
-            'Johnson & Johnson', 'Pfizer', 'Moderna', 'AstraZeneca',
-            'GlaxoSmithKline', 'Novartis', 'Roche', 'Abbott', 'Cipla',
-            'Sun Pharma', 'Dr. Reddy\'s Laboratories', 'Biocon',
-
-            // Energy & Utilities
-            'ExxonMobil', 'Shell', 'BP', 'Chevron', 'Total',
-            'Indian Oil Corporation', 'ONGC', 'Reliance Industries',
-            'Adani Group', 'NTPC', 'Power Grid Corporation'
-        ];
-
-        const skills = [
-            // Programming Languages
-            'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'PHP', 'Swift',
-            'Go', 'Rust', 'TypeScript', 'Kotlin', 'Scala', 'R', 'MATLAB',
-            'Perl', 'Haskell', 'Lua', 'Dart', 'Groovy', 'Assembly',
-            'Visual Basic', 'Objective-C', 'Shell Scripting', 'PowerShell',
-
-            // Web Technologies
-            'HTML', 'CSS', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js',
-            'Django', 'Flask', 'Spring Boot', 'ASP.NET', 'Ruby on Rails',
-            'Laravel', 'jQuery', 'Bootstrap', 'Tailwind CSS', 'Material UI',
-            'Redux', 'GraphQL', 'REST API', 'WebSocket', 'Server-Sent Events',
-            'Progressive Web Apps', 'Web Components', 'Web Assembly',
-
-            // Mobile Development
-            'Android Development', 'iOS Development', 'React Native',
-            'Flutter', 'Xamarin', 'Ionic', 'PhoneGap', 'Mobile UI/UX',
-            'App Store Optimization', 'Mobile Security', 'Push Notifications',
-
-            // Databases
-            'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch',
-            'Oracle', 'SQL Server', 'SQLite', 'Cassandra', 'DynamoDB',
-            'Firebase', 'Neo4j', 'MariaDB', 'CouchDB', 'InfluxDB',
-
-            // Cloud & DevOps
-            'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes',
-            'Jenkins', 'Git', 'Terraform', 'Ansible', 'Chef', 'Puppet',
-            'CircleCI', 'Travis CI', 'GitHub Actions', 'Bitbucket',
-            'Cloud Architecture', 'Microservices', 'Service Mesh',
-
-            // AI & ML
-            'TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV',
-            'Natural Language Processing', 'Computer Vision',
-            'Deep Learning', 'Neural Networks', 'Reinforcement Learning',
-            'Machine Learning Algorithms', 'Data Mining', 'Pattern Recognition',
-
-            // Data Science & Analytics
-            'Data Analysis', 'Data Visualization', 'Statistical Analysis',
-            'Big Data', 'Hadoop', 'Spark', 'Power BI', 'Tableau',
-            'Data Warehousing', 'ETL', 'Data Modeling', 'Business Intelligence',
-            'Predictive Analytics', 'A/B Testing', 'Data Mining',
-
-            // Security
-            'Cybersecurity', 'Network Security', 'Ethical Hacking',
-            'Penetration Testing', 'Security Auditing', 'Cryptography',
-            'Vulnerability Assessment', 'Security Protocols', 'Firewall Management',
-
-            // Project Management
-            'Agile', 'Scrum', 'Kanban', 'JIRA', 'Trello', 'MS Project',
-            'Risk Management', 'Quality Assurance', 'Requirements Analysis',
-            'Technical Documentation', 'Team Leadership',
-
-            // Design
-            'UI Design', 'UX Design', 'Graphic Design', 'Adobe Photoshop',
-            'Adobe Illustrator', 'Figma', 'Sketch', 'InVision', 'Zeplin',
-            'Wireframing', 'Prototyping', 'Design Systems',
-
-            // Soft Skills
-            'Problem Solving', 'Critical Thinking', 'Communication',
-            'Team Collaboration', 'Time Management', 'Leadership',
-            'Presentation Skills', 'Negotiation', 'Conflict Resolution',
-            'Adaptability', 'Creativity', 'Emotional Intelligence',
-
-            // Business Skills
-            'Strategic Planning', 'Business Analysis', 'Product Management',
-            'Market Research', 'Digital Marketing', 'SEO', 'Content Strategy',
-            'Social Media Marketing', 'Email Marketing', 'Growth Hacking',
-            'Customer Relationship Management', 'Sales'
-        ];
-
-        // Initialize profile data
-        let profileData = {
-            education: [],
-            experience: [],
-            skills: [],
-            social: {
-                linkedin: '',
-                github: ''
-            }
+        // API headers with auth token
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         };
 
-        // Function to create and show dropdown
-        function createDropdown(inputId, options) {
-            const input = document.getElementById(inputId);
-            const dropdownId = `${inputId}Dropdown`;
-            let dropdown = document.getElementById(dropdownId);
-
-            if (!dropdown) {
-                dropdown = document.createElement('div');
-                dropdown.id = dropdownId;
-                dropdown.className = 'dropdown-list';
-                dropdown.style.cssText = `
-                    position: absolute;
-                    width: 100%;
-                    max-height: 200px;
-                    overflow-y: auto;
-                    background: rgba(0, 0, 0, 0.95);
-                    border: 1px solid rgba(0, 247, 255, 0.2);
-                    border-radius: 8px;
-                    margin-top: 5px;
-                    z-index: 1000;
-                    display: none;
-                `;
-                input.parentNode.style.position = 'relative';
-                input.parentNode.appendChild(dropdown);
-            }
-
-            input.addEventListener('input', function() {
-                const value = this.value.toLowerCase();
-                const filtered = options.filter(option => 
-                    option.toLowerCase().includes(value)
-                );
-
-                if (value && filtered.length > 0) {
-                    dropdown.innerHTML = filtered.map(option => `
-                        <div class="dropdown-item" style="
-                            padding: 10px;
-                            cursor: pointer;
-                            color: #fff;
-                            transition: all 0.3s ease;
-                        "
-                        onmouseover="this.style.backgroundColor='rgba(0, 247, 255, 0.1)'"
-                        onmouseout="this.style.backgroundColor='transparent'"
-                        onclick="selectOption('${inputId}', '${option}')"
-                        >${option}</div>
-                    `).join('');
-                    dropdown.style.display = 'block';
-                } else {
-                    dropdown.style.display = 'none';
-                }
-            });
-
-            // Hide dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
-            });
+        // Show/hide loading overlay
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
         }
 
-        // Function to select option from dropdown
-        function selectOption(inputId, value) {
-            document.getElementById(inputId).value = value;
-            document.getElementById(`${inputId}Dropdown`).style.display = 'none';
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
         }
 
-        // Function to open modal
-        function openModal(type) {
-            const modal = document.getElementById(`${type}Modal`);
-            if (modal) {
-                modal.classList.add('active');
-            }
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
         }
 
-        // Function to close modal
-        function closeModal(type) {
-            const modal = document.getElementById(`${type}Modal`);
-            if (modal) {
-                modal.classList.remove('active');
-            }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        // Function to submit education
-        async function submitEducation(event) {
-            event.preventDefault();
-            if (!validateForm('educationForm')) return;
-
+        // Fetch user profile
+        async function fetchProfile() {
             showLoading();
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'GET',
+                    headers
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch profile');
+                }
+                
+                const profile = await response.json();
+                displayProfile(profile);
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to load profile');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display profile data
+        function displayProfile(profile) {
+            // Display education
+            const educationContainer = document.getElementById('educationContainer');
+            educationContainer.innerHTML = '';
+            profile.education.forEach(edu => {
+                const eduElement = createEducationElement(edu);
+                educationContainer.appendChild(eduElement);
+            });
+
+            // Display experience
+            const experienceContainer = document.getElementById('experienceContainer');
+            experienceContainer.innerHTML = '';
+            profile.experience.forEach(exp => {
+                const expElement = createExperienceElement(exp);
+                experienceContainer.appendChild(expElement);
+            });
+
+            // Display skills
+            const skillsContainer = document.getElementById('skillsContainer');
+            skillsContainer.innerHTML = '';
+            profile.skills.forEach(skill => {
+                const skillElement = createSkillElement(skill);
+                skillsContainer.appendChild(skillElement);
+            });
+
+            // Display social links
+            if (profile.social) {
+                document.getElementById('linkedinUrl').value = profile.social.linkedin || '';
+                document.getElementById('githubUrl').value = profile.social.github || '';
+            }
+        }
+
+        // Create education element
+        function createEducationElement(edu) {
+            const div = document.createElement('div');
+            div.className = 'education-item';
+            div.innerHTML = `
+                <div class="item-header">
+                    <div>
+                        <h3 class="item-title">${edu.school}</h3>
+                        <p class="item-subtitle">${edu.degree} in ${edu.field}</p>
+                        <p class="item-date">${formatDate(edu.startDate)} - ${edu.endDate ? formatDate(edu.endDate) : 'Present'}</p>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        // Create experience element
+        function createExperienceElement(exp) {
+            const div = document.createElement('div');
+            div.className = 'experience-item';
+            div.innerHTML = `
+                <div class="item-header">
+                    <div>
+                        <h3 class="item-title">${exp.company}</h3>
+                        <p class="item-subtitle">${exp.position} (${exp.level})</p>
+                        <p class="item-date">${formatDate(exp.startDate)} - ${exp.endDate ? formatDate(exp.endDate) : 'Present'}</p>
+                        ${exp.description ? `<p class="item-description">${exp.description}</p>` : ''}
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        // Create skill element
+        function createSkillElement(skill) {
+            const div = document.createElement('div');
+            div.className = 'skill-tag';
+            div.innerHTML = `
+                <span>${skill}</span>
+                <span class="remove-skill" onclick="removeSkill('${skill}')">&times;</span>
+            `;
+            return div;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        }
+
+        // Add education
+        async function addEducation(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
             const education = {
-                school: document.getElementById('school').value,
-                degree: document.getElementById('degree').value,
-                field: document.getElementById('field').value,
-                startDate: document.getElementById('eduStartDate').value,
-                endDate: document.getElementById('eduEndDate').value || null
+                school: formData.get('school'),
+                degree: formData.get('degree'),
+                field: formData.get('field'),
+                startDate: new Date(formData.get('startDate')).toISOString(),
+                endDate: formData.get('endDate') ? new Date(formData.get('endDate')).toISOString() : null
             };
 
             try {
                 const response = await fetch('/api/profile/education', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
+                    headers,
                     body: JSON.stringify(education)
                 });
 
-                if (response.ok) {
-                    profileData.education.push(education);
-                    renderEducation();
-                    closeModal('education');
-                    showSuccessMessage('Education added successfully!');
-                    document.getElementById('educationForm').reset();
-                } else {
-                    const error = await response.json();
-                    showErrorMessage(error.message || 'Failed to add education');
+                if (!response.ok) {
+                    throw new Error('Failed to add education');
                 }
+
+                const profile = await response.json();
+                displayProfile(profile);
+                closeModal('educationModal');
+                form.reset();
+                showSuccess('Education added successfully');
             } catch (error) {
-                console.error('Error adding education:', error);
-                showErrorMessage('Network error. Please try again.');
+                console.error('Error:', error);
+                showError('Failed to add education');
             } finally {
                 hideLoading();
             }
         }
 
-        // Function to submit experience
-        async function submitExperience(event) {
+        // Add experience
+        async function addExperience(event) {
             event.preventDefault();
-            if (!validateForm('experienceForm')) return;
-
             showLoading();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
             const experience = {
-                company: document.getElementById('company').value,
-                position: document.getElementById('position').value,
-                level: document.getElementById('experienceLevel').value,
-                description: document.getElementById('description').value,
-                startDate: document.getElementById('expStartDate').value,
-                endDate: document.getElementById('expEndDate').value || null
+                company: formData.get('company'),
+                position: formData.get('position'),
+                level: formData.get('level'),
+                description: formData.get('description'),
+                startDate: new Date(formData.get('startDate')).toISOString(),
+                endDate: formData.get('endDate') ? new Date(formData.get('endDate')).toISOString() : null
             };
 
             try {
                 const response = await fetch('/api/profile/experience', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
+                    headers,
                     body: JSON.stringify(experience)
                 });
 
-                if (response.ok) {
-                    profileData.experience.push(experience);
-                    renderExperience();
-                    closeModal('experience');
-                    showSuccessMessage('Experience added successfully!');
-                    document.getElementById('experienceForm').reset();
-                } else {
-                    const error = await response.json();
-                    showErrorMessage(error.message || 'Failed to add experience');
+                if (!response.ok) {
+                    throw new Error('Failed to add experience');
                 }
+
+                const profile = await response.json();
+                displayProfile(profile);
+                closeModal('experienceModal');
+                form.reset();
+                showSuccess('Experience added successfully');
             } catch (error) {
-                console.error('Error adding experience:', error);
-                showErrorMessage('Network error. Please try again.');
+                console.error('Error:', error);
+                showError('Failed to add experience');
             } finally {
                 hideLoading();
             }
         }
 
-        // Function to submit skill
-        async function submitSkill(event) {
+        // Add skill
+        async function addSkill(event) {
             event.preventDefault();
-            if (!validateForm('skillForm')) return;
-
-            const skill = document.getElementById('skillName').value;
-            if (profileData.skills.includes(skill)) {
-                showErrorMessage('Skill already exists!');
-                return;
-            }
-
             showLoading();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const skill = formData.get('skill');
+
             try {
                 const response = await fetch('/api/profile/skills', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
+                    headers,
                     body: JSON.stringify({ skill })
                 });
 
-                if (response.ok) {
-                    profileData.skills.push(skill);
-                    renderSkills();
-                    closeModal('skill');
-                    showSuccessMessage('Skill added successfully!');
-                    document.getElementById('skillForm').reset();
-                } else {
-                    const error = await response.json();
-                    showErrorMessage(error.message || 'Failed to add skill');
+                if (!response.ok) {
+                    throw new Error('Failed to add skill');
                 }
+
+                const profile = await response.json();
+                displayProfile(profile);
+                closeModal('skillModal');
+                form.reset();
+                showSuccess('Skill added successfully');
             } catch (error) {
-                console.error('Error adding skill:', error);
-                showErrorMessage('Network error. Please try again.');
+                console.error('Error:', error);
+                showError('Failed to add skill');
             } finally {
                 hideLoading();
             }
         }
 
-        // Function to show success message
-        function showSuccessMessage(message) {
-            const successMessage = document.getElementById('successMessage');
-            successMessage.textContent = message;
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
-        }
-
-        // Function to render education items
-        function renderEducation() {
-            const educationList = document.getElementById('educationList');
-            educationList.innerHTML = profileData.education.map(edu => `
-                <div class="education-item">
-                    <div class="item-header">
-                        <div>
-                            <h3 class="item-title">${edu.school}</h3>
-                            <div class="item-subtitle">${edu.degree} in ${edu.field}</div>
-                        </div>
-                        <div class="item-date">
-                            ${new Date(edu.startDate).toLocaleDateString()} - 
-                            ${edu.endDate ? new Date(edu.endDate).toLocaleDateString() : 'Present'}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Function to render experience items
-        function renderExperience() {
-            const experienceList = document.getElementById('experienceList');
-            experienceList.innerHTML = profileData.experience.map(exp => `
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div>
-                            <h3 class="item-title">${exp.company}</h3>
-                            <div class="item-subtitle">${exp.position} - ${exp.level}</div>
-                        </div>
-                        <div class="item-date">
-                            ${new Date(exp.startDate).toLocaleDateString()} - 
-                            ${exp.endDate ? new Date(exp.endDate).toLocaleDateString() : 'Present'}
-                        </div>
-                    </div>
-                    ${exp.description ? `<p class="item-description">${exp.description}</p>` : ''}
-                </div>
-            `).join('');
-        }
-
-        // Function to render skills
-        function renderSkills() {
-            const skillsList = document.getElementById('skillsList');
-            skillsList.innerHTML = profileData.skills.map(skill => `
-                <div class="skill-tag">
-                    ${skill}
-                    <span class="remove-skill" onclick="removeSkill('${skill}')">&times;</span>
-                </div>
-            `).join('');
-        }
-
-        // Function to remove skill
+        // Remove skill
         async function removeSkill(skill) {
-            showConfirmDialog(`Are you sure you want to remove "${skill}" from your skills?`, async () => {
-                showLoading();
-                try {
-                    const response = await fetch(`/api/profile/skills/${encodeURIComponent(skill)}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    });
+            showLoading();
+            try {
+                const response = await fetch(`/api/profile/skills/${encodeURIComponent(skill)}`, {
+                    method: 'DELETE',
+                    headers
+                });
 
-                    if (response.ok) {
-                        profileData.skills = profileData.skills.filter(s => s !== skill);
-                        renderSkills();
-                        showSuccessMessage('Skill removed successfully!');
-                    } else {
-                        const error = await response.json();
-                        showErrorMessage(error.message || 'Failed to remove skill');
-                    }
-                } catch (error) {
-                    console.error('Error removing skill:', error);
-                    showErrorMessage('Network error. Please try again.');
-                } finally {
-                    hideLoading();
+                if (!response.ok) {
+                    throw new Error('Failed to remove skill');
                 }
-            });
+
+                const profile = await response.json();
+                displayProfile(profile);
+                showSuccess('Skill removed successfully');
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to remove skill');
+            } finally {
+                hideLoading();
+            }
         }
 
-        // Function to update social links
-        async function updateSocialLinks(type, url) {
-            if (!isValidUrl(url)) {
-                showErrorMessage(`Please enter a valid ${type} URL`);
-                return;
-            }
-
+        // Update social links
+        async function updateSocialLinks(event) {
+            event.preventDefault();
             showLoading();
+            
+            const linkedin = document.getElementById('linkedinUrl').value;
+            const github = document.getElementById('githubUrl').value;
+
             try {
                 const response = await fetch('/api/profile/social', {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({
-                        [type]: url
-                    })
+                    headers,
+                    body: JSON.stringify({ linkedin, github })
                 });
 
-                if (response.ok) {
-                    profileData.social[type] = url;
-                    document.getElementById(`${type}Link`).href = url;
-                    showSuccessMessage(`${type} URL updated successfully!`);
-                } else {
-                    const error = await response.json();
-                    showErrorMessage(error.message || `Failed to update ${type} URL`);
+                if (!response.ok) {
+                    throw new Error('Failed to update social links');
                 }
+
+                const profile = await response.json();
+                displayProfile(profile);
+                showSuccess('Social links updated successfully');
             } catch (error) {
-                console.error('Error updating social link:', error);
-                showErrorMessage('Network error. Please try again.');
+                console.error('Error:', error);
+                showError('Failed to update social links');
             } finally {
                 hideLoading();
             }
         }
 
-        // Function to update profile
-        async function updateProfile() {
-            showConfirmDialog('Are you sure you want to update your profile?', async () => {
-                showLoading();
-                try {
-                    const response = await fetch('/api/profile', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        },
-                        body: JSON.stringify(profileData)
-                    });
-
-                    if (response.ok) {
-                        showSuccessMessage('Profile updated successfully!');
-                    } else {
-                        const error = await response.json();
-                        showErrorMessage(error.message || 'Failed to update profile');
-                    }
-                } catch (error) {
-                    console.error('Error updating profile:', error);
-                    showErrorMessage('Network error. Please try again.');
-                } finally {
-                    hideLoading();
-                }
-            });
-        }
-
-        // Function to load profile data
-        async function loadProfileData() {
-            showLoading();
-            try {
-                const response = await fetch('/api/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderEducation();
-                    renderExperience();
-                    renderSkills();
-                    
-                    // Update social links
-                    if (profileData.social.linkedin) {
-                        document.getElementById('linkedinLink').href = profileData.social.linkedin;
-                    }
-                    if (profileData.social.github) {
-                        document.getElementById('githubLink').href = profileData.social.github;
-                    }
-
-                    // Update user info
-                    if (profileData.user) {
-                        document.getElementById('userName').textContent = profileData.user.name || 'User';
-                        document.getElementById('userRole').textContent = profileData.user.role || 'Job Seeker';
-                    }
-                } else {
-                    showErrorMessage('Failed to load profile data. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                showErrorMessage('Failed to load profile data. Please try again.');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // Function to show error message
-        function showErrorMessage(message) {
-            const successMessage = document.getElementById('successMessage');
-            successMessage.textContent = message;
-            successMessage.style.backgroundColor = '#ff3333';
-            successMessage.style.display = 'block';
+        // Show success message
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
             setTimeout(() => {
-                successMessage.style.display = 'none';
-                successMessage.style.backgroundColor = 'rgba(0, 247, 255, 0.9)';
+                successElement.style.display = 'none';
             }, 3000);
         }
 
-        // Update social link click handlers
-        document.getElementById('linkedinLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            const url = prompt('Enter your LinkedIn URL:');
-            if (url) {
-                updateSocialLinks('linkedin', url);
-                this.href = url;
-            }
-        });
-
-        document.getElementById('githubLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            const url = prompt('Enter your GitHub URL:');
-            if (url) {
-                updateSocialLinks('github', url);
-                this.href = url;
-            }
-        });
-
-        // Loading state management
-        function showLoading() {
-            document.getElementById('loadingOverlay').classList.add('active');
+        // Show error message
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 3000);
         }
 
-        function hideLoading() {
-            document.getElementById('loadingOverlay').classList.remove('active');
-        }
-
-        // Confirmation dialog
-        function showConfirmDialog(message, onConfirm) {
-            const dialog = document.getElementById('confirmDialog');
-            document.getElementById('confirmMessage').textContent = message;
-            document.getElementById('confirmAction').onclick = () => {
-                onConfirm();
-                closeConfirmDialog();
-            };
-            dialog.classList.add('active');
-        }
-
-        function closeConfirmDialog() {
-            document.getElementById('confirmDialog').classList.remove('active');
-        }
-
-        // URL validation
-        function isValidUrl(url) {
-            try {
-                new URL(url);
-                return true;
-            } catch {
-                return false;
-            }
-        }
-
-        // Form validation
-        function validateForm(formId) {
-            const form = document.getElementById(formId);
-            const inputs = form.querySelectorAll('input[required], select[required]');
-            let isValid = true;
-
-            inputs.forEach(input => {
-                const errorDiv = input.parentElement.querySelector('.error-message');
-                if (!input.value.trim()) {
-                    input.classList.add('error');
-                    if (errorDiv) {
-                        errorDiv.textContent = 'This field is required';
-                        errorDiv.style.display = 'block';
-                    }
-                    isValid = false;
-                } else {
-                    input.classList.remove('error');
-                    if (errorDiv) {
-                        errorDiv.style.display = 'none';
-                    }
-                }
-            });
-
-            return isValid;
-        }
-
-        // Initialize the page with enhanced error handling
-        document.addEventListener('DOMContentLoaded', async function() {
-            showLoading();
-            try {
-                await loadProfileData();
-                
-                // Initialize dropdowns
-                createDropdown('school', universities);
-                createDropdown('degree', degrees);
-                createDropdown('field', fields);
-                createDropdown('company', companies);
-                createDropdown('position', positions);
-                createDropdown('skillName', skills);
-            } catch (error) {
-                console.error('Error initializing page:', error);
-                showErrorMessage('Failed to load profile data. Please refresh the page.');
-            } finally {
-                hideLoading();
-            }
-        });
+        // Initialize profile on page load
+        document.addEventListener('DOMContentLoaded', fetchProfile);
     </script>
 </body>
 </html> 
