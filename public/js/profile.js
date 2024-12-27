@@ -1,5 +1,22 @@
+// Loading Functions
+function showLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = 'flex';
+        document.body.style.cursor = 'wait';
+    }
+}
+
+function hideLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = 'none';
+        document.body.style.cursor = 'default';
+    }
+}
+
 // DOM Elements
-let educationModal, experienceModal, skillModal, profileForm, loadingOverlay;
+let educationModal, experienceModal, skillModal, profileForm;
 
 // Initialize DOM Elements
 function initializeElements() {
@@ -7,7 +24,6 @@ function initializeElements() {
     experienceModal = document.getElementById('experienceModal');
     skillModal = document.getElementById('skillModal');
     profileForm = document.getElementById('profileForm');
-    loadingOverlay = document.getElementById('loadingOverlay');
 }
 
 // Modal Functions
@@ -31,21 +47,6 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
     }
 };
-
-// Show/Hide Loading
-function showLoading() {
-    if (loadingOverlay) {
-        loadingOverlay.style.display = 'flex';
-        document.body.style.cursor = 'wait';
-    }
-}
-
-function hideLoading() {
-    if (loadingOverlay) {
-        loadingOverlay.style.display = 'none';
-        document.body.style.cursor = 'default';
-    }
-}
 
 // Show Message
 function showMessage(message, isError = false) {
