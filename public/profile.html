@@ -496,62 +496,17 @@
             window.location.href = '/login.html';
         }
 
-        // API Base URL - update based on your server configuration
-        const API_BASE_URL = 'https://careerconnect-server-975zxi3gi-vedit-agrawals-projects.vercel.app';
-
-        // API headers with auth token
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
-
-        // Show/hide loading overlay
-        function showLoading() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }
-
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+        // Use the API configuration from config.js
+        const { API_BASE_URL, handleApiCall } = window.appConfig;
 
         // Fetch user profile with proper error handling
         async function fetchProfile() {
             showLoading();
             try {
-                console.log('Fetching profile...');
-                console.log('API URL:', `${API_BASE_URL}/api/profile`);
-                console.log('Headers:', headers);
-
-                const response = await fetch(`${API_BASE_URL}/api/profile`, {
-                    method: 'GET',
-                    headers,
-                    mode: 'cors'
-                });
-                
-                console.log('Response status:', response.status);
-                const data = await response.text();
-                console.log('Response data:', data);
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        localStorage.removeItem('token');
-                        window.location.href = '/login.html';
-                        return;
-                    }
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                const profile = await handleApiCall(`${API_BASE_URL}/api/profile`);
+                if (profile) {
+                    displayProfile(profile);
                 }
-                
-                const profile = JSON.parse(data);
-                displayProfile(profile);
             } catch (error) {
                 console.error('Error:', error);
                 showError('Failed to load profile. Please check your connection and try again.');
@@ -660,30 +615,17 @@
             };
 
             try {
-                console.log('Adding education...');
-                console.log('API URL:', `${API_BASE_URL}/api/profile/education`);
-                console.log('Data:', education);
-
-                const response = await fetch(`${API_BASE_URL}/api/profile/education`, {
+                const profile = await handleApiCall(`${API_BASE_URL}/api/profile/education`, {
                     method: 'POST',
-                    headers,
-                    mode: 'cors',
                     body: JSON.stringify(education)
                 });
 
-                console.log('Response status:', response.status);
-                const data = await response.text();
-                console.log('Response data:', data);
-
-                if (!response.ok) {
-                    throw new Error('Failed to add education');
+                if (profile) {
+                    displayProfile(profile);
+                    closeModal('educationModal');
+                    form.reset();
+                    showSuccess('Education added successfully');
                 }
-
-                const profile = JSON.parse(data);
-                displayProfile(profile);
-                closeModal('educationModal');
-                form.reset();
-                showSuccess('Education added successfully');
             } catch (error) {
                 console.error('Error:', error);
                 showError('Failed to add education');
@@ -692,7 +634,7 @@
             }
         }
 
-        // Add experience
+        // Add experience with proper error handling
         async function addExperience(event) {
             event.preventDefault();
             showLoading();
@@ -710,22 +652,17 @@
             };
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/profile/experience`, {
+                const profile = await handleApiCall(`${API_BASE_URL}/api/profile/experience`, {
                     method: 'POST',
-                    headers,
-                    credentials: 'include',
                     body: JSON.stringify(experience)
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to add experience');
+                if (profile) {
+                    displayProfile(profile);
+                    closeModal('experienceModal');
+                    form.reset();
+                    showSuccess('Experience added successfully');
                 }
-
-                const profile = await response.json();
-                displayProfile(profile);
-                closeModal('experienceModal');
-                form.reset();
-                showSuccess('Experience added successfully');
             } catch (error) {
                 console.error('Error:', error);
                 showError('Failed to add experience');
@@ -734,7 +671,7 @@
             }
         }
 
-        // Add skill
+        // Add skill with proper error handling
         async function addSkill(event) {
             event.preventDefault();
             showLoading();
@@ -744,22 +681,17 @@
             const skill = formData.get('skill');
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/profile/skills`, {
+                const profile = await handleApiCall(`${API_BASE_URL}/api/profile/skills`, {
                     method: 'POST',
-                    headers,
-                    credentials: 'include',
                     body: JSON.stringify({ skill })
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to add skill');
+                if (profile) {
+                    displayProfile(profile);
+                    closeModal('skillModal');
+                    form.reset();
+                    showSuccess('Skill added successfully');
                 }
-
-                const profile = await response.json();
-                displayProfile(profile);
-                closeModal('skillModal');
-                form.reset();
-                showSuccess('Skill added successfully');
             } catch (error) {
                 console.error('Error:', error);
                 showError('Failed to add skill');
@@ -768,23 +700,18 @@
             }
         }
 
-        // Remove skill
+        // Remove skill with proper error handling
         async function removeSkill(skill) {
             showLoading();
             try {
-                const response = await fetch(`${API_BASE_URL}/api/profile/skills/${encodeURIComponent(skill)}`, {
-                    method: 'DELETE',
-                    headers,
-                    credentials: 'include'
+                const profile = await handleApiCall(`${API_BASE_URL}/api/profile/skills/${encodeURIComponent(skill)}`, {
+                    method: 'DELETE'
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to remove skill');
+                if (profile) {
+                    displayProfile(profile);
+                    showSuccess('Skill removed successfully');
                 }
-
-                const profile = await response.json();
-                displayProfile(profile);
-                showSuccess('Skill removed successfully');
             } catch (error) {
                 console.error('Error:', error);
                 showError('Failed to remove skill');
@@ -793,7 +720,7 @@
             }
         }
 
-        // Update social links
+        // Update social links with proper error handling
         async function updateSocialLinks(event) {
             event.preventDefault();
             showLoading();
@@ -802,20 +729,15 @@
             const github = document.getElementById('githubUrl').value;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/profile/social`, {
+                const profile = await handleApiCall(`${API_BASE_URL}/api/profile/social`, {
                     method: 'PUT',
-                    headers,
-                    credentials: 'include',
                     body: JSON.stringify({ linkedin, github })
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to update social links');
+                if (profile) {
+                    displayProfile(profile);
+                    showSuccess('Social links updated successfully');
                 }
-
-                const profile = await response.json();
-                displayProfile(profile);
-                showSuccess('Social links updated successfully');
             } catch (error) {
                 console.error('Error:', error);
                 showError('Failed to update social links');
