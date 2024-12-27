@@ -5,6 +5,8 @@ module.exports = function(req, res, next) {
     try {
         // Get token from header
         const authHeader = req.header('Authorization');
+        console.log('Auth header received:', authHeader ? 'Present' : 'Missing');
+        
         if (!authHeader) {
             console.log('No Authorization header found');
             return res.status(401).json({ 
@@ -13,7 +15,11 @@ module.exports = function(req, res, next) {
             });
         }
 
-        const token = authHeader.replace('Bearer ', '');
+        // Extract token
+        const token = authHeader.startsWith('Bearer ') 
+            ? authHeader.slice(7) 
+            : authHeader;
+
         if (!token) {
             console.log('No token found in Authorization header');
             return res.status(401).json({ 
@@ -24,7 +30,11 @@ module.exports = function(req, res, next) {
 
         // Verify token
         const decoded = jwt.verify(token, config.jwtSecret);
-        console.log('Token verified for user:', decoded.user.id);
+        console.log('Token decoded:', { userId: decoded.user?.id, role: decoded.user?.role });
+
+        if (!decoded.user || !decoded.user.id) {
+            throw new Error('Invalid token structure');
+        }
         
         // Set user info in request
         req.user = {
@@ -32,6 +42,7 @@ module.exports = function(req, res, next) {
             role: decoded.user.role
         };
         
+        console.log('User set in request:', req.user);
         next();
     } catch (err) {
         console.error('Auth middleware error:', err.message);

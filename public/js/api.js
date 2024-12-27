@@ -7,22 +7,16 @@ const api = {
     
     getHeaders() {
         const token = localStorage.getItem('token');
-        if (!token && window.location.pathname !== '/login.html' && window.location.pathname !== '/signup.html') {
+        if (!token && !window.location.pathname.includes('login.html') && !window.location.pathname.includes('signup.html')) {
             window.location.href = '/login.html';
             return null;
         }
 
-        const headers = {
+        return {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': token ? `Bearer ${token}` : ''
         };
-
-        console.log('Request headers:', {
-            ...headers,
-            Authorization: headers.Authorization ? '[PRESENT]' : '[MISSING]'
-        });
-        return headers;
     },
 
     async makeRequest(url, options = {}) {
@@ -39,8 +33,7 @@ const api = {
                 ...options,
                 headers,
                 signal: controller.signal,
-                mode: 'cors',
-                credentials: 'include'
+                mode: 'cors'
             };
 
             console.log('Request options:', {
@@ -55,7 +48,6 @@ const api = {
             clearTimeout(timeoutId);
 
             console.log('Response status:', response.status);
-            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
             let data;
             const text = await response.text();
@@ -68,8 +60,6 @@ const api = {
                 throw new Error(`Invalid response format from server: ${text}`);
             }
 
-            console.log('Parsed response data:', data);
-
             if (!response.ok) {
                 if (response.status === 401) {
                     localStorage.removeItem('token');
@@ -77,18 +67,14 @@ const api = {
                     window.location.href = '/login.html';
                     return;
                 }
-                const error = new Error(data.message || `Request failed with status ${response.status}`);
-                error.status = response.status;
-                error.data = data;
-                throw error;
+                throw new Error(data.message || `Request failed with status ${response.status}`);
             }
 
             return data;
         } catch (error) {
             console.error(`[${new Date().toISOString()}] Request failed:`, {
                 url,
-                error: error.message,
-                stack: error.stack
+                error: error.message
             });
 
             if (error.name === 'AbortError') {
@@ -99,65 +85,14 @@ const api = {
                 throw new Error('No internet connection. Please check your network and try again.');
             }
 
-            if (error.message.includes('Failed to fetch')) {
-                throw new Error('Unable to connect to the server. Please try again later.');
-            }
-
             throw error;
         } finally {
             clearTimeout(timeoutId);
         }
     },
 
-    async register(userData) {
-        try {
-            const data = await this.makeRequest(`${this.BASE_URL}/api/auth/register`, {
-                method: 'POST',
-                body: JSON.stringify(userData)
-            });
-            
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                if (data.user) {
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                }
-            }
-            
-            return data;
-        } catch (error) {
-            throw new Error(error.message || 'Registration failed. Please try again.');
-        }
-    },
-
-    async login(credentials) {
-        try {
-            const data = await this.makeRequest(`${this.BASE_URL}/api/auth/login`, {
-                method: 'POST',
-                body: JSON.stringify(credentials)
-            });
-            
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                if (data.user) {
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                }
-            }
-            
-            return data;
-        } catch (error) {
-            throw new Error(error.message || 'Login failed. Please try again.');
-        }
-    },
-
     async getProfile() {
         return this.makeRequest(`${this.BASE_URL}/api/profile`);
-    },
-
-    async updateProfile(profileData) {
-        return this.makeRequest(`${this.BASE_URL}/api/profile`, {
-            method: 'PUT',
-            body: JSON.stringify(profileData)
-        });
     },
 
     async addEducation(educationData) {
@@ -181,23 +116,11 @@ const api = {
         });
     },
 
-    // Helper methods
-    isAuthenticated() {
-        return !!localStorage.getItem('token');
-    },
-
-    logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = '/login.html';
-    },
-
-    handleError(error) {
-        if (error.message.includes('401') || error.message.includes('unauthorized')) {
-            this.logout();
-            return;
-        }
-        throw error;
+    async updateSocialLinks(socialLinks) {
+        return this.makeRequest(`${this.BASE_URL}/api/profile/social`, {
+            method: 'PUT',
+            body: JSON.stringify(socialLinks)
+        });
     }
 };
 

@@ -219,36 +219,41 @@ async function updateSocialLinks() {
 
     try {
         showLoading();
-        await api.updateProfile({
-            socialLinks: {
-                linkedin: linkedinUrl,
-                github: githubUrl,
-                portfolio: portfolioUrl
-            }
+        const response = await api.updateSocialLinks({
+            linkedin: linkedinUrl,
+            github: githubUrl,
+            portfolio: portfolioUrl
         });
-        showMessage('Social links updated successfully');
+
+        if (response.status === 'success') {
+            showMessage('Social links updated successfully');
+            await fetchProfile(); // Refresh the profile data
+        } else {
+            throw new Error('Failed to update social links');
+        }
     } catch (error) {
         console.error('Failed to update social links:', error);
-        showMessage('Failed to update social links', true);
+        showMessage(error.message || 'Failed to update social links', true);
     } finally {
         hideLoading();
     }
 }
 
 // Initialize everything when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     try {
+        console.log('Initializing profile page');
+        
         // Initialize DOM elements
         initializeElements();
 
         // Check authentication
-        if (!api.isAuthenticated()) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log('No token found, redirecting to login');
             window.location.href = '/login.html';
             return;
         }
-
-        // Fetch initial profile data
-        fetchProfile();
 
         // Add form submit event listeners
         const educationForm = document.getElementById('educationForm');
@@ -265,6 +270,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (skillForm) {
             skillForm.addEventListener('submit', handleSkillSubmit);
         }
+
+        // Fetch initial profile data
+        await fetchProfile();
+        
     } catch (error) {
         console.error('Failed to initialize profile:', error);
         showMessage('Failed to initialize profile. Please refresh the page.', true);

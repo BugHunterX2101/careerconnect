@@ -7,7 +7,17 @@ const auth = require('../middleware/auth');
 router.get('/', auth, async (req, res) => {
     try {
         console.log('Fetching profile for user:', req.user.id);
+        
+        if (!req.user || !req.user.id) {
+            console.error('No user ID in request');
+            return res.status(401).json({
+                status: 'error',
+                message: 'User not authenticated'
+            });
+        }
+
         let profile = await Profile.findOne({ userId: req.user.id });
+        console.log('Found profile:', profile ? 'Yes' : 'No');
         
         if (!profile) {
             console.log('Creating new profile for user:', req.user.id);
@@ -26,6 +36,7 @@ router.get('/', auth, async (req, res) => {
             console.log('New profile created successfully');
         }
         
+        console.log('Sending profile data');
         res.json({
             status: 'success',
             data: profile
@@ -43,14 +54,28 @@ router.get('/', auth, async (req, res) => {
 // Add education
 router.post('/education', auth, async (req, res) => {
     try {
+        console.log('Adding education for user:', req.user.id);
+        console.log('Education data received:', req.body);
+
         const profile = await Profile.findOne({ userId: req.user.id });
         
         if (!profile) {
-            return res.status(404).json({ message: 'Profile not found' });
+            console.log('Profile not found for user:', req.user.id);
+            return res.status(404).json({
+                status: 'error',
+                message: 'Profile not found'
+            });
         }
 
         const { school, degree, field, startDate, endDate } = req.body;
         
+        if (!school || !degree || !field || !startDate) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Missing required fields'
+            });
+        }
+
         profile.education.unshift({
             school,
             degree,
@@ -60,10 +85,19 @@ router.post('/education', auth, async (req, res) => {
         });
 
         await profile.save();
-        res.json(profile);
+        console.log('Education added successfully');
+        
+        res.json({
+            status: 'success',
+            data: profile
+        });
     } catch (error) {
         console.error('Error adding education:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to add education',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 
