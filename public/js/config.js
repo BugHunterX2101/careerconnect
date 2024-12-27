@@ -1,6 +1,9 @@
 // API Configuration
 const config = {
-    API_BASE_URL: 'http://localhost:3000',
+    // Use Vercel URL in production, localhost in development
+    API_BASE_URL: window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000'
+        : 'https://careerconnect-server.vercel.app',
     getHeaders: () => {
         const token = localStorage.getItem('token');
         return {
