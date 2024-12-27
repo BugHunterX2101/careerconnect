@@ -1,18 +1,19 @@
 // API Configuration
 const api = {
     // Use the current domain in production, localhost in development
-    BASE_URL: window.location.hostname === 'localhost' 
+    BASE_URL: window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
         ? 'http://localhost:3000'
         : 'https://careerconnect-server-7af1-4phdqp9m-vedit-agrawals-projects.vercel.app',
     
     getHeaders() {
         const token = localStorage.getItem('token');
-        return {
+        const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Origin': window.location.origin
+            'Authorization': token ? `Bearer ${token}` : ''
         };
+        console.log('Request headers:', headers);
+        return headers;
     },
 
     async makeRequest(url, options = {}) {
@@ -20,43 +21,67 @@ const api = {
         const timeoutId = setTimeout(() => controller.abort(), 30000);
 
         try {
-            console.log('Making request to:', url);
+            console.log(`[${new Date().toISOString()}] Making request to:`, url);
             console.log('Request options:', {
                 ...options,
-                headers: this.getHeaders(),
-                body: options.body ? JSON.parse(options.body) : undefined
+                headers: this.getHeaders()
             });
 
-            const response = await fetch(url, {
+            const fetchOptions = {
                 ...options,
                 headers: this.getHeaders(),
-                mode: 'cors',
                 signal: controller.signal
-            });
+            };
 
+            console.log('Final fetch options:', fetchOptions);
+
+            const response = await fetch(url, fetchOptions);
             clearTimeout(timeoutId);
 
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
             let data;
+            const text = await response.text();
+            console.log('Raw response:', text);
+
             try {
-                data = await response.json();
+                data = text ? JSON.parse(text) : {};
             } catch (e) {
                 console.error('Failed to parse JSON response:', e);
-                throw new Error('Invalid response format from server');
+                throw new Error(`Invalid response format from server: ${text}`);
             }
 
-            console.log('Response status:', response.status);
-            console.log('Response data:', data);
+            console.log('Parsed response data:', data);
 
             if (!response.ok) {
-                throw new Error(data.message || `Request failed with status ${response.status}`);
+                const error = new Error(data.message || `Request failed with status ${response.status}`);
+                error.status = response.status;
+                error.data = data;
+                throw error;
             }
 
             return data;
         } catch (error) {
+            console.error(`[${new Date().toISOString()}] Request failed:`, {
+                url,
+                error: error.message,
+                stack: error.stack
+            });
+
             if (error.name === 'AbortError') {
                 throw new Error('Request timed out. Please try again.');
             }
-            console.error('Request failed:', error);
+
+            // Check for network errors
+            if (!navigator.onLine) {
+                throw new Error('No internet connection. Please check your network and try again.');
+            }
+
+            if (error.message.includes('Failed to fetch')) {
+                throw new Error('Unable to connect to the server. Please try again later.');
+            }
+
             throw error;
         } finally {
             clearTimeout(timeoutId);
@@ -66,10 +91,15 @@ const api = {
     async register(userData) {
         console.log('Registering user:', { ...userData, password: '[REDACTED]' });
         try {
-            const data = await this.makeRequest(`${this.BASE_URL}/api/auth/register`, {
+            const url = `${this.BASE_URL}/api/auth/register`;
+            console.log('Registration URL:', url);
+            
+            const data = await this.makeRequest(url, {
                 method: 'POST',
                 body: JSON.stringify(userData)
             });
+            
+            console.log('Registration response:', { ...data, token: data.token ? '[PRESENT]' : '[MISSING]' });
             
             if (data.token) {
                 localStorage.setItem('token', data.token);
@@ -80,7 +110,11 @@ const api = {
             
             return data;
         } catch (error) {
-            console.error('Registration failed:', error);
+            console.error('Registration failed:', {
+                error: error.message,
+                status: error.status,
+                data: error.data
+            });
             throw new Error(error.message || 'Registration failed. Please try again.');
         }
     },

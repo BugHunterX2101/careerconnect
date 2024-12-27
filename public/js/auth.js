@@ -1,106 +1,86 @@
-const express = require('express');
-const router = express.Router();
-const User = require('./models/User');
+// Authentication functions
+const auth = {
+    API_URL: 'https://careerconnect-server-7af1-vedit-agrawals-projects.vercel.app',
 
-// Register route
-router.post('/register', async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        
-        // Basic validation
-        if (!username || !email || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Please provide username, email and password'
+    async register(userData) {
+        try {
+            console.log('Registering user:', userData);
+            const response = await fetch(`${this.API_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(userData)
             });
-        }
 
-        // Create user
-        const user = new User({
-            username,
-            email,
-            password
-        });
+            const data = await response.json();
+            console.log('Registration response:', data);
 
-        // Save user
-        await user.save();
-
-        // Return success
-        res.status(201).json({
-            status: 'success',
-            message: 'Registration successful',
-            data: {
-                userId: user._id,
-                username: user.username,
-                email: user.email
+            if (!response.ok) {
+                throw new Error(data.message || 'Registration failed');
             }
-        });
-    } catch (error) {
-        console.error('Registration error:', error);
-        
-        // Handle duplicate key error
-        if (error.code === 11000) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Username or email already exists'
-            });
+
+            // Store token and user data
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            return data;
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
         }
+    },
 
-        res.status(500).json({
-            status: 'error',
-            message: 'Registration failed'
-        });
-    }
-});
-
-// Login route
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        // Basic validation
-        if (!email || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Please provide email and password'
+    async login(credentials) {
+        try {
+            console.log('Logging in user:', credentials.email);
+            const response = await fetch(`${this.API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(credentials)
             });
-        }
 
-        // Find user
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({
-                status: 'error',
-                message: 'Invalid credentials'
-            });
-        }
+            const data = await response.json();
+            console.log('Login response:', data);
 
-        // Check password
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            return res.status(401).json({
-                status: 'error',
-                message: 'Invalid credentials'
-            });
-        }
-
-        // Return success
-        res.json({
-            status: 'success',
-            message: 'Login successful',
-            data: {
-                userId: user._id,
-                username: user.username,
-                email: user.email
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed');
             }
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Login failed'
-        });
-    }
-});
 
-module.exports = router; 
+            // Store token and user data
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            return data;
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
+        }
+    },
+
+    logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login.html';
+    },
+
+    isAuthenticated() {
+        return !!localStorage.getItem('token');
+    },
+
+    getToken() {
+        return localStorage.getItem('token');
+    },
+
+    getUser() {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    }
+};
+
+// Export auth object
+window.auth = auth; 
