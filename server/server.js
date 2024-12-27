@@ -8,9 +8,6 @@ const rateLimit = require('express-rate-limit');
 // Initialize express app
 const app = express();
 
-// Serve static files from the public directory
-app.use(express.static(path.join(__dirname, '../public')));
-
 // Set strict query for Mongoose
 mongoose.set('strictQuery', true);
 
@@ -38,17 +35,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profile', require('./routes/profile'));
 
-// Serve index.html for all other routes in production
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
-});
-
-// Health check endpoint with detailed status
-app.get('/health', (req, res) => {
+// Health check endpoint
+app.get('/api/health', (req, res) => {
     const status = {
         status: 'OK',
         timestamp: new Date().toISOString(),
@@ -77,51 +69,19 @@ app.get('/api/test', (req, res) => {
     });
 });
 
-// Error handling for JSON parsing
-app.use((err, req, res, next) => {
-    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        console.error('JSON Parsing Error:', err);
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid JSON payload',
-            details: err.message
-        });
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Handle client-side routing - serve index.html for all non-API routes
+app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(__dirname, '../public/index.html'));
     }
-    next(err);
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err);
-    
-    // Handle mongoose validation errors
-    if (err.name === 'ValidationError') {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Validation Error',
-            errors: Object.values(err.errors).map(e => e.message)
-        });
-    }
-
-    // Handle mongoose duplicate key errors
-    if (err.code === 11000) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Duplicate field value entered',
-            field: Object.keys(err.keyPattern)[0]
-        });
-    }
-
-    // Handle CORS errors
-    if (err.message.includes('Not allowed by CORS')) {
-        return res.status(403).json({
-            status: 'error',
-            message: 'CORS Error: Origin not allowed',
-            origin: req.headers.origin
-        });
-    }
-
-    // Handle other errors
     res.status(err.status || 500).json({
         status: 'error',
         message: err.message || 'Internal server error',
@@ -165,29 +125,27 @@ const startServer = async () => {
     try {
         await connectWithRetry();
         
-        if (process.env.NODE_ENV !== 'production') {
-            const PORT = config.port;
-            const server = app.listen(PORT, () => {
-                console.log(`Server running on port ${PORT} in ${config.nodeEnv} mode`);
-            });
+        const PORT = process.env.PORT || 3000;
+        const server = app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+        });
 
-            // Handle server errors
-            server.on('error', (error) => {
-                console.error('Server error:', error);
-                process.exit(1);
-            });
+        // Handle server errors
+        server.on('error', (error) => {
+            console.error('Server error:', error);
+            process.exit(1);
+        });
 
-            // Graceful shutdown
-            process.on('SIGTERM', () => {
-                console.log('SIGTERM received. Shutting down gracefully...');
-                server.close(() => {
-                    console.log('Server closed. Exiting process.');
-                    mongoose.connection.close(false, () => {
-                        process.exit(0);
-                    });
+        // Graceful shutdown
+        process.on('SIGTERM', () => {
+            console.log('SIGTERM received. Shutting down gracefully...');
+            server.close(() => {
+                console.log('Server closed. Exiting process.');
+                mongoose.connection.close(false, () => {
+                    process.exit(0);
                 });
             });
-        }
+        });
     } catch (err) {
         console.error('Failed to start server:', err);
         process.exit(1);
