@@ -7,24 +7,11 @@ const api = {
     
     getHeaders() {
         const token = localStorage.getItem('token');
-        if (!token && window.location.pathname !== '/login.html' && window.location.pathname !== '/signup.html') {
-            window.location.href = '/login.html';
-            return null;
-        }
-
         const headers = {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
         };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        console.log('Request headers:', {
-            ...headers,
-            Authorization: headers.Authorization ? '[PRESENT]' : '[MISSING]'
-        });
         return headers;
     },
 
@@ -33,35 +20,17 @@ const api = {
         const timeoutId = setTimeout(() => controller.abort(), 30000);
 
         try {
-            console.log(`[${new Date().toISOString()}] Making request to:`, url);
-            
-            const headers = this.getHeaders();
-            if (!headers) return; // User was redirected to login
-
             const fetchOptions = {
                 ...options,
-                headers,
-                signal: controller.signal,
-                credentials: 'include'
+                headers: this.getHeaders(),
+                signal: controller.signal
             };
-
-            console.log('Request options:', {
-                ...fetchOptions,
-                headers: {
-                    ...fetchOptions.headers,
-                    Authorization: fetchOptions.headers.Authorization ? '[PRESENT]' : '[MISSING]'
-                }
-            });
 
             const response = await fetch(url, fetchOptions);
             clearTimeout(timeoutId);
 
-            console.log('Response status:', response.status);
-            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
             let data;
             const text = await response.text();
-            console.log('Raw response:', text);
 
             try {
                 data = text ? JSON.parse(text) : {};
@@ -85,12 +54,6 @@ const api = {
 
             return data;
         } catch (error) {
-            console.error(`[${new Date().toISOString()}] Request failed:`, {
-                url,
-                error: error.message,
-                stack: error.stack
-            });
-
             if (error.name === 'AbortError') {
                 throw new Error('Request timed out. Please try again.');
             }
@@ -110,17 +73,11 @@ const api = {
     },
 
     async register(userData) {
-        console.log('Registering user:', { ...userData, password: '[REDACTED]' });
         try {
-            const url = `${this.BASE_URL}/api/auth/register`;
-            console.log('Registration URL:', url);
-            
-            const data = await this.makeRequest(url, {
+            const data = await this.makeRequest(`${this.BASE_URL}/api/auth/register`, {
                 method: 'POST',
                 body: JSON.stringify(userData)
             });
-            
-            console.log('Registration response:', { ...data, token: data.token ? '[PRESENT]' : '[MISSING]' });
             
             if (data.token) {
                 localStorage.setItem('token', data.token);
@@ -131,17 +88,11 @@ const api = {
             
             return data;
         } catch (error) {
-            console.error('Registration failed:', {
-                error: error.message,
-                status: error.status,
-                data: error.data
-            });
             throw new Error(error.message || 'Registration failed. Please try again.');
         }
     },
 
     async login(credentials) {
-        console.log('Logging in user:', credentials.email);
         try {
             const data = await this.makeRequest(`${this.BASE_URL}/api/auth/login`, {
                 method: 'POST',
@@ -157,7 +108,6 @@ const api = {
             
             return data;
         } catch (error) {
-            console.error('Login failed:', error);
             throw new Error(error.message || 'Login failed. Please try again.');
         }
     },
@@ -206,7 +156,6 @@ const api = {
     },
 
     handleError(error) {
-        console.error('API Error:', error);
         if (error.message.includes('401') || error.message.includes('unauthorized')) {
             this.logout();
             return;
