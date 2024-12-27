@@ -1151,7 +1151,7 @@
         }
 
         // Function to submit education
-        function submitEducation(event) {
+        async function submitEducation(event) {
             event.preventDefault();
             const education = {
                 school: document.getElementById('school').value,
@@ -1161,15 +1161,33 @@
                 endDate: document.getElementById('eduEndDate').value || null
             };
 
-            profileData.education.push(education);
-            renderEducation();
-            closeModal('education');
-            showSuccessMessage('Education added successfully!');
-            document.getElementById('educationForm').reset();
+            try {
+                const response = await fetch('/api/profile/education', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(education)
+                });
+
+                if (response.ok) {
+                    profileData.education.push(education);
+                    renderEducation();
+                    closeModal('education');
+                    showSuccessMessage('Education added successfully!');
+                    document.getElementById('educationForm').reset();
+                } else {
+                    showErrorMessage('Failed to add education. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error adding education:', error);
+                showErrorMessage('Failed to add education. Please try again.');
+            }
         }
 
         // Function to submit experience
-        function submitExperience(event) {
+        async function submitExperience(event) {
             event.preventDefault();
             const experience = {
                 company: document.getElementById('company').value,
@@ -1180,26 +1198,63 @@
                 endDate: document.getElementById('expEndDate').value || null
             };
 
-            profileData.experience.push(experience);
-            renderExperience();
-            closeModal('experience');
-            showSuccessMessage('Experience added successfully!');
-            document.getElementById('experienceForm').reset();
+            try {
+                const response = await fetch('/api/profile/experience', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(experience)
+                });
+
+                if (response.ok) {
+                    profileData.experience.push(experience);
+                    renderExperience();
+                    closeModal('experience');
+                    showSuccessMessage('Experience added successfully!');
+                    document.getElementById('experienceForm').reset();
+                } else {
+                    showErrorMessage('Failed to add experience. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error adding experience:', error);
+                showErrorMessage('Failed to add experience. Please try again.');
+            }
         }
 
         // Function to submit skill
-        function submitSkill(event) {
+        async function submitSkill(event) {
             event.preventDefault();
             const skill = document.getElementById('skillName').value;
 
-            if (!profileData.skills.includes(skill)) {
-                profileData.skills.push(skill);
-                renderSkills();
-                closeModal('skill');
-                showSuccessMessage('Skill added successfully!');
-                document.getElementById('skillForm').reset();
-            } else {
-                showSuccessMessage('Skill already exists!');
+            if (profileData.skills.includes(skill)) {
+                showErrorMessage('Skill already exists!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/profile/skills', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ skill })
+                });
+
+                if (response.ok) {
+                    profileData.skills.push(skill);
+                    renderSkills();
+                    closeModal('skill');
+                    showSuccessMessage('Skill added successfully!');
+                    document.getElementById('skillForm').reset();
+                } else {
+                    showErrorMessage('Failed to add skill. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error adding skill:', error);
+                showErrorMessage('Failed to add skill. Please try again.');
             }
         }
 
@@ -1264,19 +1319,133 @@
         }
 
         // Function to remove skill
-        function removeSkill(skill) {
-            profileData.skills = profileData.skills.filter(s => s !== skill);
-            renderSkills();
-            showSuccessMessage('Skill removed successfully!');
+        async function removeSkill(skill) {
+            try {
+                const response = await fetch(`/api/profile/skills/${encodeURIComponent(skill)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    profileData.skills = profileData.skills.filter(s => s !== skill);
+                    renderSkills();
+                    showSuccessMessage('Skill removed successfully!');
+                } else {
+                    showErrorMessage('Failed to remove skill. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error removing skill:', error);
+                showErrorMessage('Failed to remove skill. Please try again.');
+            }
         }
 
-        // Add click handlers for social links
+        // Function to update social links
+        async function updateSocialLinks(type, url) {
+            try {
+                const response = await fetch('/api/profile/social', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        [type]: url
+                    })
+                });
+
+                if (response.ok) {
+                    profileData.social[type] = url;
+                    showSuccessMessage(`${type} URL updated successfully!`);
+                } else {
+                    showErrorMessage(`Failed to update ${type} URL. Please try again.`);
+                }
+            } catch (error) {
+                console.error('Error updating social link:', error);
+                showErrorMessage(`Failed to update ${type} URL. Please try again.`);
+            }
+        }
+
+        // Function to update profile
+        async function updateProfile() {
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                if (response.ok) {
+                    showSuccessMessage('Profile updated successfully!');
+                } else {
+                    showErrorMessage('Failed to update profile. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showErrorMessage('Failed to update profile. Please try again.');
+            }
+        }
+
+        // Function to load profile data
+        async function loadProfileData() {
+            try {
+                const response = await fetch('/api/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    profileData = await response.json();
+                    renderEducation();
+                    renderExperience();
+                    renderSkills();
+                    
+                    // Update social links
+                    if (profileData.social.linkedin) {
+                        document.getElementById('linkedinLink').href = profileData.social.linkedin;
+                    }
+                    if (profileData.social.github) {
+                        document.getElementById('githubLink').href = profileData.social.github;
+                    }
+
+                    // Update user info
+                    if (profileData.user) {
+                        document.getElementById('userName').textContent = profileData.user.name || 'User';
+                        document.getElementById('userRole').textContent = profileData.user.role || 'Job Seeker';
+                    }
+                } else {
+                    showErrorMessage('Failed to load profile data. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showErrorMessage('Failed to load profile data. Please try again.');
+            }
+        }
+
+        // Function to show error message
+        function showErrorMessage(message) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successMessage.style.backgroundColor = '#ff3333';
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                successMessage.style.backgroundColor = 'rgba(0, 247, 255, 0.9)';
+            }, 3000);
+        }
+
+        // Update social link click handlers
         document.getElementById('linkedinLink').addEventListener('click', function(e) {
             e.preventDefault();
             const url = prompt('Enter your LinkedIn URL:');
             if (url) {
+                updateSocialLinks('linkedin', url);
                 this.href = url;
-                showSuccessMessage('LinkedIn URL updated successfully!');
             }
         });
 
@@ -1284,16 +1453,22 @@
             e.preventDefault();
             const url = prompt('Enter your GitHub URL:');
             if (url) {
+                updateSocialLinks('github', url);
                 this.href = url;
-                showSuccessMessage('GitHub URL updated successfully!');
             }
         });
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
-            renderEducation();
-            renderExperience();
-            renderSkills();
+            loadProfileData();
+            
+            // Initialize dropdowns
+            createDropdown('school', universities);
+            createDropdown('degree', degrees);
+            createDropdown('field', fields);
+            createDropdown('company', companies);
+            createDropdown('position', positions);
+            createDropdown('skillName', skills);
         });
     </script>
 </body>
