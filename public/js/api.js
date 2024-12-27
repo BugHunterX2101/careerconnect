@@ -7,12 +7,21 @@ const api = {
     
     getHeaders() {
         const token = localStorage.getItem('token');
+        if (!token && window.location.pathname !== '/login.html' && window.location.pathname !== '/signup.html') {
+            window.location.href = '/login.html';
+            return null;
+        }
+
         const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Origin': window.location.origin
+            'Authorization': token ? `Bearer ${token}` : ''
         };
+
+        console.log('Request headers:', {
+            ...headers,
+            Authorization: headers.Authorization ? '[PRESENT]' : '[MISSING]'
+        });
         return headers;
     },
 
@@ -21,17 +30,35 @@ const api = {
         const timeoutId = setTimeout(() => controller.abort(), 30000);
 
         try {
+            console.log(`[${new Date().toISOString()}] Making request to:`, url);
+            
+            const headers = this.getHeaders();
+            if (!headers) return; // User was redirected to login
+
             const fetchOptions = {
                 ...options,
-                headers: this.getHeaders(),
-                signal: controller.signal
+                headers,
+                signal: controller.signal,
+                mode: 'cors'
             };
+
+            console.log('Request options:', {
+                ...fetchOptions,
+                headers: {
+                    ...fetchOptions.headers,
+                    Authorization: fetchOptions.headers.Authorization ? '[PRESENT]' : '[MISSING]'
+                }
+            });
 
             const response = await fetch(url, fetchOptions);
             clearTimeout(timeoutId);
 
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
             let data;
             const text = await response.text();
+            console.log('Raw response:', text);
 
             try {
                 data = text ? JSON.parse(text) : {};
@@ -39,6 +66,8 @@ const api = {
                 console.error('Failed to parse JSON response:', e);
                 throw new Error(`Invalid response format from server: ${text}`);
             }
+
+            console.log('Parsed response data:', data);
 
             if (!response.ok) {
                 if (response.status === 401) {
@@ -55,6 +84,12 @@ const api = {
 
             return data;
         } catch (error) {
+            console.error(`[${new Date().toISOString()}] Request failed:`, {
+                url,
+                error: error.message,
+                stack: error.stack
+            });
+
             if (error.name === 'AbortError') {
                 throw new Error('Request timed out. Please try again.');
             }
