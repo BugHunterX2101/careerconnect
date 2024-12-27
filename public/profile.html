@@ -543,7 +543,7 @@
             <li class="nav-item">
                 <a href="./messages.html" class="nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v2zm0-3H6V6h12v2z"/>
                     </svg>
                     Messages
                 </a>
@@ -748,17 +748,6 @@
     </div>
 
     <script>
-        // Sample data structure
-        let profileData = {
-            education: [],
-            experience: [],
-            skills: [],
-            social: {
-                linkedin: '',
-                github: ''
-            }
-        };
-
         // Predefined options
         const universities = [
             // Top Global Universities
@@ -770,1371 +759,339 @@
             'Indian Institute of Technology Bombay', 'Indian Institute of Technology Delhi',
             'Indian Institute of Technology Madras', 'Indian Institute of Technology Kanpur',
             'Indian Institute of Technology Kharagpur', 'Indian Institute of Technology Roorkee',
-            'Indian Institute of Technology Guwahati', 'Indian Institute of Technology Hyderabad',
-            'Indian Institute of Technology Indore', 'Indian Institute of Technology Gandhinagar',
-            'Indian Institute of Technology Patna', 'Indian Institute of Technology Bhubaneswar',
-            'Indian Institute of Technology Jodhpur', 'Indian Institute of Technology Mandi',
-            'Indian Institute of Technology Varanasi (BHU)', 'Indian Institute of Technology Palakkad',
-            'Indian Institute of Technology Tirupati', 'Indian Institute of Technology Bhilai',
-            'Indian Institute of Technology Dharwad', 'Indian Institute of Technology Jammu',
-
-            // Indian Institutes of Management (IIMs)
-            'Indian Institute of Management Ahmedabad', 'Indian Institute of Management Bangalore',
-            'Indian Institute of Management Calcutta', 'Indian Institute of Management Lucknow',
-            'Indian Institute of Management Kozhikode', 'Indian Institute of Management Indore',
-            'Indian Institute of Management Tiruchirappalli', 'Indian Institute of Management Ranchi',
-            'Indian Institute of Management Raipur', 'Indian Institute of Management Rohtak',
-            'Indian Institute of Management Kashipur', 'Indian Institute of Management Udaipur',
-            'Indian Institute of Management Nagpur', 'Indian Institute of Management Amritsar',
-            'Indian Institute of Management Bodh Gaya', 'Indian Institute of Management Sirmaur',
-            'Indian Institute of Management Visakhapatnam', 'Indian Institute of Management Sambalpur',
-            'Indian Institute of Management Jammu',
-
-            // National Institutes of Technology (NITs)
-            'National Institute of Technology Tiruchirappalli', 'National Institute of Technology Rourkela',
-            'National Institute of Technology Karnataka', 'National Institute of Technology Calicut',
-            'National Institute of Technology Warangal', 'National Institute of Technology Durgapur',
-            'National Institute of Technology Silchar', 'National Institute of Technology Hamirpur',
-            'National Institute of Technology Jamshedpur', 'National Institute of Technology Kurukshetra',
-            'National Institute of Technology Patna', 'National Institute of Technology Raipur',
-            'National Institute of Technology Srinagar', 'National Institute of Technology Agartala',
-            'National Institute of Technology Delhi', 'National Institute of Technology Goa',
-            'National Institute of Technology Manipur', 'National Institute of Technology Meghalaya',
-            'National Institute of Technology Nagaland', 'National Institute of Technology Puducherry',
-            'National Institute of Technology Sikkim', 'National Institute of Technology Arunachal Pradesh',
-            'National Institute of Technology Uttarakhand', 'National Institute of Technology Mizoram',
-            'National Institute of Technology Andhra Pradesh',
-
-            // Other Premier Indian Institutions
-            'All India Institute of Medical Sciences Delhi', 'Jawaharlal Nehru University',
-            'Delhi University', 'Banaras Hindu University', 'Anna University',
-            'Jadavpur University', 'Aligarh Muslim University', 'Birla Institute of Technology and Science',
-            'Indian Statistical Institute', 'National Law School of India University',
-            'Christian Medical College Vellore', 'Manipal Academy of Higher Education',
-            'Savitribai Phule Pune University', 'Jamia Millia Islamia', 'University of Hyderabad',
-            'Tata Institute of Social Sciences', 'Indian Institute of Science',
-            'National Institute of Design', 'National Institute of Fashion Technology',
-            'Xavier Labour Relations Institute', 'Indian School of Business',
-            'National Institute of Mental Health and Neurosciences',
-
-            // Top US Universities
-            'Princeton University', 'Yale University', 'Columbia University', 'University of Chicago',
-            'University of Pennsylvania', 'Johns Hopkins University', 'Northwestern University',
-            'Duke University', 'Dartmouth College', 'Brown University', 'Vanderbilt University',
-            'Rice University', 'Washington University in St. Louis', 'Cornell University',
-            'University of Notre Dame', 'University of California Berkeley', 'University of California Los Angeles',
-            'University of Michigan', 'University of Virginia', 'Georgia Institute of Technology',
-            'University of Illinois Urbana-Champaign', 'University of Wisconsin-Madison',
-            'University of Texas at Austin', 'University of Washington', 'University of Maryland',
-            'Pennsylvania State University', 'Ohio State University', 'Purdue University',
-            'University of Minnesota', 'University of Florida',
-
-            // Top UK Universities
-            'University College London', 'London School of Economics', 'University of Edinburgh',
-            'University of Manchester', 'Kings College London', 'University of Bristol',
-            'University of Warwick', 'University of Glasgow', 'Durham University',
-            'University of Sheffield', 'University of Birmingham', 'University of Leeds',
-            'University of Southampton', 'University of Nottingham', 'Cardiff University',
-            'Queen Mary University of London', 'University of Liverpool', 'University of York',
-            'University of East Anglia', 'University of Essex',
-
-            // Top Canadian Universities
-            'University of Toronto', 'University of British Columbia', 'McGill University',
-            'University of Montreal', 'University of Alberta', 'McMaster University',
-            'University of Waterloo', 'Western University', 'University of Ottawa',
-            'University of Calgary', 'Queens University', 'Simon Fraser University',
-            'University of Victoria', 'Dalhousie University', 'York University',
-
-            // Top Australian Universities
-            'University of Melbourne', 'Australian National University', 'University of Sydney',
-            'University of Queensland', 'University of New South Wales', 'Monash University',
-            'University of Western Australia', 'University of Adelaide', 'University of Technology Sydney',
-            'Macquarie University', 'RMIT University', 'Curtin University',
-            'Queensland University of Technology', 'University of Wollongong', 'Deakin University',
-
-            // Top European Universities
-            'ETH Zurich', 'Technical University of Munich', 'Delft University of Technology',
-            'KU Leuven', 'EPFL', 'University of Amsterdam', 'Uppsala University',
-            'Technical University of Denmark', 'University of Helsinki', 'University of Copenhagen',
-            'Karolinska Institute', 'Trinity College Dublin', 'University of Oslo',
-            'Wageningen University', 'Technical University of Berlin', 'University of Vienna',
-            'University of Barcelona', 'University of Milan', 'University of Stockholm',
-            'University of Geneva',
-
-            // Additional Indian Universities
-            'University of Delhi', 'University of Mumbai', 'University of Calcutta',
-            'University of Madras', 'University of Pune', 'University of Hyderabad',
-            'Osmania University', 'Andhra University', 'Bangalore University',
-            'Mysore University', 'Kerala University', 'Calicut University',
-            'Cochin University of Science and Technology', 'Mahatma Gandhi University',
-            'Bharathiar University', 'Bharathidasan University', 'Annamalai University',
-            'Madurai Kamaraj University', 'Tamil Nadu Agricultural University',
-            'Anna University Chennai', 'SRM University', 'VIT University',
-            'Amrita Vishwa Vidyapeetham', 'Lovely Professional University',
-            'Chandigarh University', 'Panjab University', 'Guru Nanak Dev University',
-            'Punjabi University', 'Thapar University', 'Kurukshetra University',
-            'Maharshi Dayanand University', 'Chaudhary Charan Singh University',
-            'Aligarh Muslim University', 'Banaras Hindu University', 'Allahabad University',
-            'Lucknow University', 'Gorakhpur University', 'Kumaun University',
-            'Garhwal University', 'Himachal Pradesh University', 'Jammu University',
-            'Kashmir University', 'North Eastern Hill University', 'Gauhati University',
-            'Dibrugarh University', 'Assam University', 'Manipur University',
-            'Mizoram University', 'Nagaland University', 'Sikkim University',
-            'Tripura University', 'Visva-Bharati University', 'Jadavpur University',
-            'Kalyani University', 'North Bengal University', 'Vidyasagar University',
-            'Utkal University', 'Sambalpur University', 'Berhampur University',
-            'Ravenshaw University', 'Ranchi University', 'Patna University',
-            'Magadh University', 'Nalanda University', 'Gujarat University',
-            'Maharaja Sayajirao University of Baroda', 'Sardar Patel University',
-            'Saurashtra University', 'South Gujarat University', 'Rajasthan University',
-            'Mohanlal Sukhadia University', 'Jai Narain Vyas University',
-            'Maharshi Dayanand Saraswati University', 'Dr. Babasaheb Ambedkar Marathwada University',
-            'Sant Gadge Baba Amravati University', 'Rashtrasant Tukadoji Maharaj Nagpur University',
-            'Shivaji University', 'Solapur University', 'North Maharashtra University',
-            'Kannada University', 'Gulbarga University', 'Mangalore University',
-            'Kuvempu University', 'Tumkur University', 'Visvesvaraya Technological University',
-            'Bangalore University', 'Karnataka State Open University', 'University of Agricultural Sciences',
-            'Rajiv Gandhi University of Health Sciences', 'Dravidian University',
-            'Sri Venkateswara University', 'Acharya Nagarjuna University',
-            'Dr. B.R. Ambedkar Open University', 'Jawaharlal Nehru Technological University',
-            'Kakatiya University', 'Mahatma Gandhi University, Nalgonda',
-            'Palamuru University', 'Potti Sreeramulu Telugu University',
-            'Rayalaseema University', 'Satavahana University', 'Telangana University',
-            'Vikrama Simhapuri University', 'Yogi Vemana University',
-
-            // Additional US Universities
-            'University of Colorado Boulder', 'University of Arizona', 'Arizona State University',
-            'University of Utah', 'University of Oregon', 'Oregon State University',
-            'University of Iowa', 'Iowa State University', 'University of Kansas',
-            'Kansas State University', 'University of Kentucky', 'University of Louisville',
-            'Louisiana State University', 'University of Maine', 'University of Massachusetts Amherst',
-            'University of Mississippi', 'Mississippi State University', 'University of Missouri',
-            'University of Nebraska-Lincoln', 'University of Nevada, Las Vegas',
-            'University of New Hampshire', 'Rutgers University', 'University of New Mexico',
-            'New Mexico State University', 'University of North Carolina at Chapel Hill',
-            'North Carolina State University', 'University of North Dakota',
-            'North Dakota State University', 'Oklahoma State University',
-            'University of Rhode Island', 'University of South Carolina',
-            'South Carolina State University', 'University of South Dakota',
-            'South Dakota State University', 'University of Tennessee',
-            'Tennessee State University', 'Texas Tech University',
-            'University of Vermont', 'Virginia Tech', 'West Virginia University',
-            'University of Wyoming', 'University of Alaska Fairbanks',
-            'University of Hawaii at Manoa', 'University of Idaho',
-            'Montana State University', 'University of Montana',
-            'University of Nevada, Reno', 'University of Toledo',
-            'Wright State University', 'Youngstown State University',
-
-            // Additional UK Universities
-            'Aston University', 'Brunel University London', 'City, University of London',
-            'Goldsmiths, University of London', 'Heriot-Watt University',
-            'Keele University', 'Kingston University', 'Lancaster University',
-            'Loughborough University', 'Oxford Brookes University',
-            'Royal Holloway, University of London', 'SOAS University of London',
-            'Swansea University', 'University of Aberdeen', 'University of Bath',
-            'University of Dundee', 'University of East London', 'University of Greenwich',
-            'University of Hertfordshire', 'University of Hull', 'University of Kent',
-            'University of Leicester', 'University of Lincoln', 'University of Reading',
-            'University of Salford', 'University of St Andrews', 'University of Stirling',
-            'University of Strathclyde', 'University of Surrey', 'University of Sussex',
-            'University of Ulster', 'University of Westminster',
-
-            // Additional European Universities
-            'Aarhus University', 'University of Amsterdam', 'University of Antwerp',
-            'University of Athens', 'University of Basel', 'University of Bergen',
-            'Free University of Berlin', 'Humboldt University of Berlin',
-            'University of Bern', 'University of Bologna', 'University of Bordeaux',
-            'University of Bremen', 'Catholic University of Leuven',
-            'University of Cologne', 'University of Copenhagen', 'Dublin City University',
-            'Trinity College Dublin', 'University College Dublin',
-            'Technical University of Dortmund', 'Dresden University of Technology',
-            'University of Dublin', 'University of Duisburg-Essen',
-            'University of Florence', 'University of Freiburg',
-            'University of Ghent', 'University of Göttingen',
-            'University of Groningen', 'University of Hamburg',
-            'Heidelberg University', 'University of Helsinki',
-            'University of Iceland', 'University College Ireland',
-            'University of Lausanne', 'University of Leipzig',
-            'Catholic University of Louvain', 'University of Luxembourg',
-            'University of Lyon', 'University of Maastricht',
-            'University of Madrid', 'University of Mainz',
-            'University of Mannheim', 'University of Marburg',
-            'University of Milan', 'University of Munich',
-            'University of Münster', 'University of Naples Federico II',
-            'University of Oslo', 'University of Padua',
-            'University of Palermo', 'University of Paris',
-            'University of Pisa', 'University of Porto',
-            'University of Rome', 'University of Rotterdam',
-            'University of Salamanca', 'University of Seville',
-            'University of Stockholm', 'University of Stuttgart',
-            'University of Turin', 'Utrecht University',
-            'University of Valencia', 'University of Vienna',
-            'University of Warsaw', 'University of Zurich',
-
-            // Additional Asian Universities
-            'Peking University', 'Fudan University', 'Shanghai Jiao Tong University',
-            'Zhejiang University', 'Nanjing University', 'Wuhan University',
-            'Sun Yat-sen University', 'University of Hong Kong',
-            'Chinese University of Hong Kong', 'Hong Kong University of Science and Technology',
-            'National Taiwan University', 'Seoul National University',
-            'Korea Advanced Institute of Science and Technology',
-            'Yonsei University', 'Korea University', 'Kyoto University',
-            'Osaka University', 'Tokyo Institute of Technology',
-            'Tohoku University', 'Nagoya University', 'Hokkaido University',
-            'Nanyang Technological University', 'Universiti Malaya',
-            'Universiti Putra Malaysia', 'Universiti Sains Malaysia',
-            'Universiti Teknologi Malaysia', 'Chulalongkorn University',
-            'Mahidol University', 'University of the Philippines',
-            'University of Indonesia', 'Institut Teknologi Bandung',
-            'Universitas Gadjah Mada', 'Vietnam National University',
-            'Hanoi University of Science and Technology',
-
-            // COMEDK Colleges in Karnataka
-            'R.V. College of Engineering, Bangalore',
-            'B.M.S. College of Engineering, Bangalore',
-            'M.S. Ramaiah Institute of Technology, Bangalore',
-            'PES University, Bangalore',
-            'Dayananda Sagar College of Engineering, Bangalore',
-            'JSS Academy of Technical Education, Bangalore',
-            'Nitte Meenakshi Institute of Technology, Bangalore',
-            'Sir M. Visvesvaraya Institute of Technology, Bangalore',
-            'B.N.M. Institute of Technology, Bangalore',
-            'K.S. Institute of Technology, Bangalore',
-            'New Horizon College of Engineering, Bangalore',
-            'Cambridge Institute of Technology, Bangalore',
-            'East Point College of Engineering and Technology, Bangalore',
-            'Global Academy of Technology, Bangalore',
-            'Don Bosco Institute of Technology, Bangalore',
-            'AMC Engineering College, Bangalore',
-            'ACS College of Engineering, Bangalore',
-            'Bangalore Institute of Technology, Bangalore',
-            'Sri Venkateshwara College of Engineering, Bangalore',
-            'Acharya Institute of Technology, Bangalore',
-            'Alliance University (School of Engineering), Bangalore',
-            'CMR Institute of Technology, Bangalore',
-            'Reva University, Bangalore',
-            'RNS Institute of Technology, Bangalore',
-            'Atria Institute of Technology, Bangalore',
-            'HKBK College of Engineering, Bangalore',
-            'Impact College of Engineering and Applied Sciences, Bangalore',
-            'Jyothy Institute of Technology, Bangalore',
-            'KNS Institute of Technology, Bangalore',
-            'MVJ College of Engineering, Bangalore',
-            'Nagarjuna College of Engineering & Technology, Bangalore',
-            'Rajiv Gandhi Institute of Technology, Bangalore',
-            'Sapthagiri College of Engineering, Bangalore',
-            'SEA College of Engineering and Technology, Bangalore',
-            'Sri Krishna Institute of Technology, Bangalore',
-            'Sri Revana Siddeshwara Institute of Technology, Bangalore',
-            'The Oxford College of Engineering, Bangalore',
-            'Vemana Institute of Technology, Bangalore',
-            'Vidya Vikas Institute of Engineering & Technology, Mysore',
-            'Sri Jayachamarajendra College of Engineering, Mysore',
-            'The National Institute of Engineering, Mysore',
-            'Malnad College of Engineering, Hassan',
-            'P.E.S. College of Engineering, Mandya',
-            'Siddaganga Institute of Technology, Tumkur',
-            'Sri Siddhartha Institute of Technology, Tumkur',
-            'Manipal Institute of Technology, Manipal',
-            'KLE Technological University (formerly BVBCET), Hubli',
-            'Basaveshwar Engineering College, Bagalkot',
-            'KLS Gogte Institute of Technology, Belgaum',
-            'SDM College of Engineering and Technology, Dharwad',
-            'Bapuji Institute of Engineering & Technology, Davangere',
-            'GM Institute of Technology, Davangere',
-            'NMAM Institute of Technology, Nitte',
-            'Canara Engineering College, Mangalore',
-            'P A College of Engineering, Mangalore',
-            'St Joseph Engineering College, Mangalore',
-            'Mangalore Institute of Technology & Engineering, Mangalore',
-            'Shri Madhwa Vadiraja Institute of Technology & Management, Udupi',
-            'Tontadarya College of Engineering, Gadag',
-            'Angadi Institute of Technology and Management, Belgaum',
-            'Jain College of Engineering, Belgaum',
-            'Maratha Mandal Engineering College, Belgaum',
-            'Hirasugar Institute of Technology, Belgaum',
-            'SG Balekundri Institute of Technology, Belgaum',
-            // ... (This list continues with many more universities)
+            'Indian Institute of Technology Guwahati', 'Indian Institute of Technology Hyderabad'
         ];
 
         const degrees = [
-            // Bachelor's Degrees
-            'Bachelor of Science (BS)',
-            'Bachelor of Arts (BA)',
-            'Bachelor of Engineering (BE)',
-            'Bachelor of Technology (BTech)',
+            'Bachelor of Technology (B.Tech)',
+            'Bachelor of Engineering (B.E.)',
+            'Master of Technology (M.Tech)',
+            'Master of Engineering (M.E.)',
+            'Bachelor of Science (B.Sc)',
+            'Master of Science (M.Sc)',
+            'Bachelor of Arts (B.A.)',
+            'Master of Arts (M.A.)',
             'Bachelor of Business Administration (BBA)',
-            'Bachelor of Computer Applications (BCA)',
-            'Bachelor of Fine Arts (BFA)',
-            'Bachelor of Architecture (BArch)',
-            
-            // Master's Degrees
-            'Master of Science (MS)',
-            'Master of Arts (MA)',
-            'Master of Engineering (ME)',
-            'Master of Technology (MTech)',
             'Master of Business Administration (MBA)',
-            'Master of Computer Applications (MCA)',
-            'Master of Fine Arts (MFA)',
-            'Master of Architecture (MArch)',
-            'Master of Public Health (MPH)',
-            'Master of Social Work (MSW)',
-            
-            // Doctoral Degrees
-            'Doctor of Philosophy (PhD)',
-            'Doctor of Science (DSc)',
-            'Doctor of Engineering (DEng)',
-            'Doctor of Business Administration (DBA)',
-            
-            // Professional Degrees
-            'Associate Degree',
-            'Diploma',
-            'Professional Certification',
-            'Vocational Training Certificate'
+            'Doctor of Philosophy (Ph.D.)'
         ];
 
         const fields = [
-            // Computer Science & IT
             'Computer Science',
-            'Software Engineering',
             'Information Technology',
-            'Data Science',
-            'Artificial Intelligence',
-            'Machine Learning',
-            'Cybersecurity',
-            'Cloud Computing',
-            'Web Development',
-            'Mobile App Development',
-            
-            // Engineering
-            'Electrical Engineering',
+            'Electronics Engineering',
             'Mechanical Engineering',
             'Civil Engineering',
+            'Electrical Engineering',
             'Chemical Engineering',
             'Aerospace Engineering',
-            'Biomedical Engineering',
-            'Industrial Engineering',
-            'Robotics Engineering',
-            'Environmental Engineering',
-            
-            // Business & Management
             'Business Administration',
-            'Finance',
-            'Marketing',
-            'Economics',
-            'International Business',
-            'Project Management',
-            'Human Resource Management',
-            'Supply Chain Management',
-            
-            // Science & Mathematics
-            'Mathematics',
-            'Physics',
-            'Chemistry',
-            'Biology',
-            'Statistics',
-            'Biotechnology',
-            'Environmental Science',
-            
-            // Other Fields
-            'Digital Marketing',
-            'User Experience Design',
-            'Product Management',
-            'Data Analytics',
-            'Business Intelligence'
+            'Data Science',
+            'Artificial Intelligence',
+            'Machine Learning'
         ];
 
         const companies = [
-            // Global Tech Giants
-            'Google', 'Microsoft', 'Apple', 'Amazon', 'Meta', 'Netflix', 'IBM', 'Intel', 'Oracle',
-            'Salesforce', 'Adobe', 'VMware', 'SAP', 'Cisco', 'Dell Technologies', 'HP', 'Nvidia',
-            'AMD', 'Qualcomm', 'Twitter', 'LinkedIn', 'Spotify', 'Uber', 'Airbnb', 'PayPal',
-            'Square', 'Stripe', 'Shopify', 'Zoom', 'Slack',
-
-            // Indian IT Companies
-            'Tata Consultancy Services', 'Infosys', 'Wipro', 'HCL Technologies', 'Tech Mahindra',
-            'L&T Infotech', 'Mindtree', 'Mphasis', 'Persistent Systems', 'Hexaware Technologies',
-            'Cyient', 'Larsen & Toubro', 'Cognizant Technology Solutions', 'Capgemini India',
-            'Accenture India', 'IBM India', 'Microsoft India', 'Google India', 'Amazon India',
-            'Flipkart', 'Paytm', 'Zomato', 'Swiggy', 'Ola Cabs', 'Byju\'s', 'Unacademy',
-            'PhonePe', 'Razorpay', 'Freshworks', 'InMobi',
-
-            // Indian Conglomerates
-            'Reliance Industries', 'Tata Group', 'Aditya Birla Group', 'Mahindra Group',
-            'Godrej Group', 'Adani Group', 'JSW Group', 'Bharti Enterprises', 'Hero MotoCorp',
-            'Bajaj Group', 'TVS Group', 'Hinduja Group', 'Vedanta Resources', 'ITC Limited',
-            'Sun Pharmaceutical', 'Dr. Reddy\'s Laboratories', 'Cipla', 'Lupin Limited',
-            'Biocon', 'Torrent Pharmaceuticals',
-
-            // Global Consulting
-            'McKinsey & Company', 'Boston Consulting Group', 'Bain & Company', 'Deloitte',
-            'PwC', 'EY', 'KPMG', 'Accenture', 'Capgemini', 'Cognizant', 'Booz Allen Hamilton',
-            'Oliver Wyman', 'A.T. Kearney', 'Roland Berger', 'Strategy&', 'L.E.K. Consulting',
-            'FTI Consulting', 'Alvarez & Marsal', 'Grant Thornton', 'BDO',
-
-            // Investment Banks & Financial Services
-            'Goldman Sachs', 'JPMorgan Chase', 'Morgan Stanley', 'Bank of America',
-            'Citigroup', 'Wells Fargo', 'BlackRock', 'State Street', 'Fidelity Investments',
-            'Vanguard Group', 'Charles Schwab', 'American Express', 'Visa', 'Mastercard',
-            'HSBC', 'Deutsche Bank', 'UBS', 'Credit Suisse', 'Barclays', 'Standard Chartered',
-
-            // Indian Banks & Financial Services
-            'State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak Mahindra Bank',
-            'Yes Bank', 'IndusInd Bank', 'Federal Bank', 'RBL Bank', 'IDFC First Bank',
-            'Bandhan Bank', 'Bank of Baroda', 'Punjab National Bank', 'Canara Bank',
-            'Union Bank of India', 'LIC India', 'HDFC Life', 'SBI Life Insurance',
-            'ICICI Prudential', 'Bajaj Finserv',
-
-            // E-commerce & Retail
-            'Walmart', 'Target', 'Best Buy', 'Home Depot', 'Costco', 'CVS Health',
-            'Walgreens Boots Alliance', 'Kroger', 'Alibaba', 'JD.com', 'Rakuten',
-            'eBay', 'Etsy', 'Wayfair', 'Chewy', 'Coupang', 'Mercado Libre',
-            'Pinduoduo', 'Sea Limited', 'Coles Group',
-
-            // Automotive & Manufacturing
-            'Tesla', 'Toyota', 'Volkswagen', 'BMW', 'Mercedes-Benz', 'General Motors',
-            'Ford', 'Honda', 'Hyundai', 'Tata Motors', 'Maruti Suzuki', 'Mahindra & Mahindra',
-            'Hero MotoCorp', 'Bajaj Auto', 'TVS Motor', 'Royal Enfield', 'Ashok Leyland',
-            'Force Motors', 'Eicher Motors', 'Bharat Forge',
-
-            // Healthcare & Pharmaceuticals
-            'Johnson & Johnson', 'Pfizer', 'Roche', 'Novartis', 'Merck', 'GlaxoSmithKline',
-            'AstraZeneca', 'Sanofi', 'Abbott Laboratories', 'Eli Lilly', 'Bristol Myers Squibb',
-            'Gilead Sciences', 'Amgen', 'Biogen', 'Regeneron Pharmaceuticals', 'Vertex Pharmaceuticals',
-            'Moderna', 'BioNTech', 'Serum Institute of India', 'Bharat Biotech',
-
-            // Energy & Utilities
-            'ExxonMobil', 'Shell', 'BP', 'Chevron', 'Total', 'Saudi Aramco', 'Gazprom',
-            'Petrobras', 'Reliance Industries', 'Indian Oil Corporation', 'Bharat Petroleum',
-            'Hindustan Petroleum', 'NTPC', 'Power Grid Corporation', 'Adani Power',
-            'Tata Power', 'JSW Energy', 'ONGC', 'Coal India', 'Vedanta',
-
-            // Additional Indian Startups & Tech Companies
-            'Meesho', 'Cred', 'Groww', 'Zerodha', 'Dunzo', 'ShareChat',
-            'UpGrad', 'Vedantu', 'Pharmeasy', 'Cars24', 'Lenskart',
-            'Dailyhunt', 'PolicyBazaar', 'Delhivery', 'Moglix', 'OfBusiness',
-            'Urban Company', 'Browserstack', 'Innovaccer', 'Postman',
-            'Chargebee', 'Zenoti', 'Mindtickle', 'Icertis', 'Druva',
-            'Hasura', 'Clevertap', 'Yellow.ai', 'Whatfix', 'Zoho',
-            'Freshdesk', 'Kissflow', 'Facilio', 'Solarclue', 'Darwinbox',
-            'Amagi', 'Tracxn', 'Haptik', 'Uniphore', 'Perfios',
-
-            // Additional Global Tech Companies
-            'Unity Technologies', 'Palantir Technologies', 'Snowflake',
-            'Databricks', 'UiPath', 'Celonis', 'Automation Anywhere',
-            'OutSystems', 'Auth0', 'Confluent', 'HashiCorp', 'GitLab',
-            'JFrog', 'Elastic', 'MongoDB', 'Okta', 'Splunk', 'Datadog',
-            'Cloudflare', 'Fastly', 'Twilio', 'Box', 'Dropbox', 'Slack',
-            'Zoom', 'RingCentral', '8x8', 'Five9', 'Vonage', 'LogMeIn',
-
-            // Additional Manufacturing & Industrial
-            'Siemens', 'General Electric', 'Honeywell', 'ABB', '3M',
-            'Caterpillar', 'Deere & Company', 'Emerson Electric',
-            'Illinois Tool Works', 'Parker Hannifin', 'Rockwell Automation',
-            'Cummins', 'Eaton', 'Dover Corporation', 'Fortive',
-            'Roper Technologies', 'PACCAR', 'Ingersoll Rand',
-            'Stanley Black & Decker', 'Xylem', 'Flowserve',
-
-            // Additional Healthcare Companies
-            'UnitedHealth Group', 'CVS Health', 'McKesson', 'AmerisourceBergen',
-            'Cardinal Health', 'Anthem', 'Cigna', 'Humana', 'HCA Healthcare',
-            'Centene', 'DaVita', 'Laboratory Corporation of America',
-            'Quest Diagnostics', 'Universal Health Services', 'Tenet Healthcare',
-            'Community Health Systems', 'Molina Healthcare', 'WellCare Health Plans',
-
-            // Additional Financial Services
-            'Berkshire Hathaway', 'Industrial and Commercial Bank of China',
-            'China Construction Bank', 'Agricultural Bank of China',
-            'Bank of China', 'Mitsubishi UFJ Financial Group',
-            'Japan Post Bank', 'Sumitomo Mitsui Financial Group',
-            'Mizuho Financial Group', 'BNP Paribas', 'Crédit Agricole',
-            'Société Générale', 'Banco Santander', 'ING Group',
-            'UniCredit', 'Intesa Sanpaolo', 'Credit Suisse Group',
-            'Royal Bank of Canada', 'Toronto-Dominion Bank',
-            'Bank of Montreal', 'Canadian Imperial Bank of Commerce',
-
-            // Additional Retail & Consumer Goods
-            'Procter & Gamble', 'Unilever', 'PepsiCo', 'Coca-Cola',
-            'Nestlé', 'L\'Oréal', 'Nike', 'Adidas', 'H&M',
-            'Inditex (Zara)', 'Fast Retailing (Uniqlo)', 'Gap',
-            'TJX Companies', 'Ross Stores', 'Dollar General',
-            'Dollar Tree', 'Tractor Supply Company', 'AutoZone',
-            'O\'Reilly Auto Parts', 'Advance Auto Parts',
-
-            // Additional Media & Entertainment
-            'Walt Disney', 'Comcast', 'Netflix', 'ViacomCBS',
-            'Fox Corporation', 'Discovery', 'Sony', 'Warner Bros. Discovery',
-            'Live Nation Entertainment', 'iHeartMedia', 'Spotify',
-            'Electronic Arts', 'Activision Blizzard', 'Take-Two Interactive',
-            'Ubisoft', 'Square Enix', 'Bandai Namco', 'Konami',
-            'Capcom', 'Nintendo',
-
-            // Additional Telecommunications
-            'AT&T', 'Verizon', 'T-Mobile', 'Deutsche Telekom',
-            'Vodafone', 'Telefónica', 'Orange', 'América Móvil',
-            'China Mobile', 'NTT', 'SoftBank Group', 'KDDI',
-            'Bharti Airtel', 'Reliance Jio', 'Vodafone Idea',
-            'Rogers Communications', 'BCE', 'Telus',
-
-            // Additional Energy Companies
-            'Saudi Aramco', 'PetroChina', 'Sinopec', 'Rosneft',
-            'Lukoil', 'TotalEnergies', 'Eni', 'Equinor',
-            'ConocoPhillips', 'Phillips 66', 'Valero Energy',
-            'Marathon Petroleum', 'Enbridge', 'TC Energy',
-            'Kinder Morgan', 'Williams Companies',
-
-            // Additional Chemical Companies
-            'BASF', 'Dow', 'LyondellBasell', 'Air Liquide',
-            'Linde', 'Air Products', 'DuPont', 'PPG Industries',
-            'Sherwin-Williams', 'Eastman Chemical', 'Celanese',
-            'FMC Corporation', 'Albemarle', 'International Flavors & Fragrances'
-
-            // ... (This list continues with many more companies)
+            'Google',
+            'Microsoft',
+            'Amazon',
+            'Apple',
+            'Meta',
+            'Netflix',
+            'Adobe',
+            'IBM',
+            'Intel',
+            'Oracle',
+            'Salesforce',
+            'Twitter',
+            'Uber',
+            'Airbnb',
+            'Tesla'
         ];
 
         const positions = [
-            // Software Development
             'Software Engineer',
+            'Senior Software Engineer',
             'Full Stack Developer',
             'Frontend Developer',
             'Backend Developer',
-            'Mobile Developer',
             'DevOps Engineer',
-            'Site Reliability Engineer',
-            'Cloud Engineer',
-            'Security Engineer',
-            'Quality Assurance Engineer',
-            
-            // Data & AI
             'Data Scientist',
             'Machine Learning Engineer',
-            'AI Research Scientist',
-            'Data Engineer',
-            'Business Intelligence Analyst',
-            'Data Analyst',
-            'Big Data Engineer',
-            
-            // Product & Design
             'Product Manager',
-            'Product Owner',
-            'UI/UX Designer',
-            'User Experience Researcher',
-            'Product Designer',
-            'Visual Designer',
-            'Interaction Designer',
-            
-            // Management & Leadership
-            'Engineering Manager',
-            'Technical Lead',
             'Project Manager',
-            'Scrum Master',
+            'Technical Lead',
+            'Engineering Manager',
             'CTO',
-            'VP of Engineering',
-            'Director of Engineering',
-            'Technical Program Manager',
-            
-            // Specialized Roles
-            'Blockchain Developer',
-            'AR/VR Developer',
-            'Game Developer',
-            'Embedded Systems Engineer',
-            'Systems Architect',
-            'Network Engineer',
-            'Database Administrator',
-            'Technical Consultant',
-            'Solutions Architect',
-            'Enterprise Architect'
+            'CEO'
         ];
 
         const skills = [
             // Programming Languages
-            'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'Go', 'Swift', 'Kotlin',
-            'PHP', 'Rust', 'TypeScript', 'Scala', 'R', 'MATLAB', 'Perl', 'Haskell',
-            'Lua', 'Dart', 'Groovy', 'Objective-C', 'Visual Basic', 'Assembly',
-            'COBOL', 'Fortran', 'Pascal', 'Ada', 'Lisp', 'Prolog', 'Erlang',
-
+            'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'PHP', 'Swift', 'Go', 'Rust',
             // Web Technologies
-            'HTML5', 'CSS3', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js',
-            'Django', 'Flask', 'Spring Boot', 'ASP.NET', 'Ruby on Rails', 'Laravel',
-            'Symfony', 'CodeIgniter', 'jQuery', 'Bootstrap', 'Tailwind CSS',
-            'Material-UI', 'Webpack', 'Babel', 'GraphQL', 'REST APIs', 'WebSocket',
-            'Server-Sent Events', 'Progressive Web Apps', 'Web Components',
-            'WebAssembly', 'Service Workers', 'Web Authentication',
-
-            // Databases & Storage
-            'SQL', 'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Cassandra', 'Oracle',
-            'Microsoft SQL Server', 'SQLite', 'MariaDB', 'DynamoDB', 'Couchbase',
-            'Firebase', 'Neo4j', 'Elasticsearch', 'InfluxDB', 'Apache HBase',
-            'Apache Cassandra', 'Amazon RDS', 'Google Cloud Spanner',
-
-            // Cloud Platforms & Services
-            'AWS', 'Azure', 'Google Cloud Platform', 'IBM Cloud', 'Oracle Cloud',
-            'DigitalOcean', 'Heroku', 'Alibaba Cloud', 'OpenStack', 'VMware',
-            'AWS Lambda', 'Azure Functions', 'Google Cloud Functions',
-            'Amazon S3', 'Azure Blob Storage', 'Google Cloud Storage',
-            'Amazon EC2', 'Azure Virtual Machines', 'Google Compute Engine',
-
-            // DevOps & Tools
-            'Docker', 'Kubernetes', 'Jenkins', 'Git', 'GitHub', 'GitLab', 'Bitbucket',
-            'Terraform', 'Ansible', 'Chef', 'Puppet', 'CircleCI', 'Travis CI',
-            'TeamCity', 'Bamboo', 'Nagios', 'Prometheus', 'Grafana', 'ELK Stack',
-            'New Relic', 'Datadog', 'Apache Kafka', 'RabbitMQ', 'Redis Queue',
-
-            // AI & Machine Learning
-            'Machine Learning', 'Deep Learning', 'TensorFlow', 'PyTorch', 'Keras',
-            'Scikit-learn', 'Natural Language Processing', 'Computer Vision',
-            'Neural Networks', 'Reinforcement Learning', 'OpenCV', 'NLTK', 'spaCy',
-            'Pandas', 'NumPy', 'SciPy', 'Matplotlib', 'Seaborn', 'Plotly',
-            'Jupyter Notebook', 'Google Colab', 'Apache Spark', 'H2O.ai',
-
+            'HTML', 'CSS', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Django', 'Flask',
+            // Databases
+            'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch',
+            // Cloud & DevOps
+            'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes', 'Jenkins', 'Git',
+            // AI & ML
+            'TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV', 'Natural Language Processing',
             // Mobile Development
-            'iOS Development', 'Android Development', 'React Native', 'Flutter',
-            'Xamarin', 'Ionic', 'SwiftUI', 'Kotlin Multiplatform', 'Apache Cordova',
-            'PhoneGap', 'Unity Mobile', 'Unreal Engine Mobile', 'Mobile UI/UX',
-            'App Store Optimization', 'Mobile Analytics', 'Push Notifications',
-            'Mobile Security', 'Mobile Testing', 'Mobile CI/CD', 'Mobile DevOps',
-
-            // Security
-            'Cybersecurity', 'Network Security', 'Information Security',
-            'Application Security', 'Cloud Security', 'Cryptography',
-            'Penetration Testing', 'Vulnerability Assessment', 'Security Auditing',
-            'Incident Response', 'Forensics', 'Malware Analysis', 'SIEM',
-            'Identity and Access Management', 'OAuth', 'JWT', 'SSL/TLS',
-            'Firewall Configuration', 'IDS/IPS', 'Security Compliance',
-
-            // Project Management & Methodologies
-            'Agile', 'Scrum', 'Kanban', 'Lean', 'Waterfall', 'Prince2', 'PMI',
-            'ITIL', 'Six Sigma', 'JIRA', 'Confluence', 'Trello', 'Asana',
-            'Microsoft Project', 'Basecamp', 'Monday.com', 'ClickUp',
-            'Risk Management', 'Quality Assurance', 'Process Improvement',
-
-            // Design & Creative
-            'UI Design', 'UX Design', 'Graphic Design', 'Web Design',
-            'Adobe Creative Suite', 'Figma', 'Sketch', 'Adobe XD',
-            'InVision', 'Zeplin', 'Principle', 'After Effects',
-            'Photoshop', 'Illustrator', 'InDesign', 'Premiere Pro',
-            'Motion Graphics', '3D Modeling', 'Animation', 'Typography',
-
-            // Data Analysis & Business Intelligence
-            'Data Analysis', 'Business Intelligence', 'Data Visualization',
-            'Statistical Analysis', 'Predictive Analytics', 'Data Mining',
-            'ETL', 'Data Warehousing', 'Data Modeling', 'Power BI',
-            'Tableau', 'QlikView', 'Looker', 'Sisense', 'SAP BusinessObjects',
-            'Oracle Business Intelligence', 'Microsoft Analysis Services',
-            'Data Quality', 'Data Governance', 'Master Data Management',
-
-            // Soft Skills
-            'Communication', 'Leadership', 'Team Management', 'Problem Solving',
-            'Critical Thinking', 'Time Management', 'Presentation Skills',
-            'Negotiation', 'Conflict Resolution', 'Decision Making',
-            'Emotional Intelligence', 'Adaptability', 'Creativity',
-            'Strategic Planning', 'Customer Service', 'Mentoring',
-            'Cross-functional Collaboration', 'Cultural Awareness',
-            'Remote Work', 'Work-Life Balance',
-
-            // Additional Programming Languages & Frameworks
-            'Elixir', 'F#', 'Julia', 'Crystal', 'Nim', 'Racket',
-            'Clojure', 'OCaml', 'Elm', 'PureScript', 'Reason',
-            'Ballerina', 'Zig', 'V', 'D', 'Vala', 'Ceylon',
-            'Hack', 'Pike', 'Io', 'Factor', 'Forth', 'APL',
-            'J', 'K', 'Q', 'Tcl', 'Icon', 'REBOL',
-
-            // Additional Web Technologies
-            'Svelte', 'Solid.js', 'Preact', 'Alpine.js', 'Lit',
-            'Stencil', 'Polymer', 'Meteor', 'Ember.js', 'Backbone.js',
-            'Mithril', 'Aurelia', 'Marko', 'Riot.js', 'Stimulus',
-            'Hotwire', 'Inertia.js', 'LiveView', 'Blazor', 'Next.js',
-            'Nuxt.js', 'Gatsby', 'Gridsome', 'Eleventy', 'Hugo',
-            'Jekyll', 'Pelican', 'Zola', 'VitePress', 'Docusaurus',
-
-            // Additional Cloud & DevOps
-            'OpenShift', 'Rancher', 'Nomad', 'Consul', 'Vault',
-            'Istio', 'Linkerd', 'Envoy', 'Kong', 'Traefik',
-            'Jaeger', 'OpenTelemetry', 'Fluentd', 'Logstash',
-            'Vector', 'Telegraf', 'CollectD', 'StatsD', 'Graphite',
-            'InfluxDB', 'TimescaleDB', 'OpenMetrics', 'Thanos',
-            'Cortex', 'M3DB', 'VictoriaMetrics', 'Loki', 'OpenSearch',
-
-            // Additional Data Science & Analytics
-            'PySpark', 'Dask', 'Ray', 'Modin', 'Vaex',
-            'Polars', 'DuckDB', 'ClickHouse', 'Presto',
-            'Trino', 'Apache Druid', 'Apache Pinot', 'Apache Kylin',
-            'Apache Doris', 'Apache CarbonData', 'Apache Arrow',
-            'Apache Parquet', 'Apache ORC', 'Apache Avro',
-            'Apache Thrift', 'Protocol Buffers', 'MessagePack',
-
-            // Additional Security Tools
-            'Snort', 'Suricata', 'Zeek', 'OSSEC', 'Wazuh',
-            'OpenVAS', 'Nikto', 'Arachni', 'OWASP ZAP', 'Burp Suite',
-            'Metasploit', 'Nmap', 'Wireshark', 'tcpdump', 'Kismet',
-            'Aircrack-ng', 'John the Ripper', 'Hashcat', 'Hydra',
-            'ClamAV', 'Yara', 'MISP', 'TheHive', 'Cortex',
-
-            // Additional Testing Tools
-            'Selenium', 'Cypress', 'Playwright', 'TestCafe', 'Puppeteer',
-            'WebdriverIO', 'Nightwatch.js', 'Karma', 'Jest', 'Mocha',
-            'Jasmine', 'AVA', 'tape', 'QUnit', 'PHPUnit',
-            'JUnit', 'TestNG', 'NUnit', 'xUnit', 'RSpec',
-
-            // Additional Mobile Technologies
-            'SwiftUI', 'Jetpack Compose', 'Flutter Flow', 'Capacitor',
-            'NativeScript', 'Kivy', 'Qt Mobile', 'Xamarin.Forms',
-            'React Native Paper', 'Native Base', 'MobX', 'Redux Toolkit',
-            'Zustand', 'Jotai', 'Recoil', 'VueX', 'Pinia',
-            'NgRx', 'Akita', 'NGXS',
-
-            // Additional Design Tools
-            'Framer', 'Proto.io', 'Marvel', 'Balsamiq', 'Axure',
-            'UXPin', 'Maze', 'UsabilityHub', 'Optimal Workshop',
-            'Hotjar', 'FullStory', 'Crazy Egg', 'Lucky Orange',
-            'Microsoft Clarity', 'Amplitude', 'Mixpanel', 'Heap',
-            'Pendo', 'Appcues', 'WalkMe',
-
-            // Additional Business Tools
-            'SAP', 'Oracle ERP', 'Microsoft Dynamics', 'Salesforce',
-            'HubSpot', 'Zoho CRM', 'NetSuite', 'Workday',
-            'ServiceNow', 'Zendesk', 'Freshdesk', 'Intercom',
-            'Drift', 'Marketo', 'Pardot', 'Eloqua', 'Mailchimp',
-            'Constant Contact', 'SendGrid', 'Twilio SendGrid'
-
-            // ... (This list continues with many more skills)
+            'Android', 'iOS', 'React Native', 'Flutter', 'Kotlin',
+            // Other Skills
+            'Agile', 'Scrum', 'Project Management', 'Team Leadership', 'Problem Solving'
         ];
 
         const experienceLevels = [
-            'Entry Level (0-2 years)',
-            'Junior (2-4 years)',
-            'Mid-Level (4-6 years)',
-            'Senior (6-10 years)',
-            'Lead (10-15 years)',
-            'Principal (15+ years)',
-            'Distinguished Engineer',
-            'Fellow'
+            'Intern',
+            'Entry Level',
+            'Junior',
+            'Mid Level',
+            'Senior',
+            'Lead',
+            'Manager',
+            'Director',
+            'Executive'
         ];
 
-        // Initialize page
-        window.addEventListener('load', async () => {
-            // Check authentication
-            const userData = JSON.parse(localStorage.getItem('user'));
-            if (!userData) {
-                window.location.href = './index.html';
-                return;
+        // Initialize profile data
+        let profileData = {
+            education: [],
+            experience: [],
+            skills: [],
+            social: {
+                linkedin: '',
+                github: ''
             }
+        };
 
-            // Update user profile display
-            document.getElementById('userName').textContent = userData.username;
-            document.getElementById('userRole').textContent = userData.role;
-
-            // Load profile data from API
-            try {
-                const API_BASE_URL = window.location.hostname === 'localhost' 
-                    ? '' 
-                    : window.location.origin;
-                    
-                const response = await fetch(`${API_BASE_URL}/api/profile`, {
-                    headers: {
-                        'Authorization': `Bearer ${userData.token}`,
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        // Create empty profile if none exists
-                        profileData = {
-                            education: [],
-                            experience: [],
-                            skills: [],
-                            social: {
-                                linkedin: '',
-                                github: ''
-                            }
-                        };
-                        return;
-                    }
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new TypeError("Received non-JSON response from server");
-                }
-                
-                profileData = await response.json();
-                renderProfile();
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                // Create empty profile on error
-                profileData = {
-                    education: [],
-                    experience: [],
-                    skills: [],
-                    social: {
-                        linkedin: '',
-                        github: ''
-                    }
-                };
-            }
-        });
-
-        // Dropdown functionality
+        // Function to create and show dropdown
         function createDropdown(inputId, options) {
             const input = document.getElementById(inputId);
-            const dropdownId = inputId + 'Dropdown';
-            
-            // Create dropdown if it doesn't exist
-            if (!document.getElementById(dropdownId)) {
-                const dropdown = document.createElement('div');
+            const dropdownId = `${inputId}Dropdown`;
+            let dropdown = document.getElementById(dropdownId);
+
+            if (!dropdown) {
+                dropdown = document.createElement('div');
                 dropdown.id = dropdownId;
                 dropdown.className = 'dropdown-list';
+                dropdown.style.cssText = `
+                    position: absolute;
+                    width: 100%;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    background: rgba(0, 0, 0, 0.95);
+                    border: 1px solid rgba(0, 247, 255, 0.2);
+                    border-radius: 8px;
+                    margin-top: 5px;
+                    z-index: 1000;
+                    display: none;
+                `;
+                input.parentNode.style.position = 'relative';
                 input.parentNode.appendChild(dropdown);
             }
 
-            const dropdown = document.getElementById(dropdownId);
-            
-            input.addEventListener('input', () => {
-                const value = input.value.toLowerCase();
+            input.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
                 const filtered = options.filter(option => 
                     option.toLowerCase().includes(value)
                 );
 
-                if (filtered.length && value) {
-                    dropdown.innerHTML = filtered
-                        .map(option => `<div class="dropdown-item">${option}</div>`)
-                        .join('');
+                if (value && filtered.length > 0) {
+                    dropdown.innerHTML = filtered.map(option => `
+                        <div class="dropdown-item" style="
+                            padding: 10px;
+                            cursor: pointer;
+                            color: #fff;
+                            transition: all 0.3s ease;
+                        "
+                        onmouseover="this.style.backgroundColor='rgba(0, 247, 255, 0.1)'"
+                        onmouseout="this.style.backgroundColor='transparent'"
+                        onclick="selectOption('${inputId}', '${option}')"
+                        >${option}</div>
+                    `).join('');
                     dropdown.style.display = 'block';
                 } else {
                     dropdown.style.display = 'none';
                 }
             });
 
-            dropdown.addEventListener('click', (e) => {
-                if (e.target.className === 'dropdown-item') {
-                    input.value = e.target.textContent;
-                    dropdown.style.display = 'none';
-                }
-            });
-
             // Hide dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (e.target !== input) {
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
                     dropdown.style.display = 'none';
                 }
             });
         }
 
-        // Modal functions
-        function openModal(type, subtype = '') {
-            const modal = document.getElementById('formModal');
-            const modalContent = document.getElementById('modalContent');
-            modal.classList.add('active');
+        // Function to select option from dropdown
+        function selectOption(inputId, value) {
+            document.getElementById(inputId).value = value;
+            document.getElementById(`${inputId}Dropdown`).style.display = 'none';
+        }
 
-            switch (type) {
-                case 'education':
-                    modalContent.innerHTML = `
-                        <h2>Add Education</h2>
-                        <form id="educationForm" onsubmit="submitEducation(event)">
-                            <div class="form-group">
-                                <label for="school">School/University</label>
-                                <input type="text" id="school" class="form-input" required placeholder="Start typing to see suggestions">
-                            </div>
-                            <div class="form-group">
-                                <label for="degree">Degree</label>
-                                <input type="text" id="degree" class="form-input" required placeholder="Start typing to see suggestions">
-                            </div>
-                            <div class="form-group">
-                                <label for="field">Field of Study</label>
-                                <input type="text" id="field" class="form-input" required placeholder="Start typing to see suggestions">
-                            </div>
-                            <div class="form-group">
-                                <label for="eduStartDate">Start Date</label>
-                                <input type="date" id="eduStartDate" class="form-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="eduEndDate">End Date</label>
-                                <input type="date" id="eduEndDate" class="form-input">
-                            </div>
-                            <button type="submit" class="save-button">Save Education</button>
-                        </form>
-                    `;
-                    // Initialize dropdowns for education fields
-                    setTimeout(() => {
-                        createDropdown('school', universities);
-                        createDropdown('degree', degrees);
-                        createDropdown('field', fields);
-                    }, 0);
-                    break;
-
-                case 'experience':
-                    modalContent.innerHTML = `
-                        <h2>Add Work Experience</h2>
-                        <form id="experienceForm" onsubmit="submitExperience(event)">
-                            <div class="form-group">
-                                <label for="company">Company</label>
-                                <input type="text" id="company" class="form-input" required placeholder="Start typing to see suggestions">
-                            </div>
-                            <div class="form-group">
-                                <label for="position">Position</label>
-                                <input type="text" id="position" class="form-input" required placeholder="Start typing to see suggestions">
-                            </div>
-                            <div class="form-group">
-                                <label for="experienceLevel">Experience Level</label>
-                                <select id="experienceLevel" class="experience-level" required>
-                                    <option value="">Select Experience Level</option>
-                                    ${experienceLevels.map(level => 
-                                        `<option value="${level}">${level}</option>`
-                                    ).join('')}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="expStartDate">Start Date</label>
-                                <input type="date" id="expStartDate" class="form-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="expEndDate">End Date</label>
-                                <input type="date" id="expEndDate" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Description</label>
-                                <textarea id="description" class="form-input" rows="4"></textarea>
-                            </div>
-                            <button type="submit" class="save-button">Save Experience</button>
-                        </form>
-                    `;
-                    // Initialize dropdowns for experience fields
-                    setTimeout(() => {
-                        createDropdown('company', companies);
-                        createDropdown('position', positions);
-                    }, 0);
-                    break;
-
-                case 'skill':
-                    modalContent.innerHTML = `
-                        <h2>Add Skill</h2>
-                        <form id="skillForm" onsubmit="submitSkill(event)">
-                            <div class="form-group">
-                                <label for="skill">Skill Name</label>
-                                <input type="text" id="skill" class="form-input" required placeholder="Start typing to see suggestions">
-                            </div>
-                            <button type="submit" class="save-button">Add Skill</button>
-                        </form>
-                    `;
-                    // Initialize dropdown for skills
-                    setTimeout(() => {
-                        createDropdown('skill', skills);
-                    }, 0);
-                    break;
-
-                case 'social':
-                    const platform = subtype.charAt(0).toUpperCase() + subtype.slice(1);
-                    modalContent.innerHTML = `
-                        <h2>Add ${platform} Profile</h2>
-                        <form id="socialForm" onsubmit="saveSocialLink(event, '${subtype}')">
-                            <div class="form-group">
-                                <label for="socialUrl">${platform} URL</label>
-                                <input type="url" id="socialUrl" class="form-input" required 
-                                       value="${profileData.social[subtype]}">
-                            </div>
-                            <button type="submit" class="save-button">Save Link</button>
-                        </form>
-                    `;
-                    break;
+        // Function to open modal
+        function openModal(type) {
+            const modal = document.getElementById(`${type}Modal`);
+            if (modal) {
+                modal.classList.add('active');
             }
         }
 
-        function closeModal() {
-            document.getElementById('formModal').classList.remove('active');
+        // Function to close modal
+        function closeModal(type) {
+            const modal = document.getElementById(`${type}Modal`);
+            if (modal) {
+                modal.classList.remove('active');
+            }
         }
 
-        // Save functions
-        async function saveEducation(event) {
+        // Function to submit education
+        function submitEducation(event) {
             event.preventDefault();
             const education = {
                 school: document.getElementById('school').value,
                 degree: document.getElementById('degree').value,
                 field: document.getElementById('field').value,
                 startDate: document.getElementById('eduStartDate').value,
-                endDate: document.getElementById('eduEndDate').value || 'Present'
+                endDate: document.getElementById('eduEndDate').value || null
             };
 
-            try {
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('/api/profile/education', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${userData.token}`
-                    },
-                    body: JSON.stringify(education)
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderProfile();
-                    closeModal();
-                } else {
-                    throw new Error('Failed to save education');
-                }
-            } catch (error) {
-                console.error('Error saving education:', error);
-                alert('Failed to save education data');
-            }
+            profileData.education.push(education);
+            renderEducation();
+            closeModal('education');
+            showSuccessMessage('Education added successfully!');
+            document.getElementById('educationForm').reset();
         }
 
-        async function saveExperience(event) {
+        // Function to submit experience
+        function submitExperience(event) {
             event.preventDefault();
             const experience = {
                 company: document.getElementById('company').value,
                 position: document.getElementById('position').value,
-                experienceLevel: document.getElementById('experienceLevel').value,
+                level: document.getElementById('experienceLevel').value,
+                description: document.getElementById('description').value,
                 startDate: document.getElementById('expStartDate').value,
-                endDate: document.getElementById('expEndDate').value || 'Present',
-                description: document.getElementById('description').value
+                endDate: document.getElementById('expEndDate').value || null
             };
 
-            try {
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('/api/profile/experience', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${userData.token}`
-                    },
-                    body: JSON.stringify(experience)
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderProfile();
-                    closeModal();
-                } else {
-                    throw new Error('Failed to save experience');
-                }
-            } catch (error) {
-                console.error('Error saving experience:', error);
-                alert('Failed to save experience data');
-            }
+            profileData.experience.push(experience);
+            renderExperience();
+            closeModal('experience');
+            showSuccessMessage('Experience added successfully!');
+            document.getElementById('experienceForm').reset();
         }
 
-        async function saveSkill(event) {
+        // Function to submit skill
+        function submitSkill(event) {
             event.preventDefault();
-            const skill = document.getElementById('skill').value;
+            const skill = document.getElementById('skillName').value;
+
             if (!profileData.skills.includes(skill)) {
-                try {
-                    const userData = JSON.parse(localStorage.getItem('user'));
-                    const response = await fetch('/api/profile/skills', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${userData.token}`
-                        },
-                        body: JSON.stringify({
-                            skills: [...profileData.skills, skill]
-                        })
-                    });
-
-                    if (response.ok) {
-                        profileData = await response.json();
-                        renderProfile();
-                        closeModal();
-                    } else {
-                        throw new Error('Failed to save skill');
-                    }
-                } catch (error) {
-                    console.error('Error saving skill:', error);
-                    alert('Failed to save skill data');
-                }
-            }
-            closeModal();
-        }
-
-        async function saveSocialLink(event, platform) {
-            event.preventDefault();
-            const url = document.getElementById('socialUrl').value;
-            
-            try {
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('/api/profile/social', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${userData.token}`
-                    },
-                    body: JSON.stringify({
-                        ...profileData.social,
-                        [platform]: url
-                    })
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderProfile();
-                    closeModal();
-                } else {
-                    throw new Error('Failed to save social link');
-                }
-            } catch (error) {
-                console.error('Error saving social link:', error);
-                alert('Failed to save social link');
+                profileData.skills.push(skill);
+                renderSkills();
+                closeModal('skill');
+                showSuccessMessage('Skill added successfully!');
+                document.getElementById('skillForm').reset();
+            } else {
+                showSuccessMessage('Skill already exists!');
             }
         }
 
-        // Delete functions
-        async function deleteEducation(index) {
-            try {
-                const eduId = profileData.education[index]._id;
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch(`/api/profile/education/${eduId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${userData.token}`
-                    }
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderProfile();
-                } else {
-                    throw new Error('Failed to delete education');
-                }
-            } catch (error) {
-                console.error('Error deleting education:', error);
-                alert('Failed to delete education');
-            }
+        // Function to show success message
+        function showSuccessMessage(message) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
         }
 
-        async function deleteExperience(index) {
-            try {
-                const expId = profileData.experience[index]._id;
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch(`/api/profile/experience/${expId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${userData.token}`
-                    }
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderProfile();
-                } else {
-                    throw new Error('Failed to delete experience');
-                }
-            } catch (error) {
-                console.error('Error deleting experience:', error);
-                alert('Failed to delete experience');
-            }
-        }
-
-        async function deleteSkill(skill) {
-            try {
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('/api/profile/skills', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${userData.token}`
-                    },
-                    body: JSON.stringify({
-                        skills: profileData.skills.filter(s => s !== skill)
-                    })
-                });
-
-                if (response.ok) {
-                    profileData = await response.json();
-                    renderProfile();
-                } else {
-                    throw new Error('Failed to delete skill');
-                }
-            } catch (error) {
-                console.error('Error deleting skill:', error);
-                alert('Failed to delete skill');
-            }
-        }
-
-        // Render functions
-        function renderProfile() {
-            // Render education
+        // Function to render education items
+        function renderEducation() {
             const educationList = document.getElementById('educationList');
-            educationList.innerHTML = profileData.education.map((edu, index) => `
-                <div class="item-card">
+            educationList.innerHTML = profileData.education.map(edu => `
+                <div class="education-item">
                     <div class="item-header">
                         <div>
-                            <div class="item-title">${edu.school}</div>
+                            <h3 class="item-title">${edu.school}</h3>
                             <div class="item-subtitle">${edu.degree} in ${edu.field}</div>
-                            <div class="item-date">${edu.startDate} - ${edu.endDate}</div>
                         </div>
-                    </div>
-                    <div class="item-actions">
-                        <button class="action-button" onclick="deleteEducation(${index})">×</button>
+                        <div class="item-date">
+                            ${new Date(edu.startDate).toLocaleDateString()} - 
+                            ${edu.endDate ? new Date(edu.endDate).toLocaleDateString() : 'Present'}
+                        </div>
                     </div>
                 </div>
             `).join('');
+        }
 
-            // Render experience
+        // Function to render experience items
+        function renderExperience() {
             const experienceList = document.getElementById('experienceList');
-            experienceList.innerHTML = profileData.experience.map((exp, index) => `
-                <div class="item-card">
+            experienceList.innerHTML = profileData.experience.map(exp => `
+                <div class="experience-item">
                     <div class="item-header">
                         <div>
-                            <div class="item-title">${exp.position}</div>
-                            <div class="item-subtitle">${exp.company}</div>
-                            <div class="item-date">${exp.startDate} - ${exp.endDate}</div>
+                            <h3 class="item-title">${exp.company}</h3>
+                            <div class="item-subtitle">${exp.position} - ${exp.level}</div>
+                        </div>
+                        <div class="item-date">
+                            ${new Date(exp.startDate).toLocaleDateString()} - 
+                            ${exp.endDate ? new Date(exp.endDate).toLocaleDateString() : 'Present'}
                         </div>
                     </div>
-                    <div class="item-description">${exp.description}</div>
-                    <div class="item-actions">
-                        <button class="action-button" onclick="deleteExperience(${index})">×</button>
-                    </div>
+                    ${exp.description ? `<p class="item-description">${exp.description}</p>` : ''}
                 </div>
             `).join('');
+        }
 
-            // Render skills
+        // Function to render skills
+        function renderSkills() {
             const skillsList = document.getElementById('skillsList');
             skillsList.innerHTML = profileData.skills.map(skill => `
                 <div class="skill-tag">
                     ${skill}
-                    <button class="action-button" onclick="deleteSkill('${skill}')">×</button>
+                    <span class="remove-skill" onclick="removeSkill('${skill}')">&times;</span>
                 </div>
             `).join('');
-
-            // Update social links
-            const linkedinUrl = document.getElementById('linkedinUrl');
-            const githubUrl = document.getElementById('githubUrl');
-            linkedinUrl.textContent = profileData.social.linkedin || 'Add LinkedIn Profile';
-            githubUrl.textContent = profileData.social.github || 'Add GitHub Profile';
-
-            if (profileData.social.linkedin) {
-                document.getElementById('linkedinLink').href = profileData.social.linkedin;
-            }
-            if (profileData.social.github) {
-                document.getElementById('githubLink').href = profileData.social.github;
-            }
         }
 
-        async function updateProfile() {
-            try {
-                const userData = JSON.parse(localStorage.getItem('user'));
-                if (!userData || !userData.token) {
-                    window.location.href = './index.html';
-                    return;
-                }
-
-                // Gather all profile data
-                const profileData = {
-                    education: Array.from(document.getElementById('educationList').children).map(edu => ({
-                        school: edu.querySelector('.item-title').textContent,
-                        degree: edu.querySelector('.item-subtitle').textContent.split(' in ')[0],
-                        field: edu.querySelector('.item-subtitle').textContent.split(' in ')[1],
-                        startDate: edu.querySelector('.item-date').textContent.split(' - ')[0],
-                        endDate: edu.querySelector('.item-date').textContent.split(' - ')[1]
-                    })),
-                    experience: Array.from(document.getElementById('experienceList').children).map(exp => ({
-                        company: exp.querySelector('.item-subtitle').textContent,
-                        position: exp.querySelector('.item-title').textContent,
-                        startDate: exp.querySelector('.item-date').textContent.split(' - ')[0],
-                        endDate: exp.querySelector('.item-date').textContent.split(' - ')[1],
-                        description: exp.querySelector('.item-description')?.textContent || ''
-                    })),
-                    skills: Array.from(document.getElementById('skillsList').children).map(skill => 
-                        skill.textContent.trim().replace('×', '')
-                    ),
-                    social: {
-                        linkedin: document.getElementById('linkedinUrl').textContent === 'Add LinkedIn Profile' ? '' : document.getElementById('linkedinUrl').textContent,
-                        github: document.getElementById('githubUrl').textContent === 'Add GitHub Profile' ? '' : document.getElementById('githubUrl').textContent
-                    }
-                };
-
-                // Send update request to server
-                const response = await fetch('/api/profile', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${userData.token}`
-                    },
-                    body: JSON.stringify(profileData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to update profile');
-                }
-
-                // Show success message
-                const successMessage = document.getElementById('successMessage');
-                successMessage.style.display = 'block';
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 3000);
-
-                // Refresh profile data
-                const updatedProfile = await response.json();
-                profileData = updatedProfile;
-                renderProfile();
-
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                alert('Failed to update profile. Please try again.');
-            }
+        // Function to remove skill
+        function removeSkill(skill) {
+            profileData.skills = profileData.skills.filter(s => s !== skill);
+            renderSkills();
+            showSuccessMessage('Skill removed successfully!');
         }
 
-        // Modify your existing renderProfile function to handle null/undefined values
-        function renderProfile() {
-            // Render education
-            const educationList = document.getElementById('educationList');
-            educationList.innerHTML = (profileData.education || []).map((edu, index) => `
-                <div class="item-card">
-                    <div class="item-header">
-                        <div>
-                            <div class="item-title">${edu.school || ''}</div>
-                            <div class="item-subtitle">${edu.degree || ''} in ${edu.field || ''}</div>
-                            <div class="item-date">${edu.startDate || ''} - ${edu.endDate || 'Present'}</div>
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <button class="action-button" onclick="deleteEducation(${index})">×</button>
-                    </div>
-                </div>
-            `).join('');
-
-            // Render experience
-            const experienceList = document.getElementById('experienceList');
-            experienceList.innerHTML = (profileData.experience || []).map((exp, index) => `
-                <div class="item-card">
-                    <div class="item-header">
-                        <div>
-                            <div class="item-title">${exp.position || ''}</div>
-                            <div class="item-subtitle">${exp.company || ''}</div>
-                            <div class="item-date">${exp.startDate || ''} - ${exp.endDate || 'Present'}</div>
-                        </div>
-                    </div>
-                    <div class="item-description">${exp.description || ''}</div>
-                    <div class="item-actions">
-                        <button class="action-button" onclick="deleteExperience(${index})">×</button>
-                    </div>
-                </div>
-            `).join('');
-
-            // Render skills
-            const skillsList = document.getElementById('skillsList');
-            skillsList.innerHTML = (profileData.skills || []).map(skill => `
-                <div class="skill-tag">
-                    ${skill}
-                    <button class="action-button" onclick="deleteSkill('${skill}')">×</button>
-                </div>
-            `).join('');
-
-            // Update social links
-            const linkedinUrl = document.getElementById('linkedinUrl');
-            const githubUrl = document.getElementById('githubUrl');
-            linkedinUrl.textContent = profileData.social?.linkedin || 'Add LinkedIn Profile';
-            githubUrl.textContent = profileData.social?.github || 'Add GitHub Profile';
-
-            if (profileData.social?.linkedin) {
-                document.getElementById('linkedinLink').href = profileData.social.linkedin;
+        // Add click handlers for social links
+        document.getElementById('linkedinLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = prompt('Enter your LinkedIn URL:');
+            if (url) {
+                this.href = url;
+                showSuccessMessage('LinkedIn URL updated successfully!');
             }
-            if (profileData.social?.github) {
-                document.getElementById('githubLink').href = profileData.social.github;
+        });
+
+        document.getElementById('githubLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = prompt('Enter your GitHub URL:');
+            if (url) {
+                this.href = url;
+                showSuccessMessage('GitHub URL updated successfully!');
             }
-        }
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderEducation();
+            renderExperience();
+            renderSkills();
+        });
     </script>
 </body>
 </html> 
