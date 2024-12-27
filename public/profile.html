@@ -50,6 +50,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            padding: 1rem 0;
         }
 
         .page-title {
@@ -67,6 +68,10 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
         }
 
         .update-profile-btn:hover {
@@ -655,25 +660,23 @@
             <form id="educationForm" onsubmit="submitEducation(event)">
                 <div class="form-group">
                     <label for="school">School/University</label>
-                    <input type="text" id="school" class="form-input" required>
+                    <input type="text" id="school" class="form-input" required placeholder="Start typing to see suggestions">
                 </div>
                 <div class="form-group">
                     <label for="degree">Degree</label>
-                    <input type="text" id="degree" class="form-input" required>
+                    <input type="text" id="degree" class="form-input" required placeholder="Start typing to see suggestions">
                 </div>
                 <div class="form-group">
                     <label for="field">Field of Study</label>
-                    <input type="text" id="field" class="form-input" required>
+                    <input type="text" id="field" class="form-input" required placeholder="Start typing to see suggestions">
                 </div>
-                <div class="date-inputs">
-                    <div class="form-group">
-                        <label for="startDate">Start Date</label>
-                        <input type="date" id="startDate" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="endDate">End Date</label>
-                        <input type="date" id="endDate" class="form-input">
-                    </div>
+                <div class="form-group">
+                    <label for="eduStartDate">Start Date</label>
+                    <input type="date" id="eduStartDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="eduEndDate">End Date</label>
+                    <input type="date" id="eduEndDate" class="form-input">
                 </div>
                 <button type="submit" class="submit-btn">Save Education</button>
             </form>
@@ -690,25 +693,32 @@
             <form id="experienceForm" onsubmit="submitExperience(event)">
                 <div class="form-group">
                     <label for="company">Company</label>
-                    <input type="text" id="company" class="form-input" required>
+                    <input type="text" id="company" class="form-input" required placeholder="Start typing to see suggestions">
                 </div>
                 <div class="form-group">
                     <label for="position">Position</label>
-                    <input type="text" id="position" class="form-input" required>
+                    <input type="text" id="position" class="form-input" required placeholder="Start typing to see suggestions">
+                </div>
+                <div class="form-group">
+                    <label for="experienceLevel">Experience Level</label>
+                    <select id="experienceLevel" class="experience-level" required>
+                        <option value="">Select Experience Level</option>
+                        ${experienceLevels.map(level => 
+                            `<option value="${level}">${level}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expStartDate">Start Date</label>
+                    <input type="date" id="expStartDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="expEndDate">End Date</label>
+                    <input type="date" id="expEndDate" class="form-input">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" class="form-input" rows="3"></textarea>
-                </div>
-                <div class="date-inputs">
-                    <div class="form-group">
-                        <label for="expStartDate">Start Date</label>
-                        <input type="date" id="expStartDate" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="expEndDate">End Date</label>
-                        <input type="date" id="expEndDate" class="form-input">
-                    </div>
+                    <textarea id="description" class="form-input" rows="4"></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Save Experience</button>
             </form>
@@ -725,7 +735,7 @@
             <form id="skillForm" onsubmit="submitSkill(event)">
                 <div class="form-group">
                     <label for="skillName">Skill Name</label>
-                    <input type="text" id="skillName" class="form-input" required>
+                    <input type="text" id="skillName" class="form-input" required placeholder="Start typing to see suggestions">
                 </div>
                 <button type="submit" class="submit-btn">Add Skill</button>
             </form>
@@ -1622,7 +1632,7 @@
                 case 'education':
                     modalContent.innerHTML = `
                         <h2>Add Education</h2>
-                        <form id="educationForm" onsubmit="saveEducation(event)">
+                        <form id="educationForm" onsubmit="submitEducation(event)">
                             <div class="form-group">
                                 <label for="school">School/University</label>
                                 <input type="text" id="school" class="form-input" required placeholder="Start typing to see suggestions">
@@ -1657,7 +1667,7 @@
                 case 'experience':
                     modalContent.innerHTML = `
                         <h2>Add Work Experience</h2>
-                        <form id="experienceForm" onsubmit="saveExperience(event)">
+                        <form id="experienceForm" onsubmit="submitExperience(event)">
                             <div class="form-group">
                                 <label for="company">Company</label>
                                 <input type="text" id="company" class="form-input" required placeholder="Start typing to see suggestions">
@@ -1700,7 +1710,7 @@
                 case 'skill':
                     modalContent.innerHTML = `
                         <h2>Add Skill</h2>
-                        <form id="skillForm" onsubmit="saveSkill(event)">
+                        <form id="skillForm" onsubmit="submitSkill(event)">
                             <div class="form-group">
                                 <label for="skill">Skill Name</label>
                                 <input type="text" id="skill" class="form-input" required placeholder="Start typing to see suggestions">
