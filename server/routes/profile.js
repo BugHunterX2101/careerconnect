@@ -15,9 +15,10 @@ router.get('/', auth, async (req, res) => {
                 education: [],
                 experience: [],
                 skills: [],
-                social: {
+                socialLinks: {
                     linkedin: '',
-                    github: ''
+                    github: '',
+                    portfolio: ''
                 }
             });
             await profile.save();
@@ -26,7 +27,7 @@ router.get('/', auth, async (req, res) => {
         res.json(profile);
     } catch (error) {
         console.error('Error fetching profile:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -45,15 +46,15 @@ router.post('/education', auth, async (req, res) => {
             school,
             degree,
             field,
-            startDate,
-            endDate
+            startDate: new Date(startDate),
+            endDate: endDate ? new Date(endDate) : null
         });
 
         await profile.save();
         res.json(profile);
     } catch (error) {
         console.error('Error adding education:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -66,22 +67,21 @@ router.post('/experience', auth, async (req, res) => {
             return res.status(404).json({ message: 'Profile not found' });
         }
 
-        const { company, position, level, description, startDate, endDate } = req.body;
+        const { company, position, description, startDate, endDate } = req.body;
         
         profile.experience.unshift({
             company,
             position,
-            level,
             description,
-            startDate,
-            endDate
+            startDate: new Date(startDate),
+            endDate: endDate ? new Date(endDate) : null
         });
 
         await profile.save();
         res.json(profile);
     } catch (error) {
         console.error('Error adding experience:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -94,23 +94,28 @@ router.post('/skills', auth, async (req, res) => {
             return res.status(404).json({ message: 'Profile not found' });
         }
 
-        const { skill } = req.body;
+        const { name, level } = req.body;
         
-        if (profile.skills.includes(skill)) {
+        // Check if skill already exists
+        const skillExists = profile.skills.some(skill => 
+            skill.name.toLowerCase() === name.toLowerCase()
+        );
+
+        if (skillExists) {
             return res.status(400).json({ message: 'Skill already exists' });
         }
 
-        profile.skills.push(skill);
+        profile.skills.push({ name, level });
         await profile.save();
         res.json(profile);
     } catch (error) {
         console.error('Error adding skill:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
 // Remove skill
-router.delete('/skills/:skill', auth, async (req, res) => {
+router.delete('/skills/:skillId', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ userId: req.user.id });
         
@@ -118,14 +123,15 @@ router.delete('/skills/:skill', auth, async (req, res) => {
             return res.status(404).json({ message: 'Profile not found' });
         }
 
-        const skill = decodeURIComponent(req.params.skill);
-        profile.skills = profile.skills.filter(s => s !== skill);
+        profile.skills = profile.skills.filter(skill => 
+            skill._id.toString() !== req.params.skillId
+        );
         
         await profile.save();
         res.json(profile);
     } catch (error) {
         console.error('Error removing skill:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -138,12 +144,12 @@ router.put('/social', auth, async (req, res) => {
             return res.status(404).json({ message: 'Profile not found' });
         }
 
-        profile.social = { ...profile.social, ...req.body };
+        profile.socialLinks = { ...profile.socialLinks, ...req.body };
         await profile.save();
         res.json(profile);
     } catch (error) {
         console.error('Error updating social links:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -156,6 +162,23 @@ router.put('/', auth, async (req, res) => {
             return res.status(404).json({ message: 'Profile not found' });
         }
 
+        // Ensure dates are properly converted
+        if (req.body.education) {
+            req.body.education = req.body.education.map(edu => ({
+                ...edu,
+                startDate: new Date(edu.startDate),
+                endDate: edu.endDate ? new Date(edu.endDate) : null
+            }));
+        }
+
+        if (req.body.experience) {
+            req.body.experience = req.body.experience.map(exp => ({
+                ...exp,
+                startDate: new Date(exp.startDate),
+                endDate: exp.endDate ? new Date(exp.endDate) : null
+            }));
+        }
+
         profile = await Profile.findOneAndUpdate(
             { userId: req.user.id },
             { $set: req.body },
@@ -165,7 +188,7 @@ router.put('/', auth, async (req, res) => {
         res.json(profile);
     } catch (error) {
         console.error('Error updating profile:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
