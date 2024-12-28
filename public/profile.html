@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - CareerConnect</title>
-    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
@@ -41,7 +40,6 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1>My Profile</h1>
-        <button class="update-button" onclick="openModal('profileModal')">Update Profile</button>
 
         <!-- Education Section -->
         <section class="profile-section">
@@ -76,15 +74,15 @@
             <div class="social-links">
                 <div class="form-group">
                     <label for="linkedinUrl">LinkedIn URL</label>
-                    <input type="url" id="linkedinUrl" class="form-input">
+                    <input type="url" id="linkedinUrl" class="form-input" placeholder="https://linkedin.com/in/username">
                 </div>
                 <div class="form-group">
                     <label for="githubUrl">GitHub URL</label>
-                    <input type="url" id="githubUrl" class="form-input">
+                    <input type="url" id="githubUrl" class="form-input" placeholder="https://github.com/username">
                 </div>
                 <div class="form-group">
                     <label for="portfolioUrl">Portfolio URL</label>
-                    <input type="url" id="portfolioUrl" class="form-input">
+                    <input type="url" id="portfolioUrl" class="form-input" placeholder="https://yourportfolio.com">
                 </div>
                 <button class="submit-btn" onclick="updateSocialLinks()">Update Links</button>
             </div>
@@ -101,22 +99,22 @@
             <form id="educationForm">
                 <div class="form-group">
                     <label for="school">School/University</label>
-                    <input type="text" id="school" name="school" class="form-input" required>
+                    <input type="text" id="school" name="school" class="form-input" required placeholder="Enter school name">
                 </div>
                 <div class="form-group">
                     <label for="degree">Degree</label>
-                    <input type="text" id="degree" name="degree" class="form-input" required>
+                    <input type="text" id="degree" name="degree" class="form-input" required placeholder="Enter degree">
                 </div>
                 <div class="form-group">
                     <label for="field">Field of Study</label>
-                    <input type="text" id="field" name="field" class="form-input" required>
+                    <input type="text" id="field" name="field" class="form-input" required placeholder="Enter field of study">
                 </div>
                 <div class="form-group">
                     <label for="startDate">Start Date</label>
                     <input type="date" id="startDate" name="startDate" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="endDate">End Date</label>
+                    <label for="endDate">End Date (or expected)</label>
                     <input type="date" id="endDate" name="endDate" class="form-input">
                 </div>
                 <button type="submit" class="submit-btn">Add Education</button>
@@ -134,23 +132,35 @@
             <form id="experienceForm">
                 <div class="form-group">
                     <label for="company">Company</label>
-                    <input type="text" id="company" name="company" class="form-input" required>
+                    <input type="text" id="company" name="company" class="form-input" required placeholder="Enter company name">
                 </div>
                 <div class="form-group">
                     <label for="position">Position</label>
-                    <input type="text" id="position" name="position" class="form-input" required>
+                    <input type="text" id="position" name="position" class="form-input" required placeholder="Enter position">
+                </div>
+                <div class="form-group">
+                    <label for="level">Level</label>
+                    <select id="level" name="level" class="form-input">
+                        <option value="">Select Level</option>
+                        <option value="Intern">Intern</option>
+                        <option value="Entry Level">Entry Level</option>
+                        <option value="Mid Level">Mid Level</option>
+                        <option value="Senior">Senior</option>
+                        <option value="Lead">Lead</option>
+                        <option value="Manager">Manager</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="expStartDate">Start Date</label>
                     <input type="date" id="expStartDate" name="startDate" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="expEndDate">End Date</label>
+                    <label for="expEndDate">End Date (leave blank if current)</label>
                     <input type="date" id="expEndDate" name="endDate" class="form-input">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" class="form-input" rows="4" required></textarea>
+                    <textarea id="description" name="description" class="form-input" rows="4" placeholder="Describe your responsibilities and achievements"></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Add Experience</button>
             </form>
@@ -167,16 +177,7 @@
             <form id="skillForm">
                 <div class="form-group">
                     <label for="skillName">Skill Name</label>
-                    <input type="text" id="skillName" name="skillName" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="skillLevel">Skill Level</label>
-                    <select id="skillLevel" name="skillLevel" class="form-input" required>
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                        <option value="Expert">Expert</option>
-                    </select>
+                    <input type="text" id="skillName" name="skillName" class="form-input" required placeholder="Enter skill name">
                 </div>
                 <button type="submit" class="submit-btn">Add Skill</button>
             </form>

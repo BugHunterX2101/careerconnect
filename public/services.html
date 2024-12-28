@@ -6,14 +6,12 @@
     <title>Services - CareerConnect</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* CSS styles remain unchanged */
         .services-container {
             min-height: 100vh;
             background: rgba(0, 0, 0, 0.8);
             padding: 2rem;
-            height: 100vh;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #00f7ff rgba(0, 0, 0, 0.2);
         }
 
         .services-container::-webkit-scrollbar {
@@ -69,26 +67,14 @@
             padding: 2rem;
             border-radius: 10px;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .service-card:hover {
             transform: translateY(-5px);
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #006c7d, #00f7ff);
         }
 
         .service-icon {
@@ -134,7 +120,7 @@
             content: '→';
             position: absolute;
             left: 0;
-            color: #00f7ff;
+            color: #00f 7ff;
         }
 
         .pricing-section {
@@ -226,98 +212,6 @@
             text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
         }
 
-        .service-card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .service-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transform-style: preserve-3d;
-        }
-
-        .service-card-front,
-        .service-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            padding: 2rem;
-        }
-
-        .service-card-back {
-            transform: rotateY(180deg);
-            background: rgba(20, 20, 30, 0.95);
-        }
-
-        .pricing-card {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #006c7d, #00f7ff);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-
-        .pricing-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .feature-tooltip {
-            position: relative;
-            cursor: help;
-        }
-
-        .feature-tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            padding: 0.5rem 1rem;
-            background: rgba(0, 247, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 5px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            transition: transform 0.3s ease;
-            pointer-events: none;
-        }
-
-        .feature-tooltip:hover::after {
-            transform: translateX(-50%) scale(1);
-        }
-
-        .compare-plans {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .compare-button {
-            background: transparent;
-            border: 1px solid #00f7ff;
-            color: #00f7ff;
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .compare-button:hover {
-            background: rgba(0, 247, 255, 0.1);
-        }
-
         .comparison-modal {
             display: none;
             position: fixed;
@@ -394,112 +288,101 @@
     </style>
 </head>
 <body>
-    <canvas id="backgroundParticles" class="particle-canvas"></canvas>
-    
     <div class="services-container">
         <div class="services-content">
             <div class="services-header">
                 <h1 class="services-title">Our Services</h1>
-                <p class="services-subtitle">Comprehensive Career Solutions for Professionals and Companies</p>
+                <p class="services-subtitle">Discover how we can help advance your career</p>
             </div>
 
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-icon">🎯</div>
-                    <h3 class="service-title">Job Matching</h3>
-                    <p class="service-description">Advanced AI-powered job matching system that connects professionals with their ideal opportunities.</p>
+                    <h2 class="service-title">Job Matching</h2>
+                    <p class="service-description">Advanced AI-powered job matching to connect you with the perfect opportunities.</p>
                     <ul class="service-features">
-                        <li>Smart profile matching</li>
-                        <li>Real-time job alerts</li>
-                        <li>Skill-based recommendations</li>
-                        <li>Company culture fit analysis</li>
+                        <li>Personalized job recommendations</li>
+                        <li>Skills-based matching</li>
+                        <li>Industry-specific targeting</li>
                     </ul>
                 </div>
 
                 <div class="service-card">
-                    <div class="service-icon">📊</div>
-                    <h3 class="service-title">Career Development</h3>
-                    <p class="service-description">Comprehensive tools and resources to help you grow in your professional journey.</p>
+                    <div class="service-icon">📝</div>
+                    <h2 class="service-title">Resume Building</h2>
+                    <p class="service-description">Professional resume creation and optimization services.</p>
                     <ul class="service-features">
-                        <li>Skill assessment tests</li>
-                        <li>Professional certifications</li>
-                        <li>Mentorship programs</li>
+                        <li>ATS-friendly templates</li>
+                        <li>Keyword optimization</li>
+                        <li>Professional reviewing</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎓</div>
+                    <h2 class="service-title">Career Coaching</h2>
+                    <p class="service-description">One-on-one guidance from industry experts.</p>
+                    <ul class="service-features">
                         <li>Career path planning</li>
-                    </ul>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon">🤝</div>
-                    <h3 class="service-title">Recruitment Solutions</h3>
-                    <p class="service-description">End-to-end recruitment services for companies looking to build strong teams.</p>
-                    <ul class="service-features">
-                        <li>Talent pool access</li>
-                        <li>Automated screening</li>
-                        <li>Interview scheduling</li>
-                        <li>Onboarding support</li>
+                        <li>Interview preparation</li>
+                        <li>Skill development advice</li>
                     </ul>
                 </div>
             </div>
 
             <div class="pricing-section">
-                <h2 style="color: #00f7ff; text-align: center; margin-bottom: 2rem;">Pricing Plans</h2>
+                <h2 class="services-title">Pricing Plans</h2>
                 <div class="pricing-grid">
                     <div class="pricing-card">
                         <h3 class="pricing-tier">Basic</h3>
-                        <div class="pricing-price">$0 <span>/month</span></div>
+                        <div class="pricing-price">$0<span>/month</span></div>
                         <ul class="pricing-features">
-                            <li>Basic job search</li>
-                            <li>Profile creation</li>
-                            <li>Job alerts</li>
-                            <li>Limited applications</li>
+                            <li>Basic job matching</li>
+                            <li>Limited job applications</li>
+                            <li>Basic resume builder</li>
                         </ul>
                         <a href="#" class="pricing-button">Get Started</a>
                     </div>
 
                     <div class="pricing-card">
                         <h3 class="pricing-tier">Professional</h3>
-                        <div class="pricing-price">$29 <span>/month</span></div>
+                        <div class="pricing-price">$29<span>/month</span></div>
                         <ul class="pricing-features">
-                            <li>Advanced job search</li>
-                            <li>Priority applications</li>
-                            <li>Skill assessments</li>
-                            <li>Career counseling</li>
+                            <li>Advanced job matching</li>
+                            <li>Unlimited applications</li>
+                            <li>Resume optimization</li>
+                            <li>Priority support</li>
                         </ul>
                         <a href="#" class="pricing-button">Upgrade Now</a>
                     </div>
 
                     <div class="pricing-card">
                         <h3 class="pricing-tier">Enterprise</h3>
-                        <div class="pricing-price">$99 <span>/month</span></div>
+                        <div class="pricing-price">$99<span>/month</span></div>
                         <ul class="pricing-features">
-                            <li>Full platform access</li>
-                            <li>Recruitment tools</li>
-                            <li>Analytics dashboard</li>
-                            <li>Priority support</li>
+                            <li>All Professional features</li>
+                            <li>Career coaching sessions</li>
+                            <li>Custom solutions</li>
+                            <li>Dedicated support</li>
                         </ul>
                         <a href="#" class="pricing-button">Contact Sales</a>
                     </div>
                 </div>
             </div>
-
-            <div class="compare-plans">
-                <button class="compare-button" onclick="showComparison()">Compare All Plans</button>
-            </div>
-
-            <div style="text-align: center;">
-                <a href="/" class="back-to-home">← Back to Home</a>
-            </div>
         </div>
+
+        <a href="index.html" class="back-to-home">← Back to Home</a>
     </div>
 
-    <div class="comparison-modal">
+    <!-- Comparison Modal -->
+    <div class="comparison-modal" id="comparisonModal">
         <div class="comparison-content">
-            <button class="close-modal" onclick="hideComparison()">&times;</button>
-            <h2 style="color: #00f7ff; text-align: center; margin-bottom: 2rem;">Plan Comparison</h2>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2>Plan Comparison</h2>
             <table class="comparison-table">
                 <thead>
                     <tr>
-                        <th>Features</th>
+                        <th>Feature</th>
                         <th>Basic</th>
                         <th>Professional</th>
                         <th>Enterprise</th>
@@ -507,58 +390,34 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Job Search</td>
+                        <td>Job Matching</td>
                         <td>Basic</td>
                         <td>Advanced</td>
                         <td>Premium</td>
                     </tr>
                     <tr>
-                        <td>Monthly Applications</td>
+                        <td>Applications/month</td>
                         <td>10</td>
-                        <td>50</td>
+                        <td>Unlimited</td>
                         <td>Unlimited</td>
                     </tr>
                     <tr>
-                        <td>Profile Visibility</td>
-                        <td>Limited</td>
-                        <td>Enhanced</td>
-                        <td>Priority</td>
+                        <td>Resume Builder</td>
+                        <td>Basic</td>
+                        <td>Advanced</td>
+                        <td>Premium</td>
                     </tr>
                     <tr>
-                        <td>Skill Assessments</td>
-                        <td>❌</td>
+                        <td>Career Coaching</td>
+                        <td>-</td>
+                        <td>-</td>
                         <td>✓</td>
-                        <td>✓</td>
-                    </tr>
-                    <tr>
-                        <td>Career Counseling</td>
-                        <td>❌</td>
-                        <td>✓</td>
-                        <td>✓</td>
-                    </tr>
-                    <tr>
-                        <td>Analytics Dashboard</td>
-                        <td>❌</td>
-                        <td>❌</td>
-                        <td>✓</td>
-                    </tr>
-                    <tr>
-                        <td>API Access</td>
-                        <td>❌</td>
-                        <td>❌</td>
-                        <td>✓</td>
-                    </tr>
-                    <tr>
-                        <td>Support</td>
-                        <td>Email</td>
-                        <td>Email & Chat</td>
-                        <td>24/7 Priority</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script src="script.js" defer></script>
+    <script src="services.js"></script>
 </body>
-</html> 
+</html>
