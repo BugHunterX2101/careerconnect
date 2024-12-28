@@ -3,7 +3,7 @@ const api = {
     // Use the current domain in production, localhost in development
     BASE_URL: window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
         ? 'http://localhost:3000/api'
-        : 'https://careerconnect-server-7af1.vercel.app/api',
+        : 'https://careerconnect-server-7af1-vedit-agrawals-projects.vercel.app/api',
     
     getHeaders() {
         const token = localStorage.getItem('token');
