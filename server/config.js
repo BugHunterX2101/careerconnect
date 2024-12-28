@@ -34,7 +34,9 @@ const config = {
         'http://127.0.0.1:3000',
         'https://careerconnect-7af1.vercel.app',
         'https://careerconnect-client-7af1.vercel.app',
-        'https://careerconnect-server-7af1.vercel.app'
+        'https://careerconnect-server-7af1.vercel.app',
+        'https://careerconnect-server-7af1-vedit-agrawals-projects.vercel.app',
+        'https://careerconnect-client-7af1-vedit-agrawals-projects.vercel.app'
     ],
 
     // Rate Limiting

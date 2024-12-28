@@ -15,7 +15,8 @@ const api = {
         return {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Origin': window.location.origin
         };
     },
 
@@ -33,6 +34,7 @@ const api = {
                 ...options,
                 headers,
                 signal: controller.signal,
+                mode: 'cors',
                 credentials: 'include'
             };
 
