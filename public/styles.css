@@ -48,18 +48,18 @@ body {
 
 /* Container Styles */
 .container {
+    position: relative;
+    z-index: 1;
     background: rgba(21, 21, 21, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     width: 90%;
     max-width: 1200px;
     height: 600px;
     border-radius: 24px;
-    position: relative;
     padding: 2rem;
     box-shadow: 0 0 60px rgba(0, 247, 255, 0.15);
     overflow: hidden;
-    z-index: 2;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
     min-height: 0;
     height: auto;
     overflow-y: auto;
