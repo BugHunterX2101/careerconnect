@@ -1,17 +1,21 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const config = {
     // MongoDB Configuration
-    mongoURI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/careerconnect',
+    mongoURI: process.env.MONGODB_URI || 'mongodb://localhost:27017/careerconnect',
     mongoOptions: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 10000,
         socketTimeoutMS: 45000,
-        family: 4, // Use IPv4, skip trying IPv6
+        family: 4,
         maxPoolSize: 10,
         retryWrites: true,
-        retryReads: true
+        retryReads: true,
+        connectTimeoutMS: 10000,
+        keepAlive: true,
+        keepAliveInitialDelay: 300000
     },
 
     // JWT Configuration
@@ -28,15 +32,10 @@ const config = {
         'http://localhost:5000',
         'http://127.0.0.1:5500',
         'http://127.0.0.1:3000',
-        'https://careerconnect-7af1-4phdqp9m-vedit-agrawals-projects.vercel.app',
-        'https://careerconnect-client.vercel.app',
-        'https://careerconnect-server-7af1-4phdqp9m-vedit-agrawals-projects.vercel.app'
+        'https://careerconnect-7af1.vercel.app',
+        'https://careerconnect-client-7af1.vercel.app',
+        'https://careerconnect-server-7af1.vercel.app'
     ],
-
-    // Email Configuration (if needed)
-    emailService: process.env.EMAIL_SERVICE,
-    emailUser: process.env.EMAIL_USER,
-    emailPass: process.env.EMAIL_PASS,
 
     // Rate Limiting
     rateLimit: {
@@ -45,18 +44,9 @@ const config = {
     }
 };
 
-// Validate required configurations
-const requiredEnvVars = ['JWT_SECRET'];
-if (process.env.NODE_ENV === 'production') {
-    requiredEnvVars.push('MONGODB_URI');
-}
-
-const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
-if (missingEnvVars.length > 0) {
-    console.warn(`Warning: Missing required environment variables: ${missingEnvVars.join(', ')}`);
-    if (process.env.NODE_ENV === 'production') {
-        throw new Error('Missing required environment variables in production');
-    }
-}
+// Log configuration
+console.log('Environment:', process.env.NODE_ENV);
+console.log('MongoDB URI:', config.mongoURI.replace(/\/\/[^:]+:[^@]+@/, '//***:***@'));
+console.log('Port:', config.port);
 
 module.exports = config;

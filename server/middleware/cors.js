@@ -8,38 +8,24 @@ const allowedOrigins = [
     'http://127.0.0.1:3000',
     'https://careerconnect-7af1.vercel.app',
     'https://careerconnect-client-7af1.vercel.app',
-    'https://careerconnect-server-7af1.vercel.app',
-    'https://careerconnect-7af1-git-main-vedit-agrawals-projects.vercel.app'
+    'https://careerconnect-server-7af1.vercel.app'
 ];
 
-// Debug function
-const debugOrigin = (origin) => {
-    console.log(`[CORS] Request from origin: ${origin || 'no origin'}`);
-    if (!origin) {
-        console.log('[CORS] No origin header (local file or same origin)');
-        return;
-    }
-    console.log('[CORS] Origin allowed:', allowedOrigins.includes(origin));
+// Debug middleware
+const debugCors = (req, res, next) => {
+    console.log('[CORS] Request from origin:', req.headers.origin || 'no origin');
+    next();
 };
 
 // CORS options
 const corsOptions = {
     origin: function (origin, callback) {
-        debugOrigin(origin);
-
-        // Allow all origins in development
-        if (process.env.NODE_ENV !== 'production') {
-            console.log('[CORS] Development mode - allowing all origins');
-            return callback(null, true);
-        }
-
-        // Allow requests with no origin (like mobile apps, local files, or curl requests)
+        // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) {
             console.log('[CORS] No origin - allowing request');
             return callback(null, true);
         }
-        
-        // Check if origin is allowed
+
         if (allowedOrigins.includes(origin)) {
             console.log(`[CORS] Origin ${origin} is allowed`);
             callback(null, true);
@@ -61,7 +47,6 @@ const corsMiddleware = cors(corsOptions);
 // Additional headers middleware
 const additionalHeaders = (req, res, next) => {
     const origin = req.headers.origin;
-    debugOrigin(origin);
     
     // Allow all origins in development
     if (process.env.NODE_ENV !== 'production') {
@@ -72,11 +57,6 @@ const additionalHeaders = (req, res, next) => {
     else if (origin && allowedOrigins.includes(origin)) {
         console.log(`[CORS] Production mode - setting Access-Control-Allow-Origin: ${origin}`);
         res.header('Access-Control-Allow-Origin', origin);
-    }
-    // Handle requests with no origin
-    else if (!origin) {
-        console.log('[CORS] No origin - setting Access-Control-Allow-Origin: *');
-        res.header('Access-Control-Allow-Origin', '*');
     }
 
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -97,6 +77,7 @@ const additionalHeaders = (req, res, next) => {
 module.exports = {
     corsMiddleware,
     additionalHeaders,
+    debugCors,
     allowedOrigins
 };
 

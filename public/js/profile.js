@@ -15,6 +15,30 @@ function hideLoading() {
     }
 }
 
+// Check Authentication
+function checkAuth() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/login.html';
+        return false;
+    }
+    return true;
+}
+
+// Initialize Profile Page
+async function initializePage() {
+    if (!checkAuth()) return;
+    
+    initializeElements();
+    await fetchProfile();
+    
+    // Add event listeners
+    document.getElementById('educationForm')?.addEventListener('submit', handleEducationSubmit);
+    document.getElementById('experienceForm')?.addEventListener('submit', handleExperienceSubmit);
+    document.getElementById('skillForm')?.addEventListener('submit', handleSkillSubmit);
+    document.getElementById('updateLinksBtn')?.addEventListener('click', updateSocialLinks);
+}
+
 // DOM Elements
 let educationModal, experienceModal, skillModal, profileForm;
 
@@ -70,6 +94,8 @@ function showMessage(message, isError = false) {
 
 // Fetch Profile Data
 async function fetchProfile() {
+    if (!checkAuth()) return;
+    
     try {
         showLoading();
         console.log('Fetching profile data...');
@@ -85,6 +111,13 @@ async function fetchProfile() {
     } catch (error) {
         console.error('Failed to fetch profile:', error);
         showMessage(error.message || 'Failed to load profile data. Please try again.', true);
+        
+        // If unauthorized, redirect to login
+        if (error.message.includes('401') || error.message.includes('unauthorized')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
     } finally {
         hideLoading();
     }
@@ -105,7 +138,7 @@ function populateProfile(profile) {
                 <div class="education-item">
                     <h3>${edu.school}</h3>
                     <p>${edu.degree} - ${edu.field}</p>
-                    <p>${new Date(edu.startDate).toLocaleDateString()} - ${edu.endDate ? new Date(edu.endDate).toLocaleDateString() : 'Present'}</p>
+                    <p>${formatDate(edu.startDate)} - ${edu.endDate ? formatDate(edu.endDate) : 'Present'}</p>
                 </div>
             `).join('');
         }
@@ -116,9 +149,9 @@ function populateProfile(profile) {
             experienceContainer.innerHTML = profile.experience.map(exp => `
                 <div class="experience-item">
                     <h3>${exp.company}</h3>
-                    <p>${exp.position}</p>
-                    <p>${new Date(exp.startDate).toLocaleDateString()} - ${exp.endDate ? new Date(exp.endDate).toLocaleDateString() : 'Present'}</p>
-                    <p>${exp.description}</p>
+                    <p>${exp.position} ${exp.level ? `- ${exp.level}` : ''}</p>
+                    <p>${formatDate(exp.startDate)} - ${exp.endDate ? formatDate(exp.endDate) : 'Present'}</p>
+                    ${exp.description ? `<p>${exp.description}</p>` : ''}
                 </div>
             `).join('');
         }
@@ -128,25 +161,38 @@ function populateProfile(profile) {
         if (skillsContainer && profile.skills) {
             skillsContainer.innerHTML = profile.skills.map(skill => `
                 <div class="skill-item">
-                    <span>${skill.name}</span>
-                    <span class="skill-level">${skill.level}</span>
+                    <span>${skill}</span>
                 </div>
             `).join('');
         }
 
         // Social Links
-        if (profile.socialLinks) {
+        if (profile.social) {
             const linkedinInput = document.getElementById('linkedinUrl');
             const githubInput = document.getElementById('githubUrl');
             const portfolioInput = document.getElementById('portfolioUrl');
 
-            if (linkedinInput) linkedinInput.value = profile.socialLinks.linkedin || '';
-            if (githubInput) githubInput.value = profile.socialLinks.github || '';
-            if (portfolioInput) portfolioInput.value = profile.socialLinks.portfolio || '';
+            if (linkedinInput) linkedinInput.value = profile.social.linkedin || '';
+            if (githubInput) githubInput.value = profile.social.github || '';
+            if (portfolioInput) portfolioInput.value = profile.social.portfolio || '';
         }
     } catch (error) {
         console.error('Error populating profile:', error);
         showMessage('Error displaying profile data', true);
+    }
+}
+
+// Helper function to format dates
+function formatDate(dateString) {
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short'
+        });
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return dateString;
     }
 }
 
@@ -193,24 +239,36 @@ async function handleEducationSubmit(event) {
 async function handleExperienceSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    const experienceData = {
-        company: form.company.value,
-        position: form.position.value,
-        startDate: form.startDate.value,
-        endDate: form.endDate.value || null,
-        description: form.description.value
-    };
-
+    
     try {
+        const experienceData = {
+            company: form.company.value.trim(),
+            position: form.position.value.trim(),
+            level: form.level.value.trim(),
+            startDate: form.startDate.value,
+            endDate: form.endDate.value || null,
+            description: form.description.value.trim()
+        };
+
+        // Validate required fields
+        if (!experienceData.company || !experienceData.position || !experienceData.startDate) {
+            throw new Error('Please fill in all required fields');
+        }
+
         showLoading();
-        await api.addExperience(experienceData);
-        closeModal('experienceModal');
-        form.reset();
-        await fetchProfile();
-        showMessage('Experience added successfully');
+        const response = await api.addExperience(experienceData);
+        
+        if (response.status === 'success') {
+            closeModal('experienceModal');
+            form.reset();
+            await fetchProfile();
+            showMessage('Experience added successfully');
+        } else {
+            throw new Error(response.message || 'Failed to add experience');
+        }
     } catch (error) {
         console.error('Failed to add experience:', error);
-        showMessage('Failed to add experience', true);
+        showMessage(error.message || 'Failed to add experience', true);
     } finally {
         hideLoading();
     }
@@ -219,21 +277,31 @@ async function handleExperienceSubmit(event) {
 async function handleSkillSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    const skillData = {
-        name: form.skillName.value,
-        level: form.skillLevel.value
-    };
-
+    
     try {
+        const skillData = {
+            name: form.skillName.value.trim()
+        };
+
+        // Validate required fields
+        if (!skillData.name) {
+            throw new Error('Please enter a skill name');
+        }
+
         showLoading();
-        await api.addSkill(skillData);
-        closeModal('skillModal');
-        form.reset();
-        await fetchProfile();
-        showMessage('Skill added successfully');
+        const response = await api.addSkill(skillData);
+        
+        if (response.status === 'success') {
+            closeModal('skillModal');
+            form.reset();
+            await fetchProfile();
+            showMessage('Skill added successfully');
+        } else {
+            throw new Error(response.message || 'Failed to add skill');
+        }
     } catch (error) {
         console.error('Failed to add skill:', error);
-        showMessage('Failed to add skill', true);
+        showMessage(error.message || 'Failed to add skill', true);
     } finally {
         hideLoading();
     }
@@ -241,9 +309,9 @@ async function handleSkillSubmit(event) {
 
 // Update Social Links
 async function updateSocialLinks() {
-    const linkedinUrl = document.getElementById('linkedinUrl').value;
-    const githubUrl = document.getElementById('githubUrl').value;
-    const portfolioUrl = document.getElementById('portfolioUrl').value;
+    const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
+    const githubUrl = document.getElementById('githubUrl').value.trim();
+    const portfolioUrl = document.getElementById('portfolioUrl').value.trim();
 
     try {
         showLoading();
@@ -255,9 +323,9 @@ async function updateSocialLinks() {
 
         if (response.status === 'success') {
             showMessage('Social links updated successfully');
-            await fetchProfile(); // Refresh the profile data
+            await fetchProfile();
         } else {
-            throw new Error('Failed to update social links');
+            throw new Error(response.message || 'Failed to update social links');
         }
     } catch (error) {
         console.error('Failed to update social links:', error);
@@ -267,49 +335,5 @@ async function updateSocialLinks() {
     }
 }
 
-// Initialize everything when the DOM is loaded
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        console.log('Initializing profile page');
-        
-        // Initialize DOM elements
-        initializeElements();
-
-        // Check authentication
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log('No token found, redirecting to login');
-            window.location.href = '/login.html';
-            return;
-        }
-
-        // Add form submit event listeners
-        const educationForm = document.getElementById('educationForm');
-        if (educationForm) {
-            educationForm.addEventListener('submit', handleEducationSubmit);
-        } else {
-            console.warn('Education form not found');
-        }
-
-        const experienceForm = document.getElementById('experienceForm');
-        if (experienceForm) {
-            experienceForm.addEventListener('submit', handleExperienceSubmit);
-        } else {
-            console.warn('Experience form not found');
-        }
-
-        const skillForm = document.getElementById('skillForm');
-        if (skillForm) {
-            skillForm.addEventListener('submit', handleSkillSubmit);
-        } else {
-            console.warn('Skill form not found');
-        }
-
-        // Fetch initial profile data
-        await fetchProfile();
-        
-    } catch (error) {
-        console.error('Failed to initialize profile:', error);
-        showMessage('Failed to initialize profile. Please refresh the page.', true);
-    }
-});
+// Call initialize when the page loads
+document.addEventListener('DOMContentLoaded', initializePage);

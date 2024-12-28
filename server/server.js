@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const { corsMiddleware, additionalHeaders, debugCors } = require('./middleware/cors');
+const cors = require('cors');
 const config = require('./config');
 const rateLimit = require('express-rate-limit');
 
@@ -11,15 +11,34 @@ const app = express();
 // Set strict query for Mongoose
 mongoose.set('strictQuery', true);
 
-// Apply rate limiting
-app.use(rateLimit(config.rateLimit));
+// Create rate limiter
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+});
 
-// Debug middleware
-app.use(debugCors);
+// Apply rate limiting
+app.use(limiter);
+
+// CORS Configuration
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || config.corsOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    maxAge: 86400
+};
 
 // Apply CORS middleware
-app.use(corsMiddleware);
-app.use(additionalHeaders);
+app.use(cors(corsOptions));
 
 // Body parser middleware with size limits
 app.use(express.json({ limit: '10mb' }));
@@ -105,14 +124,42 @@ const connectWithRetry = async (retries = 5, delay = 5000) => {
     for (let i = 0; i < retries; i++) {
         try {
             console.log(`MongoDB connection attempt ${i + 1} of ${retries}`);
+            console.log('Connecting to MongoDB URI:', config.mongoURI.replace(/\/\/[^:]+:[^@]+@/, '//***:***@'));
+            console.log('MongoDB options:', JSON.stringify(config.mongoOptions, null, 2));
+            
             await mongoose.connect(config.mongoURI, config.mongoOptions);
+            
             console.log('MongoDB Connected Successfully');
+            console.log('Connection state:', mongoose.connection.readyState);
+            console.log('Database name:', mongoose.connection.name);
+            
+            // Set up connection error handlers
+            mongoose.connection.on('error', err => {
+                console.error('MongoDB connection error:', err);
+            });
+
+            mongoose.connection.on('disconnected', () => {
+                console.log('MongoDB disconnected');
+            });
+
+            mongoose.connection.on('reconnected', () => {
+                console.log('MongoDB reconnected');
+            });
+
             return true;
         } catch (err) {
-            console.error('MongoDB connection error:', err);
+            console.error('MongoDB connection error:', {
+                message: err.message,
+                code: err.code,
+                name: err.name,
+                stack: err.stack
+            });
+            
             if (i === retries - 1) {
+                console.error('Max retries reached. Could not connect to MongoDB.');
                 throw err;
             }
+            
             console.log(`Retrying in ${delay/1000} seconds...`);
             await new Promise(resolve => setTimeout(resolve, delay));
         }
@@ -126,8 +173,9 @@ const startServer = async () => {
         await connectWithRetry();
         
         const PORT = process.env.PORT || 3000;
-        const server = app.listen(PORT, () => {
+        const server = app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+            console.log(`Server is listening on all network interfaces`);
         });
 
         // Handle server errors
@@ -154,7 +202,10 @@ const startServer = async () => {
 
 // Start server if not in test mode
 if (process.env.NODE_ENV !== 'test') {
-    startServer();
+    startServer().catch(err => {
+        console.error('Fatal error during server startup:', err);
+        process.exit(1);
+    });
 }
 
 // Export for testing and Vercel
