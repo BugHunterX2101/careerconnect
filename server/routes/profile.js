@@ -45,7 +45,6 @@ router.get('/', auth, async (req, res) => {
             }
         }
         
-        console.log('Sending profile data to client');
         return res.json({
             status: 'success',
             data: profile
@@ -55,6 +54,135 @@ router.get('/', auth, async (req, res) => {
         return res.status(500).json({
             status: 'error',
             message: 'Server error while fetching profile'
+        });
+    }
+});
+
+// Add education
+router.post('/education', auth, async (req, res) => {
+    try {
+        const { school, degree, field, startDate, endDate } = req.body;
+        
+        // Validate required fields
+        if (!school || !degree || !field || !startDate) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Missing required fields'
+            });
+        }
+
+        let profile = await Profile.findOne({ userId: req.user.id });
+        if (!profile) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Profile not found'
+            });
+        }
+
+        profile.education.push({
+            school,
+            degree,
+            field,
+            startDate: new Date(startDate),
+            endDate: endDate ? new Date(endDate) : null
+        });
+
+        await profile.save();
+
+        return res.json({
+            status: 'success',
+            data: profile
+        });
+    } catch (error) {
+        console.error('Error adding education:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Server error while adding education'
+        });
+    }
+});
+
+// Add experience
+router.post('/experience', auth, async (req, res) => {
+    try {
+        const { company, position, level, description, startDate, endDate } = req.body;
+        
+        // Validate required fields
+        if (!company || !position || !startDate) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Missing required fields'
+            });
+        }
+
+        let profile = await Profile.findOne({ userId: req.user.id });
+        if (!profile) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Profile not found'
+            });
+        }
+
+        profile.experience.push({
+            company,
+            position,
+            level: level || '',
+            description: description || '',
+            startDate: new Date(startDate),
+            endDate: endDate ? new Date(endDate) : null
+        });
+
+        await profile.save();
+
+        return res.json({
+            status: 'success',
+            data: profile
+        });
+    } catch (error) {
+        console.error('Error adding experience:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Server error while adding experience'
+        });
+    }
+});
+
+// Add skill
+router.post('/skills', auth, async (req, res) => {
+    try {
+        const { name } = req.body;
+        
+        // Validate required fields
+        if (!name) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Skill name is required'
+            });
+        }
+
+        let profile = await Profile.findOne({ userId: req.user.id });
+        if (!profile) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Profile not found'
+            });
+        }
+
+        // Check if skill already exists
+        if (!profile.skills.includes(name)) {
+            profile.skills.push(name);
+            await profile.save();
+        }
+
+        return res.json({
+            status: 'success',
+            data: profile
+        });
+    } catch (error) {
+        console.error('Error adding skill:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Server error while adding skill'
         });
     }
 });
@@ -89,108 +217,6 @@ router.put('/social', auth, async (req, res) => {
         return res.status(500).json({
             status: 'error',
             message: 'Server error while updating social links'
-        });
-    }
-});
-
-// Add education
-router.post('/education', auth, async (req, res) => {
-    try {
-        const { school, degree, field, startDate, endDate } = req.body;
-        
-        let profile = await Profile.findOne({ userId: req.user.id });
-        if (!profile) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Profile not found'
-            });
-        }
-
-        profile.education.push({
-            school,
-            degree,
-            field,
-            startDate,
-            endDate
-        });
-
-        await profile.save();
-
-        return res.json({
-            status: 'success',
-            data: profile
-        });
-    } catch (error) {
-        console.error('Error adding education:', error);
-        return res.status(500).json({
-            status: 'error',
-            message: 'Server error while adding education'
-        });
-    }
-});
-
-// Add experience
-router.post('/experience', auth, async (req, res) => {
-    try {
-        const { company, position, level, description, startDate, endDate } = req.body;
-        
-        let profile = await Profile.findOne({ userId: req.user.id });
-        if (!profile) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Profile not found'
-            });
-        }
-
-        profile.experience.push({
-            company,
-            position,
-            level,
-            description,
-            startDate,
-            endDate
-        });
-
-        await profile.save();
-
-        return res.json({
-            status: 'success',
-            data: profile
-        });
-    } catch (error) {
-        console.error('Error adding experience:', error);
-        return res.status(500).json({
-            status: 'error',
-            message: 'Server error while adding experience'
-        });
-    }
-});
-
-// Add skill
-router.post('/skills', auth, async (req, res) => {
-    try {
-        const { name, level } = req.body;
-        
-        let profile = await Profile.findOne({ userId: req.user.id });
-        if (!profile) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Profile not found'
-            });
-        }
-
-        profile.skills.push(name);
-        await profile.save();
-
-        return res.json({
-            status: 'success',
-            data: profile
-        });
-    } catch (error) {
-        console.error('Error adding skill:', error);
-        return res.status(500).json({
-            status: 'error',
-            message: 'Server error while adding skill'
         });
     }
 });

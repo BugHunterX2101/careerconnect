@@ -11,7 +11,7 @@ const educationSchema = new mongoose.Schema({
 const experienceSchema = new mongoose.Schema({
     company: { type: String, required: true },
     position: { type: String, required: true },
-    level: { type: String, required: true },
+    level: { type: String },
     description: { type: String },
     startDate: { type: Date, required: true },
     endDate: { type: Date }
@@ -19,7 +19,8 @@ const experienceSchema = new mongoose.Schema({
 
 const socialSchema = new mongoose.Schema({
     linkedin: { type: String, default: '' },
-    github: { type: String, default: '' }
+    github: { type: String, default: '' },
+    portfolio: { type: String, default: '' }
 });
 
 const profileSchema = new mongoose.Schema({
@@ -34,7 +35,11 @@ const profileSchema = new mongoose.Schema({
     skills: [{ type: String }],
     social: {
         type: socialSchema,
-        default: () => ({})
+        default: () => ({
+            linkedin: '',
+            github: '',
+            portfolio: ''
+        })
     },
     createdAt: {
         type: Date,
@@ -48,7 +53,7 @@ const profileSchema = new mongoose.Schema({
 
 // Update the updatedAt timestamp before saving
 profileSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
+    this.updatedAt = new Date();
     next();
 });
 
