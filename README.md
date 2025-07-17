@@ -92,5 +92,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Your Name - your.email@example.com
-Project Link: https://github.com/yourusername/careerconnect 
+Your Name - veditagrawal21@gmail.com
+Project Link: https://github.com/BugHunterX2101/careerconnect 
